@@ -1,0 +1,918 @@
+/* ==========================================================================
+   AKILESH GLOBAL — LUXURY CINEMATIC DESIGN SYSTEM & STYLES (UNIVERSAL POPPINS)
+   ========================================================================== */
+
+:root {
+  --color-bg-light: #ffffff;
+  --color-bg-dark: #0a0a0a;
+  --color-text-dark: #000000;
+  --color-text-light: #ffffff;
+  --color-muted: #767676;
+  --color-accent: #0284c7;
+  
+  --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  --header-height: 80px;
+  --grid-margin: clamp(1.5rem, 4vw, 3.5rem);
+  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-body);
+  background-color: var(--color-bg-light);
+  color: var(--color-text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100vw;
+  min-height: 100vh;
+  font-family: var(--font-body);
+}
+
+/* --------------------------------------------------------------------------
+   Preloader
+   -------------------------------------------------------------------------- */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  transition: opacity 0.8s var(--transition-smooth), transform 0.8s var(--transition-smooth);
+}
+
+.preloader.fade-out {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.05);
+}
+
+.preloader-dot {
+  width: 2.38vh;
+  height: 2.38vh;
+  border-radius: 50%;
+  background-color: #000000;
+  animation: pulse-dot 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+.preloader-counter {
+  position: absolute;
+  top: var(--grid-margin);
+  right: var(--grid-margin);
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #000000;
+  letter-spacing: -0.02em;
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(1.2rem, 3vw, 2.4rem) var(--grid-margin);
+  background: transparent;
+  pointer-events: auto;
+  transition: color 0.4s ease;
+}
+
+.site-header.dark-header {
+  color: #ffffff;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  color: currentColor;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.header-logo:hover {
+  opacity: 0.8;
+}
+
+.logo-text {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(1.6rem, 2.5vw, 2.3rem);
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: currentColor;
+}
+
+.nav-links ul {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  list-style: none;
+}
+
+.nav-link {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: lowercase;
+  color: currentColor;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: opacity 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: currentColor;
+  transition: width 0.3s var(--transition-smooth);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Pinned Hero Section & Multi-Stage Scroll Portal Zoom Track (580vh)
+   -------------------------------------------------------------------------- */
+.hero-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  height: 580vh;
+}
+
+.hero-section.sticky-hero {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--color-bg-light);
+}
+
+.canvas-container {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+}
+
+#hero-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Top Transition Canvas (Renders OVER Cards, Z-Index 40) */
+.top-transition-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+}
+
+/* ABOUT ME Landing Overlay (Vertically Centered & Left-Aligned) */
+.hero-content.about-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(var(--header-height) + 2rem) var(--grid-margin) var(--grid-margin);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.hero-content.fade-out-text {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* Center Vertically & Left-Align Text */
+.about-hero-center {
+  max-width: 55%;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-align: left;
+}
+
+@media (max-width: 900px) {
+  .about-hero-center {
+    max-width: 100%;
+  }
+}
+
+.about-main-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4.2vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #000000;
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+
+.highlight-name {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 3px;
+}
+
+.about-lead-text {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+  line-height: 1.55;
+  color: #222222;
+  font-weight: 500;
+  max-width: 620px;
+  text-align: left;
+}
+
+.about-hero-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 2rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333333;
+}
+
+.hero-stats strong {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #000000;
+}
+
+.scroll-down-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-dark);
+}
+
+.scroll-line {
+  width: 30px;
+  height: 1px;
+  background-color: var(--color-text-dark);
+}
+
+/* --------------------------------------------------------------------------
+   About Screen Left-Side Portrait Card (Strictly Hidden on Home Screen)
+   -------------------------------------------------------------------------- */
+.about-portrait-wrapper {
+  position: absolute;
+  top: 52%;
+  left: clamp(1.5rem, 4vw, 5rem);
+  transform: translateY(-50%);
+  z-index: 25;
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity 0.35s var(--transition-smooth), transform 0.35s var(--transition-smooth);
+}
+
+.about-portrait-wrapper.hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-30%) scale(0.90) !important;
+}
+
+.portrait-card {
+  position: relative;
+  width: clamp(320px, 38vw, 520px);
+  height: clamp(500px, 82vh, 840px);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.2);
+  background: #0f131a;
+  transition: transform 0.4s var(--transition-smooth), border-color 0.4s ease;
+}
+
+.portrait-card:hover {
+  transform: scale(1.02);
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.portrait-badge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.6rem 1.6rem;
+  background: linear-gradient(to top, rgba(10, 14, 20, 0.96), transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.portrait-name {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.portrait-role {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #38bdf8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 1100px) {
+  .about-portrait-wrapper {
+    display: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   9-Card Capabilities Section (3 Columns x 3 Rows)
+   -------------------------------------------------------------------------- */
+.capabilities-grid-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 35;
+  width: 90%;
+  max-width: 1320px;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  transition: opacity 0.15s ease-out;
+}
+
+.capabilities-grid-overlay.hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translate(-50%, 100vh) !important;
+}
+
+/* 3-Column x 3-Row Parallax Grid Container (9 Cards Total) */
+.eight-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.2rem;
+  align-items: start;
+  position: relative;
+}
+
+/* Grid Column Styling with Mild Divider Line Between Columns */
+.grid-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  will-change: transform;
+  position: relative;
+  padding-right: 0.2rem;
+}
+
+/* MILD LINE BETWEEN EACH OF THE 3 COLUMNS */
+.grid-col:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  right: -1.1rem;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.12) 15%,
+    rgba(255, 255, 255, 0.12) 85%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Dynamic Staggered Offset for Center Column (Column 2) */
+.grid-col.col-2 {
+  margin-top: 50px;
+}
+
+/* Capability Card: 8px Corner Radius, No Border */
+.cap-card {
+  background: linear-gradient(145deg, #10141c, #0b0e14);
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 1.7rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+  transition: transform 0.4s var(--transition-smooth), box-shadow 0.4s ease;
+}
+
+.cap-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.18);
+}
+
+.cap-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+/* Number Count Removed */
+.cap-num {
+  display: none !important;
+}
+
+.cap-icon {
+  flex-shrink: 0;
+  opacity: 0.9;
+  transition: transform 0.3s ease, stroke 0.3s ease;
+}
+
+.cap-card:hover .cap-icon {
+  transform: scale(1.15) rotate(5deg);
+  stroke: #60a5fa;
+}
+
+/* Heading Font Weight: 600 */
+.cap-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.55rem;
+}
+
+/* Content Font Weight: 300 */
+.cap-card-desc {
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  font-weight: 300;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.70);
+}
+
+/* --------------------------------------------------------------------------
+   3D SPEAR SCROLL Projects Showcase Overlay INSIDE HERO CANVAS (Z-Index 45)
+   -------------------------------------------------------------------------- */
+.projects-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  transition: opacity 0.25s ease-out;
+  overflow: hidden;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.projects-hero-overlay.hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.vertical-projects-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+.projects-header-bar {
+  position: absolute;
+  top: calc(var(--header-height) + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  text-align: center;
+}
+
+.projects-section-tag {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+.vertical-cards-deck {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+/* Individual 3D Spear Scroll Project Cards */
+.vertical-project-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(340px, 58vw, 820px);
+  height: clamp(380px, 58vh, 540px);
+  border-radius: 36px;
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.09), 0 2px 10px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease-out;
+}
+
+.vertical-project-card.card-peach {
+  background-color: #ffedd5;
+}
+
+.vertical-project-card.card-indigo {
+  background-color: #e0e7ff;
+}
+
+.vertical-project-card.card-sage {
+  background-color: #dcfce7;
+}
+
+.vertical-project-card.card-cream {
+  background-color: #feefc3;
+}
+
+.vcard-img-wrap {
+  width: 100%;
+  height: 78%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.09);
+  background: #ffffff;
+}
+
+.vcard-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.5s var(--transition-smooth);
+}
+
+.vertical-project-card:hover .vcard-img {
+  transform: scale(1.025);
+}
+
+.vcard-info {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.8rem;
+}
+
+.vcard-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2.5vw, 2.1rem);
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+}
+
+.vcard-desc {
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+  font-weight: 500;
+  color: #475569;
+  max-width: 60%;
+  text-align: right;
+}
+
+/* Responsive Grid Breakpoints */
+@media (max-width: 1000px) {
+  .eight-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+  
+  .grid-col.col-2 {
+    margin-top: 0px;
+  }
+
+  .grid-col:not(:last-child)::after {
+    display: none;
+  }
+
+  .vertical-project-card {
+    width: clamp(300px, 85vw, 550px);
+    height: clamp(360px, 54vh, 460px);
+    padding: 1.5rem;
+  }
+
+  .vcard-desc {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .eight-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Contact Modal Card ("Available Worldwide")
+   -------------------------------------------------------------------------- */
+.contact-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s var(--transition-smooth), visibility 0.4s ease;
+}
+
+.contact-modal-backdrop.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.contact-card {
+  position: relative;
+  width: 100%;
+  max-width: 850px;
+  background-color: #ffffff;
+  color: #000000;
+  padding: clamp(2rem, 5vw, 4rem);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: scale(1);
+  transition: transform 0.4s var(--transition-smooth);
+}
+
+.contact-modal-backdrop.hidden .contact-card {
+  transform: scale(0.95);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  transform: scale(1.1);
+}
+
+.contact-card-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  margin-bottom: 3.5rem;
+}
+
+.contact-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3rem;
+}
+
+.col-heading {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.address-text {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.social-links a {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #000;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.social-links a:hover {
+  opacity: 0.6;
+}
+
+.departments-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dept-name {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.copy-email-btn {
+  position: relative;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #000;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.copy-email-btn:hover .email-text {
+  text-decoration: underline;
+}
+
+.copied-badge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  color: #008000;
+  font-weight: 700;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.copy-email-btn.copied .email-text {
+  opacity: 0;
+}
+
+.copy-email-btn.copied .copied-badge {
+  opacity: 1;
+}
+
+/* Responsive queries */
+@media (max-width: 768px) {
+  .hero-tagline {
+    font-size: 2rem;
+  }
+  
+  .about-hero-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+/* ==========================================================================
+   50/50 SPLIT 2-COLUMN FULL-WIDTH SHOWCASE SCREEN
+   ========================================================================== */
+.split-showcase-section {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  background-color: #000000;
+  box-sizing: border-box;
+}
+
+.split-column {
+  flex: 1 1 50%;
+  width: 50%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.split-img {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-column:hover .split-img {
+  transform: scale(1.03);
+}
+
+@media (max-width: 768px) {
+  .split-showcase-section {
+    flex-direction: column;
+  }
+  .split-column {
+    width: 100%;
+    min-height: 50vh;
+  }
+}

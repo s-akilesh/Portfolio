@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AKILESH — Creative Director & Full-Stack Architect</title>
+    <meta name="description" content="Portfolio of Akilesh — Creative Director, Product Architect & Developer working across content experiences, AI products, and design systems." />
+    
+    <!-- Google Fonts: Universal Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <script type="module" crossorigin src="/assets/index-DZJGk_xQ.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index--csiGkPk.css">
+  </head>
+  <body>
+    <!-- Preloader Screen -->
+    <div id="preloader" class="preloader">
+      <div class="preloader-dot"></div>
+      <div id="preloader-counter" class="preloader-counter">0</div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header id="site-header" class="site-header">
+      <a href="#" class="header-logo">
+        <span class="logo-text">AKILESH</span>
+      </a>
+
+      <nav class="nav-links">
+        <ul>
+          <li><button type="button" class="nav-link" id="nav-work">work</button></li>
+          <li><button type="button" class="nav-link" id="nav-about">about me</button></li>
+          <li><button type="button" class="nav-link" id="nav-contact">contact</button></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Multi-Stage Scroll Portal Zoom Track (Pinned Hero Section) -->
+    <div id="hero-scroll-wrapper" class="hero-scroll-wrapper">
+      <section id="hero-section" class="hero-section sticky-hero">
+        <!-- Interactive WebGL/Canvas Layer -->
+        <div id="canvas-container" class="canvas-container">
+          <canvas id="hero-canvas"></canvas>
+        </div>
+
+        <!-- ABOUT ME Hero Landing Overlay (Main Home Screen Text) -->
+        <div id="hero-content" class="hero-content about-hero-overlay">
+          <div class="about-hero-center">
+            <h1 class="about-main-title">
+              I’M <span class="highlight-name">AKILESH</span> — CREATIVE ARCHITECT &amp; PRODUCT DESIGN LEADER
+            </h1>
+            <p class="about-lead-text">
+              I connect product direction with hands-on craft, turning complex opportunities into intuitive digital experiences and scalable design systems.
+            </p>
+          </div>
+
+          <div class="about-hero-bottom">
+            <div class="hero-stats">
+              <div><strong>10+</strong> YEARS EXP</div>
+              <div><strong>50+</strong> PRODUCTS</div>
+            </div>
+
+            <div class="scroll-down-indicator">
+              <span>Scroll to Explore</span>
+              <div class="scroll-line"></div>
+            </div>
+          </div>
+        </div>
+
+      <!-- Left Side Portrait Card (Revealed inside Portal) -->
+      <div id="about-portrait-wrapper" class="about-portrait-wrapper hidden">
+        <div class="portrait-card">
+          <img src="/akilesh_portrait.jpg" alt="AKILESH — Creative Director &amp; Full-Stack Architect" class="portrait-img" />
+          <div class="portrait-badge">
+            <span class="portrait-name">AKILESH</span>
+            <span class="portrait-role">Creative Director</span>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- Top Transition Canvas (Renders OVER Cards, Z-Index 40) -->
+      <canvas id="transition-canvas" class="top-transition-canvas"></canvas>
+
+
+    </section>
+    </div>
+
+
+
+    <!-- Contact Modal Card ("Available Worldwide") -->
+    <div id="contact-modal" class="contact-modal-backdrop hidden">
+      <div class="contact-card">
+        <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close modal">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+
+        <h2 class="contact-card-title">AVAILABLE WORLDWIDE</h2>
+
+        <div class="contact-card-grid">
+          <div class="contact-col">
+            <h3 class="col-heading">HEADQUARTERS</h3>
+            <p class="address-text">
+              Akilesh Design &amp; Tech<br />
+              100 Innovation Way, Suite 400<br />
+              San Francisco, CA 94107
+            </p>
+
+            <h3 class="col-heading">SOCIAL</h3>
+            <div class="social-links">
+              <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+              <a href="https://twitter.com" target="_blank" rel="noopener">X / Twitter</a>
+              <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+
+          <div class="contact-col departments-col">
+            <div class="dept-item">
+              <h3 class="dept-name">NEW BUSINESS &amp; PRESS</h3>
+              <button type="button" class="copy-email-btn" data-email="hello@akilesh.global">
+                <span class="email-text">hello@akilesh.global</span>
+                <span class="copied-badge">Copied!</span>
+              </button>
+            </div>
+
+            <div class="dept-item">
+              <h3 class="dept-name">CAREERS &amp; COLLABS</h3>
+              <button type="button" class="copy-email-btn" data-email="careers@akilesh.global">
+                <span class="email-text">careers@akilesh.global</span>
+                <span class="copied-badge">Copied!</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main JS Bundle -->
+  </body>
+</html>
