@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habit Partner - Build better habits, one day at a time | AKILESH</title>
+  <meta name="description" content="Habit Partner is a simple, privacy-focused Android habit tracking application designed to help you create habits, track daily progress, maintain streaks, and build consistent routines.">
+  
+  <!-- Google Fonts: Universal Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" crossorigin href="./assets/style-vFtBHCiU.css">
+  <link rel="stylesheet" crossorigin href="./assets/habit-partner-D94WrWLm.css">
+</head>
+<body>
+
+  <!-- Navigation Header (Modular & Expandable for Future Apps) -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="habit-partner.html" class="brand" aria-label="Habit Partner Home">
+        <div class="brand-logo-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <div class="brand-title-group">
+          <span class="brand-name">Habit Partner</span>
+          <span class="brand-badge">Android App</span>
+        </div>
+      </a>
+
+      <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="./index.html" class="nav-link hp-back-btn">← Back to Projects</a></li>
+          <li><a href="habit-partner.html" class="nav-link active">Home</a></li>
+          <li><a href="habit-partner-privacy.html" class="nav-link">Privacy</a></li>
+          <li><a href="habit-partner-terms.html" class="nav-link">Terms</a></li>
+          <li><a href="#support" class="nav-link hp-support-trigger">Support</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          Privacy-First Android Application
+        </div>
+        
+        <h1 class="hero-title">Habit Partner</h1>
+        <p class="hero-tagline">"Build better habits, one day at a time."</p>
+
+        <p class="hero-description">
+          Habit Partner is a simple habit tracking application designed to help users create habits, track daily progress, maintain streaks and build consistent routines.
+        </p>
+
+        <!-- Product Showcase Visual Mockup -->
+        <div class="hp-showcase-frame">
+          <img src="./showcase_3.jpg" alt="Habit Partner Mobile UI Mockup" class="hp-showcase-img" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Designed for Consistency &amp; Privacy</h2>
+          <p class="section-subtitle">Everything you need to create lasting daily habits without compromising your personal data.</p>
+        </div>
+
+        <div class="features-grid">
+          
+          <!-- Feature 1: Habit Tracking -->
+          <article class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <path d="m9 14 2 2 4-4"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Habit Tracking</h3>
+            <ul class="feature-list">
+              <li>Create and manage habits</li>
+              <li>Track daily completion</li>
+              <li>Monitor progress and streaks</li>
+            </ul>
+          </article>
+
+          <!-- Feature 2: Daily Reminders -->
+          <article class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Daily Reminders</h3>
+            <ul class="feature-list">
+              <li>Optional local reminders</li>
+              <li>Helps users remember their habits</li>
+              <li>Reminders are handled on the user's device</li>
+            </ul>
+          </article>
+
+          <!-- Feature 3: Smart Analytics -->
+          <article class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </div>
+            <h3 class="feature-title">Smart Analytics</h3>
+            <ul class="feature-list">
+              <li>Detailed streak and completion stats</li>
+              <li>Visual progress charts and insights</li>
+              <li>Track long-term habit consistency</li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-wrapper">
+      <div class="footer-copy">
+        © 2026 Habit Partner. All rights reserved.
+      </div>
+      <ul class="footer-links">
+        <li><a href="./index.html">Portfolio</a></li>
+        <li><a href="habit-partner-privacy.html">Privacy Policy</a></li>
+        <li><a href="habit-partner-terms.html">Terms of Service</a></li>
+        <li><a href="#support" class="hp-support-trigger">Support</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Habit Partner Support Modal Popup -->
+  <div id="hp-support-modal" class="hp-support-modal-backdrop hidden">
+    <div class="hp-support-card">
+      <button type="button" id="hp-support-close-btn" class="hp-support-close-btn" aria-label="Close modal">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="hp-support-header">
+        <h2 class="hp-support-main-title">Support</h2>
+        <p class="hp-support-sub-title">We are here to help you get the most out of Habit Partner.</p>
+      </div>
+
+      <div class="hp-support-inner-card">
+        <h3 class="hp-contact-title">Contact Us</h3>
+        <p class="hp-contact-desc">
+          For any application support, privacy policy inquiries, Google Drive backup questions, or general feedback, please reach out to us directly via email.
+        </p>
+        
+        <div class="hp-email-section">
+          <span class="hp-email-label">OUR EMAIL</span>
+          <button type="button" class="hp-copy-email-btn" data-email="akileshselva909@gmail.com">
+            <span class="hp-email-text">akileshselva909@gmail.com</span>
+            <span class="hp-copied-badge">Copied!</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+    if (menuBtn && navLinks) {
+      menuBtn.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('open');
+        menuBtn.setAttribute('aria-expanded', isOpen);
+      });
+    }
+
+    // Support Modal Handlers
+    const supportModal = document.getElementById('hp-support-modal');
+    const supportTriggers = document.querySelectorAll('.hp-support-trigger, a[href="#support"]');
+    const closeSupportBtn = document.getElementById('hp-support-close-btn');
+
+    function openSupportModal(e) {
+      if (e) e.preventDefault();
+      if (supportModal) supportModal.classList.remove('hidden');
+    }
+
+    function closeSupportModal() {
+      if (supportModal) supportModal.classList.add('hidden');
+    }
+
+    supportTriggers.forEach(btn => {
+      btn.addEventListener('click', openSupportModal);
+    });
+
+    if (closeSupportBtn) {
+      closeSupportBtn.addEventListener('click', closeSupportModal);
+    }
+
+    if (supportModal) {
+      supportModal.addEventListener('click', (e) => {
+        if (e.target === supportModal) closeSupportModal();
+      });
+    }
+
+    // Email Copy Button Handler
+    const copyBtn = document.querySelector('.hp-copy-email-btn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const email = copyBtn.getAttribute('data-email');
+        if (email) {
+          navigator.clipboard.writeText(email).then(() => {
+            copyBtn.classList.add('copied');
+            setTimeout(() => copyBtn.classList.remove('copied'), 2000);
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html>

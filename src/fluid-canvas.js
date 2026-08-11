@@ -27,6 +27,9 @@ export function initFluidCanvas() {
   const showcase2Img = new Image();
   showcase2Img.src = '/showcase_2.jpg';
 
+  const showcase3Img = new Image();
+  showcase3Img.src = '/showcase_3.jpg';
+
   // Load Updated 3D Character Animation Video (Char_Anim.mp4 with Cache Busting)
   const animVideo = document.createElement('video');
   animVideo.src = '/Char_Anim.mp4?v=' + Date.now();
@@ -78,6 +81,7 @@ export function initFluidCanvas() {
   // Persistent smooth lerp hover factors for bottom-left project title text overlay
   let img1HoverFactor = 0.0;
   let img2HoverFactor = 0.0;
+  let img3HoverFactor = 0.0;
 
   // Persistent smooth lerp hover factors for 6 right-side Figma cards
   const cardHoverFactors = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
@@ -136,6 +140,29 @@ export function initFluidCanvas() {
       topCtx.setTransform(1, 0, 0, 1, 0, 0);
       topCtx.scale(dpr, dpr);
     }
+  }
+
+  let isImage2Past50Global = false;
+  let isCursorInsideImageGlobal = false;
+  let activeIndexGlobal = 0;
+
+  const handleShowcaseClick = (e) => {
+    if (smoothScrollProgress >= 0.68) {
+      if (activeIndexGlobal === 0) {
+        window.location.href = './flyer-eats.html';
+      } else if (activeIndexGlobal === 2) {
+        window.location.href = './habit-partner.html';
+      }
+    }
+  };
+
+  if (topCanvas) {
+    topCanvas.style.cursor = 'pointer';
+    topCanvas.addEventListener('click', handleShowcaseClick);
+  }
+  if (canvas) {
+    canvas.style.cursor = 'pointer';
+    canvas.addEventListener('click', handleShowcaseClick);
   }
 
   window.addEventListener('resize', resize);
@@ -235,35 +262,30 @@ export function initFluidCanvas() {
   }
 
   /**
-   * Helper function to draw full UI showcase image centered inside canvas frame without cutting off UI elements
+   * Helper function to draw project work showcase image to FIT & FILL 100% of the canvas frame edge-to-edge
    * Returns exact image bounding box { dx, dy, dw, dh }
    */
-  function drawImageFit(context, img, x, y, w, h) {
+  function drawImageCover(context, img, x, y, w, h) {
     if (!img.complete || img.naturalWidth === 0) return null;
     const imgAspect = img.naturalWidth / img.naturalHeight;
     const containerAspect = w / h;
 
-    let dw, dh, dx, dy;
+    let sx, sy, sw, sh;
 
-    if (Math.abs(imgAspect - containerAspect) < 0.1) {
-      dw = w;
-      dh = h;
-      dx = x;
-      dy = y;
-    } else if (imgAspect > containerAspect) {
-      dw = w;
-      dh = w / imgAspect;
-      dx = x;
-      dy = y + (h - dh) / 2;
+    if (imgAspect > containerAspect) {
+      sh = img.naturalHeight;
+      sw = sh * containerAspect;
+      sx = (img.naturalWidth - sw) / 2;
+      sy = 0;
     } else {
-      dh = h;
-      dw = h * imgAspect;
-      dx = x + (w - dw) / 2;
-      dy = y;
+      sw = img.naturalWidth;
+      sh = sw / containerAspect;
+      sx = 0;
+      sy = (img.naturalHeight - sh) / 2;
     }
 
-    context.drawImage(img, dx, dy, dw, dh);
-    return { dx, dy, dw, dh };
+    context.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+    return { dx: x, dy: y, dw: w, dh: h };
   }
 
   /**
@@ -1205,71 +1227,220 @@ export function initFluidCanvas() {
       topCtx.clip(); // Clip directly inside the organic expanding portal!
       topCtx.globalAlpha = portalAlpha;
 
-      // 2-STAGE TIMELINE MATH:
-      // STAGE 1: Portal expands from 30% to 100% open (scrollProgress 0.68 -> 0.80). Image 1 stays 100% stationary centered (slideRaw = 0).
-      // STAGE 2: AFTER portal is 100% open (scrollProgress >= 0.80), scrolling further slides Image 1 up and Image 2 into view!
+      // 3-STAGE TIMELINE MATH (01 Catering -> 02 Yes2Food -> 03 Habit Partner)
       let slideRaw = 0;
-      if (scrollProgress >= 0.80) {
-        slideRaw = Math.min((scrollProgress - 0.80) / 0.18, 1.0);
+      if (scrollProgress >= 0.76) {
+        slideRaw = Math.min((scrollProgress - 0.76) / 0.12, 2.0);
       }
-      const easeSlide = slideRaw * slideRaw * (3 - 2 * slideRaw); // 0.0 -> 1.0 smooth cubic ease
 
       // Mouse Parallax Offset (subtle)
       const mouseOffsetY = (smoothMouse.y - height * 0.5) * 0.015;
-
       let isCursorInsideImage = false;
 
-      // Image 1 (Full-frame, stays 100% centered during portal entrance, then slides up AFTER portal is 100% open)
-      const img1Y = - easeSlide * height + mouseOffsetY;
-      let b1 = null;
-      if (img1Y + height > -50) {
-        b1 = drawImageFit(topCtx, showcase1Img, 0, img1Y, width, height);
-        if (b1 && smoothMouse.x >= b1.dx && smoothMouse.x <= b1.dx + b1.dw &&
-            smoothMouse.y >= b1.dy && smoothMouse.y <= b1.dy + b1.dh) {
-          isCursorInsideImage = true;
-          img1HoverFactor += (1.0 - img1HoverFactor) * 0.12;
-        } else {
-          img1HoverFactor += (0.0 - img1HoverFactor) * 0.12;
-        }
+      // Image 1: Catering Made Easy (Pinned stationary at y = 0)
+      const img1Y = mouseOffsetY;
+      let b1 = drawImageCover(topCtx, showcase1Img, 0, img1Y, width, height);
+      if (b1 && smoothMouse.x >= b1.dx && smoothMouse.x <= b1.dx + b1.dw &&
+          smoothMouse.y >= b1.dy && smoothMouse.y <= b1.dy + b1.dh && slideRaw < 0.85) {
+        isCursorInsideImage = true;
+        img1HoverFactor += (1.0 - img1HoverFactor) * 0.12;
       } else {
-        img1HoverFactor = 0.0;
+        img1HoverFactor += (0.0 - img1HoverFactor) * 0.12;
       }
 
-      // Image 2 (Full-frame, slides up from bottom into frame AFTER portal is 100% open)
-      const img2Y = height - easeSlide * height + mouseOffsetY;
+      if (b1 && img1HoverFactor > 0.005) {
+        topCtx.save();
+        const trX = b1.dx + b1.dw;
+        const trY = b1.dy;
+        const blX = b1.dx - b1.dw * (1.0 - img1HoverFactor * 0.8);
+        const blY = b1.dy + b1.dh * (1.0 + img1HoverFactor * 0.8);
+
+        const sweepGrad = topCtx.createLinearGradient(trX, trY, blX, blY);
+        sweepGrad.addColorStop(0.0, `rgba(35, 40, 50, ${0.75 * img1HoverFactor})`);
+        sweepGrad.addColorStop(Math.min(img1HoverFactor * 0.7, 1.0), `rgba(25, 28, 35, ${0.68 * img1HoverFactor})`);
+        sweepGrad.addColorStop(1.0, `rgba(15, 18, 22, ${0.60 * img1HoverFactor})`);
+
+        topCtx.fillStyle = sweepGrad;
+        topCtx.fillRect(b1.dx, b1.dy, b1.dw, b1.dh);
+        topCtx.restore();
+      }
+
+      // Image 2: Yes2Food Business (Slides up from bottom at slideRaw 0.0 -> 1.0)
+      const slide2Stage = Math.min(Math.max(slideRaw, 0.0), 1.0);
+      const easeSlide2 = slide2Stage * slide2Stage * (3 - 2 * slide2Stage);
+      const img2Y = (1.0 - easeSlide2) * height + mouseOffsetY;
+
       let b2 = null;
-      if (img2Y < height + 50) {
-        b2 = drawImageFit(topCtx, showcase2Img, 0, img2Y, width, height);
+      if (slideRaw > 0.001) {
+        b2 = drawImageCover(topCtx, showcase2Img, 0, img2Y, width, height);
         if (b2 && smoothMouse.x >= b2.dx && smoothMouse.x <= b2.dx + b2.dw &&
-            smoothMouse.y >= b2.dy && smoothMouse.y <= b2.dy + b2.dh) {
+            smoothMouse.y >= b2.dy && smoothMouse.y <= b2.dy + b2.dh && slideRaw >= 0.15 && slideRaw < 1.85) {
           isCursorInsideImage = true;
           img2HoverFactor += (1.0 - img2HoverFactor) * 0.12;
         } else {
           img2HoverFactor += (0.0 - img2HoverFactor) * 0.12;
         }
+
+        if (b2 && img2HoverFactor > 0.005) {
+          topCtx.save();
+          const trX = b2.dx + b2.dw;
+          const trY = b2.dy;
+          const blX = b2.dx - b2.dw * (1.0 - img2HoverFactor * 0.8);
+          const blY = b2.dy + b2.dh * (1.0 + img2HoverFactor * 0.8);
+
+          const sweepGrad = topCtx.createLinearGradient(trX, trY, blX, blY);
+          sweepGrad.addColorStop(0.0, `rgba(35, 40, 50, ${0.75 * img2HoverFactor})`);
+          sweepGrad.addColorStop(Math.min(img2HoverFactor * 0.7, 1.0), `rgba(25, 28, 35, ${0.68 * img2HoverFactor})`);
+          sweepGrad.addColorStop(1.0, `rgba(15, 18, 22, ${0.60 * img2HoverFactor})`);
+
+          topCtx.fillStyle = sweepGrad;
+          topCtx.fillRect(b2.dx, b2.dy, b2.dw, b2.dh);
+          topCtx.restore();
+        }
       } else {
         img2HoverFactor = 0.0;
       }
 
-      // RENDER KINETIC BOTTOM-LEFT PROJECT TITLE & SUB-CONTENT OVERLAY
-      // Hover In: Separated letters join together & fade in. Hover Out: Joined letters separate apart & fade out.
-      if (b1 && img1HoverFactor > 0.005) {
-        const textX = b1.dx + 42;
-        const titleY = b1.dy + b1.dh - 58;
-        const subY = b1.dy + b1.dh - 34;
+      // Image 3: Habit Partner Mobile App (Slides up from bottom at slideRaw 1.0 -> 2.0)
+      const slide3Stage = Math.min(Math.max(slideRaw - 1.0, 0.0), 1.0);
+      const easeSlide3 = slide3Stage * slide3Stage * (3 - 2 * slide3Stage);
+      const img3Y = (1.0 - easeSlide3) * height + mouseOffsetY;
 
-        drawKineticText(topCtx, 'MYWORKER AI', textX, titleY, '600 22px Poppins, sans-serif', '#ffffff', img1HoverFactor, img1HoverFactor);
-        drawKineticText(topCtx, 'Enterprise Autonomous AI Agent Ecosystem', textX, subY, '400 13px Poppins, sans-serif', 'rgba(255, 255, 255, 0.85)', img1HoverFactor, img1HoverFactor);
+      let b3 = null;
+      if (slideRaw > 1.001) {
+        b3 = drawImageCover(topCtx, showcase3Img, 0, img3Y, width, height);
+        if (b3 && smoothMouse.x >= b3.dx && smoothMouse.x <= b3.dx + b3.dw &&
+            smoothMouse.y >= b3.dy && smoothMouse.y <= b3.dy + b3.dh && slideRaw >= 1.15) {
+          isCursorInsideImage = true;
+          img3HoverFactor += (1.0 - img3HoverFactor) * 0.12;
+        } else {
+          img3HoverFactor += (0.0 - img3HoverFactor) * 0.12;
+        }
+
+        if (b3 && img3HoverFactor > 0.005) {
+          topCtx.save();
+          const trX = b3.dx + b3.dw;
+          const trY = b3.dy;
+          const blX = b3.dx - b3.dw * (1.0 - img3HoverFactor * 0.8);
+          const blY = b3.dy + b3.dh * (1.0 + img3HoverFactor * 0.8);
+
+          const sweepGrad = topCtx.createLinearGradient(trX, trY, blX, blY);
+          sweepGrad.addColorStop(0.0, `rgba(35, 40, 50, ${0.75 * img3HoverFactor})`);
+          sweepGrad.addColorStop(Math.min(img3HoverFactor * 0.7, 1.0), `rgba(25, 28, 35, ${0.68 * img3HoverFactor})`);
+          sweepGrad.addColorStop(1.0, `rgba(15, 18, 22, ${0.60 * img3HoverFactor})`);
+
+          topCtx.fillStyle = sweepGrad;
+          topCtx.fillRect(b3.dx, b3.dy, b3.dw, b3.dh);
+          topCtx.restore();
+        }
+      } else {
+        img3HoverFactor = 0.0;
       }
 
-      if (b2 && img2HoverFactor > 0.005) {
-        const textX = b2.dx + 42;
-        const titleY = b2.dy + b2.dh - 58;
-        const subY = b2.dy + b2.dh - 34;
+      // RENDER REFERENCE DESIGN OVERLAY (VERTICALLY CENTERED ON SCREEN WITH SCROLL PROGRESS BAR LINE)
+      topCtx.save();
+      topCtx.globalAlpha = portalAlpha;
 
-        drawKineticText(topCtx, 'PULSE STUDIO', textX, titleY, '600 22px Poppins, sans-serif', '#ffffff', img2HoverFactor, img2HoverFactor);
-        drawKineticText(topCtx, '60fps Real-Time WebGL Audio Shader Engine', textX, subY, '400 13px Poppins, sans-serif', 'rgba(255, 255, 255, 0.85)', img2HoverFactor, img2HoverFactor);
+      let activeIndex = 0;
+      if (slideRaw >= 1.45 || (b3 && img3Y <= height * 0.50)) {
+        activeIndex = 2;
+      } else if (slideRaw >= 0.45 || (b2 && img2Y <= height * 0.50)) {
+        activeIndex = 1;
       }
+
+      const isImage2Past50 = activeIndex > 0;
+      isImage2Past50Global = isImage2Past50;
+      isCursorInsideImageGlobal = isCursorInsideImage;
+      activeIndexGlobal = activeIndex;
+
+      const activeNum = activeIndex === 2 ? '03' : (activeIndex === 1 ? '02' : '01');
+      const activePill = activeIndex === 2 ? '🎯 Habit Partner' : (activeIndex === 1 ? '⚡ Yes2Food' : '🍽 Catering');
+      const activeSub = activeIndex === 2 ? '— Social Habit Tracker' : (activeIndex === 1 ? '— Enterprise Dashboard' : '— Mobile Experience');
+      const activeHeadline = activeIndex === 2
+        ? 'Habit Partner — Social Habit Tracker & Accountability Mobile App'
+        : (activeIndex === 1
+          ? 'Yes2Food Business — Enterprise Merchant & Orders Dashboard'
+          : 'Catering Made Easy — Mobile Order & Bulk Catering Experience');
+
+      const marginX = Math.max(width * 0.08, 40);
+      const availableW = width - (marginX * 2);
+
+      // VERTICAL CENTERED LAYOUT MATH:
+      const titleFontSize = width < 768 ? 22 : (width < 1200 ? 32 : 40);
+      const lineY = (height * 0.50) - 50;
+
+      // 1. SCROLL-DRIVEN HORIZONTAL PROGRESS BAR DIVIDER LINE (100% END-TO-END SCREEN FILL, WHITE COLOR, NO CIRCLE)
+      let showcaseProgress = 0.0;
+      if (scrollProgress >= 0.68) {
+        showcaseProgress = Math.min(Math.max((scrollProgress - 0.68) / 0.30, 0), 1.0);
+      }
+      const currentLineEndX = showcaseProgress * width;
+
+      // Background subtle guide line (100% end-to-end from 0 to width)
+      topCtx.strokeStyle = 'rgba(255, 255, 255, 0.20)';
+      topCtx.lineWidth = 1.0;
+      topCtx.beginPath();
+      topCtx.moveTo(0, lineY);
+      topCtx.lineTo(width, lineY);
+      topCtx.stroke();
+
+      // Active expanding pure white progress bar line based on scroll (no circle dot!)
+      if (showcaseProgress > 0.001) {
+        const lineGrad = topCtx.createLinearGradient(0, lineY, currentLineEndX, lineY);
+        lineGrad.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
+        lineGrad.addColorStop(1, '#ffffff');
+        topCtx.strokeStyle = lineGrad;
+        topCtx.lineWidth = 2.0;
+        topCtx.beginPath();
+        topCtx.moveTo(0, lineY);
+        topCtx.lineTo(currentLineEndX, lineY);
+        topCtx.stroke();
+      }
+
+      // 2. Top-Left Number Counter (01 / 02) Above Line
+      topCtx.font = '700 15px Poppins, sans-serif';
+      topCtx.fillStyle = '#ffffff';
+      topCtx.textAlign = 'left';
+      topCtx.textBaseline = 'alphabetic';
+      topCtx.fillText(activeNum, marginX, lineY - 14);
+
+      // 3. Top-Center Brand Pill Badge (Overlapping line)
+      const pillText = activePill;
+      topCtx.font = '600 12px Poppins, sans-serif';
+      const pillW = topCtx.measureText(pillText).width + 32;
+      const pillX = (width * 0.40) - (pillW / 2);
+      const pillY = lineY - 14;
+
+      topCtx.fillStyle = 'rgba(147, 197, 253, 0.35)';
+      topCtx.beginPath();
+      if (topCtx.roundRect) {
+        topCtx.roundRect(pillX, pillY, pillW, 28, 14);
+      } else {
+        topCtx.rect(pillX, pillY, pillW, 28);
+      }
+      topCtx.fill();
+
+      topCtx.fillStyle = '#ffffff';
+      topCtx.textAlign = 'center';
+      topCtx.textBaseline = 'middle';
+      topCtx.fillText(pillText, pillX + pillW / 2, pillY + 14);
+
+      // 4. Left Sub-Label Below Line
+      topCtx.textAlign = 'left';
+      topCtx.textBaseline = 'top';
+      topCtx.font = '500 13px Poppins, sans-serif';
+      topCtx.fillStyle = 'rgba(255, 255, 255, 0.78)';
+      topCtx.fillText(activeSub, marginX, lineY + 28);
+
+      // 5. Main Center Editorial Headline
+      const headlineX = width < 900 ? marginX : Math.max(width * 0.32, 340);
+      const headlineMaxW = width < 900 ? width - marginX * 2 : Math.min(width * 0.58, 720);
+
+      topCtx.font = `700 ${titleFontSize}px Poppins, sans-serif`;
+      topCtx.fillStyle = '#ffffff';
+
+      wrapCanvasText(topCtx, activeHeadline, headlineX, lineY + 38, headlineMaxW, titleFontSize * 1.28);
+      topCtx.restore();
 
       // RENDER INTERACTIVE NEGATIVE-COLOR BLEND HOVER CURSOR CIRCLE ("EXPLORE") ONLY WHEN CURSOR IS INSIDE THE VISIBLE IMAGE BOUNDS
       const targetScale = isCursorInsideImage ? 1.0 : 0.0;

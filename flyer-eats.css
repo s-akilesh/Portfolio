@@ -1,0 +1,567 @@
+/* Flyer Eats UX Case Study Dedicated Stylesheet */
+
+body.case-study-body {
+  background-color: #05070b;
+  color: #ffffff;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Header Adjustments */
+.cs-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 24px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  box-sizing: border-box;
+  background: rgba(5, 7, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cs-back-btn {
+  color: #38bdf8 !important;
+  font-weight: 600 !important;
+  text-transform: lowercase;
+}
+
+/* Main Container */
+.cs-container {
+  width: 90%;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.cs-main {
+  padding-top: 120px;
+}
+
+/* Section Shared Rules */
+.cs-section {
+  padding: 120px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cs-section-label, .cs-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  color: #38bdf8;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.cs-section-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 20px 0;
+  color: #ffffff;
+  max-width: 800px;
+}
+
+.cs-section-desc {
+  font-size: clamp(15px, 1.8vw, 18px);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 760px;
+  margin-bottom: 40px;
+}
+
+.cs-img-fit {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* 1. HERO SECTION */
+.cs-hero-section {
+  padding: 60px 0 100px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cs-hero-title {
+  font-size: clamp(42px, 7vw, 84px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  margin: 10px 0 16px 0;
+  color: #ffffff;
+}
+
+.cs-hero-sub {
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 600;
+  color: #38bdf8;
+  margin: 0 0 20px 0;
+}
+
+.cs-hero-desc {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 780px;
+  margin-bottom: 48px;
+}
+
+.cs-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  padding: 32px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 60px;
+}
+
+.cs-meta-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.cs-meta-val {
+  font-size: 15px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.cs-hero-image-frame {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.60);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* 2. THE PROBLEM SECTION */
+.cs-highlight-card {
+  background: rgba(15, 23, 42, 0.70);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 16px;
+  padding: 32px 40px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 36px;
+}
+
+.cs-highlight-icon {
+  font-size: 28px;
+  color: #38bdf8;
+}
+
+.cs-highlight-text {
+  font-size: clamp(17px, 2vw, 22px);
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* 3. RESEARCH SECTION */
+.cs-metrics-row {
+  display: flex;
+  gap: 48px;
+  margin-bottom: 32px;
+}
+
+.cs-metric-card {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.cs-metric-num {
+  font-size: clamp(48px, 6vw, 72px);
+  font-weight: 900;
+  color: #38bdf8;
+  line-height: 1;
+}
+
+.cs-metric-unit {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #94a3b8;
+}
+
+.cs-insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.cs-insight-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.cs-insight-card:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: #38bdf8;
+  transform: translateY(-3px);
+}
+
+.cs-insight-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.cs-insight-from {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.70);
+}
+
+.cs-insight-arrow {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.cs-insight-to {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* 4. OPPORTUNITY SECTION */
+.cs-opp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+  margin-top: 48px;
+}
+
+.cs-opp-card {
+  background: rgba(15, 23, 42, 0.50);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 16px;
+  padding: 40px 32px;
+  transition: all 0.3s ease;
+}
+
+.cs-opp-card:hover {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.06);
+  transform: translateY(-4px);
+}
+
+.cs-opp-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #38bdf8;
+  margin: 0 0 12px 0;
+}
+
+.cs-opp-desc {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+/* 5. SOLUTION SECTION */
+.cs-solution-frame {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 40px;
+}
+
+.cs-annotation-pills {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 24px;
+  background: rgba(5, 7, 11, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.cs-ann-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.30);
+}
+
+/* 6. DESIGN SECTION */
+.cs-flow-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px 28px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+  margin: 32px 0 48px 0;
+}
+
+.cs-flow-step {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+}
+
+.cs-flow-arrow {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.cs-design-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 28px;
+}
+
+.cs-design-card {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+/* 7. TESTING SECTION */
+.inline-metric {
+  margin-bottom: 24px;
+}
+
+.cs-comparison-flow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  align-items: center;
+  margin-top: 48px;
+}
+
+@media (max-width: 850px) {
+  .cs-comparison-flow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cs-comp-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.v2-card {
+  background: rgba(56, 189, 248, 0.06);
+  border-color: #38bdf8;
+}
+
+.cs-comp-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #38bdf8;
+}
+
+.cs-comp-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 10px 0;
+}
+
+.cs-comp-desc {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.cs-comp-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.cs-comp-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.10);
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.cs-comp-line {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.20);
+}
+
+/* 8. VALIDATION SECTION */
+.cs-outcomes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.cs-outcome-card {
+  background: rgba(15, 23, 42, 0.60);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 16px;
+  padding: 36px 28px;
+  transition: all 0.3s ease;
+}
+
+.cs-outcome-card:hover {
+  transform: translateY(-4px);
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.10);
+}
+
+.cs-outcome-num {
+  font-size: 12px;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.cs-outcome-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #ffffff;
+  margin: 12px 0 0 0;
+}
+
+/* 9. TAKEAWAY SECTION */
+.cs-takeaway-statement {
+  font-size: clamp(28px, 4.5vw, 56px);
+  font-weight: 900;
+  line-height: 1.15;
+  color: #ffffff;
+  margin-bottom: 24px;
+  max-width: 900px;
+}
+
+.cs-takeaway-support {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.80);
+  max-width: 780px;
+  margin-bottom: 60px;
+}
+
+.cs-final-visual-frame {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* 10. NEXT CASE STUDY & NAVIGATION SECTION */
+.cs-nav-section {
+  padding: 120px 0;
+  background: #080c14;
+}
+
+.cs-next-wrapper {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cs-next-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #38bdf8;
+  margin-bottom: 16px;
+}
+
+.cs-next-title {
+  display: block;
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 900;
+  color: #ffffff;
+  text-decoration: none;
+  margin-bottom: 12px;
+  transition: color 0.3s ease;
+}
+
+.cs-next-title:hover {
+  color: #38bdf8;
+}
+
+.cs-next-sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.70);
+  margin-bottom: 40px;
+}
+
+.cs-next-preview-frame {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 60px;
+}
+
+.cs-back-container {
+  margin-top: 48px;
+}
+
+.cs-back-portfolio-btn {
+  display: inline-block;
+  padding: 16px 40px;
+  border-radius: 30px;
+  background: #ffffff;
+  color: #05070b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.cs-back-portfolio-btn:hover {
+  background: #38bdf8;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Footer */
+.cs-footer {
+  padding: 40px 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.50);
+}

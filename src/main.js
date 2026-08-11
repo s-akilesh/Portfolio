@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Contact Modal Handlers
   const contactModal = document.getElementById('contact-modal');
   const openBtn = document.getElementById('open-contact-btn');
-  const closeBtn = document.getElementById('close-contact-btn');
+  const closeBtn = document.getElementById('close-contact-btn') || document.getElementById('modal-close-btn') || document.querySelector('.modal-close-btn');
 
   function openContactModal() {
     if (contactModal) {
@@ -93,8 +93,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (closeBtn) {
-    closeBtn.addEventListener('click', closeContactModal);
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeContactModal();
+    });
   }
+
+  const allCloseBtns = document.querySelectorAll('#close-contact-btn, #modal-close-btn, .modal-close-btn');
+  allCloseBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeContactModal();
+    });
+  });
 
   // Close modal when clicking on backdrop
   if (contactModal) {
