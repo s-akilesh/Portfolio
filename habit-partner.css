@@ -705,6 +705,14 @@ a:focus-visible, button:focus-visible {
   font-weight: 800;
 }
 
+.legal-card-content ul.plain-list li {
+  padding-left: 0 !important;
+}
+
+.legal-card-content ul.plain-list li::before {
+  display: none !important;
+}
+
 /* Code Scope Pill Styling */
 .code-scope-box {
   display: inline-block;
