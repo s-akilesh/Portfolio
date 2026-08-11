@@ -1,5 +1,5 @@
 /**
- * Fluid Canvas Module — Portal Zoom, 50-50 About Section, 3D Character Animation Video Section (Focused 3-Card Viewport Window), Organic 4-Corner Dust White Portal with 16:9 Widescreen Full-Frame Image Slide, Kinetic Bottom-Left Project Title Overlay (Separating & Joining Letter Spacing Hover Fade) & Interactive Negative-Color Blend Hover Cursor Circle ("EXPLORE") & Kinetic Architectural Dashed Grid
+ * Fluid Canvas Module — "How I Work" Process Section with Sequential Card Stagger Reveal, Expanding Axis Line & Rotating (+) Nodes, About Me Section ("I LIKE MAKING THINGS MAKE SENSE"), Ultra-Compact Organic Liquid Jelly Portal with Slow Elegant Spinning Outer Circular Text ("AKILESH • UI/UX DESIGNER • PRODUCT ARCHITECT"), Velocity-Capped Inertial Lerp Smooth Scroll Engine, 3D Character Animation Video Section (Focused 3-Card Viewport Window), Organic Dust White Portal with 16:9 Image Slide & Interactive Negative-Color Blend Hover Cursor Circle ("EXPLORE") & Kinetic Dashed Grid
  */
 
 export function initFluidCanvas() {
@@ -67,6 +67,10 @@ export function initFluidCanvas() {
   // Mouse tracking & smooth lerp mouse coords
   let mouse = { x: -1000, y: -1000, speed: 0 };
   let smoothMouse = { x: 0, y: 0 };
+
+  // Velocity-Capped Inertial Lerp Smooth Scroll Engine Variables
+  let rawScrollProgress = 0;
+  let smoothScrollProgress = 0;
 
   // Smooth lerp position & scale for interactive negative-blend Explore hover cursor circle
   let exploreCursor = { x: -100, y: -100, scale: 0.0 };
@@ -172,29 +176,9 @@ export function initFluidCanvas() {
   let isTypingTriggered = false;
   let typedCharFloat = 0;
 
-  // Organic Fluid "A" Letter Silhouette Control Points
-  const baseAPoints = [
-    { rx: 0.0, ry: -0.65 },
-    { rx: 0.18, ry: -0.45 },
-    { rx: 0.45, ry: -0.05 },
-    { rx: 0.58, ry: 0.46 },
-    { rx: 0.36, ry: 0.62 },
-    { rx: 0.15, ry: 0.22 },
-    { rx: 0.0, ry: 0.12 },
-    { rx: -0.15, ry: 0.22 },
-    { rx: -0.36, ry: 0.62 },
-    { rx: -0.58, ry: 0.46 },
-    { rx: -0.45, ry: -0.05 },
-    { rx: -0.18, ry: -0.45 },
-  ];
-
-  // Static Content
-  const LINE_1 = "I design products people choose to explore,";
-  const LINE_2 = "and complex tools they learn to trust.";
-  const TOTAL_CHARS = LINE_1.length + LINE_2.length;
-
-  const BIO_P1 = "I’m a product design leader working across content experiences, AI-powered products, search and discovery, personalization, and design systems. At Dow Jones, I connect product direction with hands-on craft, aligning partners and carrying ambitious ideas into scalable foundations used across multiple brands.";
-  const BIO_P2 = "I combine product strategy with hands-on interaction and visual design, turning ambiguous opportunities into high-fidelity concepts, prototypes, and production-ready experiences. My background in accessibility and design systems helps ambitious ideas retain their quality as they scale.";
+  // About Me Section Static Content
+  const ABOUT_TITLE = "I LIKE MAKING THINGS MAKE SENSE.";
+  const ABOUT_BIO = "I’m a UI/UX designer who looks beyond the interface. I understand the business, study the users, uncover the gaps, and turn complex problems into simple, useful experiences.";
 
   /**
    * Helper function to wrap canvas text nicely across lines (Left Aligned)
@@ -314,7 +298,39 @@ export function initFluidCanvas() {
   }
 
   /**
-   * Render portal texture with 50-50 split screen layout, 3D Character Animation Video Section & KINETIC ARCHITECTURAL DASHED GRID
+   * Render spinning circular text orbiting around center point (cx, cy) at radius R
+   */
+  function drawSpinningCircularText(context, text, cx, cy, radius, startAngle, alpha) {
+    if (alpha <= 0.01) return;
+    context.save();
+    context.globalAlpha *= alpha;
+    context.font = '700 11px Poppins, sans-serif';
+    context.fillStyle = '#000000';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+
+    const totalChars = text.length;
+    const angleStep = (Math.PI * 2) / totalChars;
+
+    for (let i = 0; i < totalChars; i++) {
+      const char = text[i];
+      const charAngle = startAngle + i * angleStep;
+
+      const x = cx + Math.cos(charAngle) * radius;
+      const y = cy + Math.sin(charAngle) * radius;
+
+      context.save();
+      context.translate(x, y);
+      context.rotate(charAngle + Math.PI / 2);
+      context.fillText(char, 0, 0);
+      context.restore();
+    }
+
+    context.restore();
+  }
+
+  /**
+   * Render portal texture with 50-50 split screen layout, Process Section ("How I Work"), 3D Character Animation Video Section & KINETIC ARCHITECTURAL DASHED GRID
    */
   function renderMediaTexture(t, scrollProgress, aboutOpacity, aboutScale, whitePortalProgress) {
     mctx.clearRect(0, 0, width, height);
@@ -322,7 +338,7 @@ export function initFluidCanvas() {
     const portalCenterX = width * 0.5;
     const portalCenterY = height * 0.5;
 
-    const blackShiftProgress = Math.min(Math.max((scrollProgress - 0.14) / 0.12, 0), 1);
+    const blackShiftProgress = Math.min(Math.max((scrollProgress - 0.04) / 0.08, 0), 1);
 
     if (blackShiftProgress < 1) {
       const bgGrad = mctx.createRadialGradient(
@@ -370,9 +386,9 @@ export function initFluidCanvas() {
       mctx.fillRect(0, 0, width, height);
     }
 
-    // RENDER KINETIC ARCHITECTURAL DASHED GRID FOR AVATAR SCREEN
-    if (scrollProgress > 0.24 && whitePortalProgress < 0.95) {
-      const gridAlpha = Math.min((scrollProgress - 0.24) / 0.10, 1.0) * (1 - whitePortalProgress);
+    // RENDER KINETIC ARCHITECTURAL DASHED GRID FOR AVATAR & PROCESS SCREENS
+    if (scrollProgress > 0.16 && whitePortalProgress < 0.95) {
+      const gridAlpha = Math.min((scrollProgress - 0.16) / 0.08, 1.0) * (1 - whitePortalProgress);
 
       if (gridAlpha > 0.01) {
         const mouseOffsetX = (smoothMouse.x - width * 0.5);
@@ -448,7 +464,7 @@ export function initFluidCanvas() {
       }
     }
 
-    // 1. RENDER ABOUT ME SECTION
+    // 1. RENDER ABOUT ME SECTION (scrollProgress 0.04 -> 0.20)
     if (aboutOpacity > 0.01) {
       const isMobile = width < 1100;
 
@@ -534,10 +550,6 @@ export function initFluidCanvas() {
       mctx.letterSpacing = '2px';
       mctx.fillText('ABOUT ME', portalTextX, textFloatY);
 
-      mctx.font = '600 12px Poppins, sans-serif';
-      mctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-      mctx.fillText('AKILESH — CREATIVE ARCHITECT', portalTextX, textFloatY + 24);
-
       if (scrollProgress > 0.04) {
         isTypingTriggered = true;
       } else if (scrollProgress < 0.02) {
@@ -546,49 +558,28 @@ export function initFluidCanvas() {
       }
 
       if (isTypingTriggered) {
-        if (typedCharFloat < TOTAL_CHARS) {
+        if (typedCharFloat < ABOUT_TITLE.length) {
           typedCharFloat += 2.0;
         }
 
-        const charsToShow = Math.min(Math.floor(typedCharFloat), TOTAL_CHARS);
+        const charsToShow = Math.min(Math.floor(typedCharFloat), ABOUT_TITLE.length);
+        const visibleTitle = ABOUT_TITLE.substring(0, charsToShow) + (charsToShow < ABOUT_TITLE.length ? '|' : '');
 
-        let visibleLine1 = "";
-        let visibleLine2 = "";
+        let currentY = textFloatY + 38;
+        const fontSize = width < 768 ? 18 : 24;
 
-        if (charsToShow <= LINE_1.length) {
-          visibleLine1 = LINE_1.substring(0, charsToShow);
-          visibleLine2 = "";
-        } else {
-          visibleLine1 = LINE_1;
-          visibleLine2 = LINE_2.substring(0, charsToShow - LINE_1.length);
-        }
-
-        let currentY = textFloatY + 58;
-        const fontSize = width < 768 ? 14 : 16;
-
-        mctx.font = `600 ${fontSize}px Poppins, sans-serif`;
+        mctx.font = `900 ${fontSize}px Poppins, sans-serif`;
         mctx.fillStyle = '#ffffff';
 
-        const line1Text = visibleLine1 + (charsToShow <= LINE_1.length && charsToShow < TOTAL_CHARS ? '|' : '');
-        mctx.fillText(line1Text, portalTextX, currentY);
+        currentY = wrapCanvasText(mctx, visibleTitle, portalTextX, currentY, textMaxWidth, 32);
+        currentY += 18;
 
-        if (charsToShow > LINE_1.length) {
-          const line2Text = visibleLine2 + (charsToShow < TOTAL_CHARS ? '|' : '');
-          mctx.fillText(line2Text, portalTextX, currentY + 26);
-          currentY += 26;
-        }
+        if (charsToShow > 8) {
+          mctx.font = '400 13.5px Poppins, sans-serif';
+          mctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
 
-        currentY += 42;
-
-        if (charsToShow > LINE_1.length + 5) {
-          mctx.font = '400 12.5px Poppins, sans-serif';
-          mctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-
-          currentY = wrapCanvasText(mctx, BIO_P1, portalTextX, currentY, textMaxWidth, 19);
-          currentY += 12;
-
-          currentY = wrapCanvasText(mctx, BIO_P2, portalTextX, currentY, textMaxWidth, 19);
-          currentY += 24;
+          currentY = wrapCanvasText(mctx, ABOUT_BIO, portalTextX, currentY, textMaxWidth, 20);
+          currentY += 28;
 
           mctx.font = '500 13px Poppins, sans-serif';
           mctx.fillStyle = '#94a3b8';
@@ -617,15 +608,217 @@ export function initFluidCanvas() {
       mctx.restore();
     }
 
-    // 2. RENDER 3D CHARACTER ANIMATION VIDEO SECTION (FOCUSED 3-CARD MIDDLE VIEWPORT WINDOW WITH FADE MASKING)
-    if (scrollProgress > 0.28 && scrollProgress < 0.65) {
-      const avatarAlpha = scrollProgress < 0.35 
-        ? Math.min((scrollProgress - 0.28) / 0.07, 1.0)
-        : (scrollProgress > 0.58 ? 1.0 - Math.min((scrollProgress - 0.58) / 0.07, 1.0) : 1.0);
+    // 2. RENDER "HOW I WORK" PROCESS SECTION WITH SEQUENTIAL CARD STAGGER REVEAL, EXPANDING AXIS LINE & ROTATING (+) NODES
+    let processOpacity = 0.0;
+    if (scrollProgress > 0.19 && scrollProgress < 0.45) {
+      const secP = (scrollProgress - 0.19) / 0.26; // 0.0 -> 1.0
+
+      if (secP < 0.12) {
+        processOpacity = Math.min(secP / 0.12, 1.0);
+      } else if (secP > 0.84) {
+        processOpacity = 1.0 - Math.min((secP - 0.84) / 0.16, 1.0);
+      } else {
+        processOpacity = 1.0;
+      }
+
+      if (processOpacity > 0.01) {
+        mctx.save();
+
+        const isMobile = width < 900;
+        const marginX = width * 0.08;
+        const availableW = width - (marginX * 2);
+
+        const startY = Math.max(height * 0.15, 110) + 30;
+
+        // Header Title (Fades & slides up first)
+        const headerP = Math.min(secP / 0.18, 1.0);
+        const headerOffsetY = (1.0 - headerP) * 20;
+
+        mctx.save();
+        mctx.globalAlpha = processOpacity * headerP;
+        mctx.translate(0, headerOffsetY);
+
+        mctx.font = '500 13px Poppins, sans-serif';
+        mctx.fillStyle = '#94a3b8';
+        mctx.letterSpacing = '2px';
+        mctx.textAlign = 'left';
+        mctx.textBaseline = 'top';
+        mctx.fillText('PROCESS', marginX, startY);
+
+        const titleFontSize = width < 768 ? 32 : 48;
+        mctx.font = `900 ${titleFontSize}px Poppins, sans-serif`;
+        mctx.fillStyle = '#ffffff';
+        mctx.fillText('How I Work', marginX, startY + 24);
+        mctx.restore();
+
+        // 3 Columns Layout Geometry
+        const gridTopY = startY + (titleFontSize > 40 ? 120 : 100);
+        const colGap = 40;
+        const numCols = isMobile ? 1 : 3;
+        const colWidth = (availableW - (colGap * (numCols - 1))) / numCols;
+
+        const processSteps = [
+          {
+            step: 'STEP — 01',
+            title: 'Understand',
+            desc: 'I start with the business and the people — understanding goals, users, context, and the problem worth solving.',
+            flow: 'Business → Users → Insights',
+            triggerP: Math.min(Math.max((secP - 0.12) / 0.22, 0), 1.0)
+          },
+          {
+            step: 'STEP — 02',
+            title: 'Shape',
+            desc: 'I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.',
+            flow: 'Gaps → Structure → Design',
+            triggerP: Math.min(Math.max((secP - 0.30) / 0.22, 0), 1.0)
+          },
+          {
+            step: 'STEP — 03',
+            title: 'Evolve',
+            desc: 'I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.',
+            flow: 'Validate → Improve → Grow',
+            triggerP: Math.min(Math.max((secP - 0.48) / 0.22, 0), 1.0)
+          }
+        ];
+
+        // Draw 3 Process Step Columns with Sequential Stagger Reveal
+        processSteps.forEach((s, idx) => {
+          if (s.triggerP <= 0.005) return;
+
+          const cardAlpha = s.triggerP * processOpacity;
+          const cardOffsetY = (1.0 - s.triggerP) * 32;
+
+          let cx, cy;
+          if (isMobile) {
+            cx = marginX;
+            cy = gridTopY + idx * 165;
+          } else {
+            cx = marginX + idx * (colWidth + colGap);
+            cy = gridTopY;
+          }
+
+          mctx.save();
+          mctx.globalAlpha = cardAlpha;
+          mctx.translate(0, cardOffsetY);
+
+          // Step Counter Tag (STEP — 01)
+          mctx.font = '600 11.5px Poppins, sans-serif';
+          mctx.fillStyle = '#94a3b8';
+          mctx.letterSpacing = '1.5px';
+          mctx.fillText(s.step, cx, cy);
+
+          // Step Title (Understand, Shape, Evolve) - Increased space (+12px)
+          mctx.font = '700 24px Poppins, sans-serif';
+          mctx.fillStyle = '#ffffff';
+          mctx.fillText(s.title, cx, cy + 38);
+
+          // Body Description - Increased space (+12px+)
+          mctx.font = '300 13px Poppins, sans-serif';
+          mctx.fillStyle = 'rgba(255, 255, 255, 0.82)';
+          const nextY = wrapCanvasText(mctx, s.desc, cx, cy + 84, colWidth, 20);
+
+          // Flow Pill Tag - Increased space (+12px)
+          const flowY = nextY + 20;
+          mctx.font = '600 12px Poppins, sans-serif';
+          const flowW = mctx.measureText(s.flow).width + 24;
+
+          mctx.fillStyle = 'rgba(56, 189, 248, 0.12)';
+          mctx.beginPath();
+          if (mctx.roundRect) {
+            mctx.roundRect(cx, flowY, flowW, 28, 14);
+          } else {
+            mctx.rect(cx, flowY, flowW, 28);
+          }
+          mctx.fill();
+
+          mctx.fillStyle = '#38bdf8';
+          mctx.textAlign = 'center';
+          mctx.textBaseline = 'middle';
+          mctx.fillText(s.flow, cx + flowW / 2, flowY + 14.5);
+          mctx.textAlign = 'left';
+          mctx.textBaseline = 'top';
+
+          mctx.restore();
+        });
+
+        // Bottom Architectural Axis Divider Line Length Expansion Based on Scroll
+        const lineP = Math.min(Math.max((secP - 0.08) / 0.70, 0), 1.0);
+        const lineY = isMobile ? gridTopY + 3 * 200 + 10 : gridTopY + 265;
+        const currentLineEndX = marginX + lineP * availableW;
+
+        mctx.save();
+        mctx.globalAlpha = processOpacity;
+
+        // Background subtle guide line
+        mctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        mctx.lineWidth = 1.0;
+        mctx.beginPath();
+        mctx.moveTo(marginX, lineY);
+        mctx.lineTo(width - marginX, lineY);
+        mctx.stroke();
+
+        // Expanding active cyan axis line
+        if (lineP > 0.001) {
+          const lineGrad = mctx.createLinearGradient(marginX, lineY, currentLineEndX, lineY);
+          lineGrad.addColorStop(0, 'rgba(56, 189, 248, 0.30)');
+          lineGrad.addColorStop(1, '#38bdf8');
+          mctx.strokeStyle = lineGrad;
+          mctx.lineWidth = 1.6;
+          mctx.beginPath();
+          mctx.moveTo(marginX, lineY);
+          mctx.lineTo(currentLineEndX, lineY);
+          mctx.stroke();
+        }
+
+        // Rotating Plus Nodes (+)
+        const nodes = isMobile ? [marginX, width - marginX] : [
+          marginX,
+          marginX + colWidth + colGap / 2,
+          marginX + 2 * colWidth + 1.5 * colGap,
+          width - marginX
+        ];
+
+        nodes.forEach((nx, idx) => {
+          const isReached = currentLineEndX >= nx - 5;
+          const nodeAlpha = isReached ? processOpacity : processOpacity * 0.25;
+
+          // Rotation angle driven by scroll
+          const spinAngle = (scrollProgress * Math.PI * 6) + idx * 0.785;
+          const nodeScale = isReached ? 1.0 : 0.7;
+
+          mctx.save();
+          mctx.globalAlpha = nodeAlpha;
+          mctx.translate(nx, lineY);
+          mctx.rotate(spinAngle);
+          mctx.scale(nodeScale, nodeScale);
+
+          mctx.strokeStyle = isReached ? '#38bdf8' : 'rgba(255, 255, 255, 0.40)';
+          mctx.lineWidth = isReached ? 1.8 : 1.0;
+
+          mctx.beginPath();
+          mctx.moveTo(-6, 0);
+          mctx.lineTo(6, 0);
+          mctx.moveTo(0, -6);
+          mctx.lineTo(0, 6);
+          mctx.stroke();
+
+          mctx.restore();
+        });
+
+        mctx.restore();
+        mctx.restore();
+      }
+    }
+
+    // 3. RENDER 3D CHARACTER ANIMATION VIDEO SECTION (scrollProgress 0.42 -> 0.68)
+    if (scrollProgress > 0.42 && scrollProgress < 0.68) {
+      const avatarAlpha = scrollProgress < 0.48 
+        ? Math.min((scrollProgress - 0.42) / 0.06, 1.0)
+        : (scrollProgress > 0.62 ? 1.0 - Math.min((scrollProgress - 0.62) / 0.06, 1.0) : 1.0);
 
       if (avatarAlpha > 0.01) {
-        // Video slide to left completes by scrollProgress = 0.38
-        const slideProgress = Math.min(Math.max((scrollProgress - 0.32) / 0.06, 0), 1.0);
+        // Video slide to left completes by scrollProgress = 0.50
+        const slideProgress = Math.min(Math.max((scrollProgress - 0.44) / 0.06, 0), 1.0);
         const easeSlide = slideProgress * slideProgress * (3 - 2 * slideProgress);
 
         // Ensure video plays continuously at full 60fps
@@ -672,7 +865,7 @@ export function initFluidCanvas() {
 
         // Draw Right-Side Architectural Cards (FOCUSED 3-CARD MIDDLE VIEWPORT WINDOW WITH FADE MASKING)
         if (easeSlide > 0.02) {
-          const cardsFadeIn = Math.min(Math.max((scrollProgress - 0.36) / 0.05, 0), 1.0);
+          const cardsFadeIn = Math.min(Math.max((scrollProgress - 0.46) / 0.05, 0), 1.0);
           const textOpacity = cardsFadeIn;
 
           const textX = isMobile ? width * 0.06 : Math.max(width * 0.54, 580);
@@ -685,34 +878,34 @@ export function initFluidCanvas() {
           // CARDS DATA
           const cardsData = [
             {
-              title: 'FRONTEND & CRAFT',
-              desc: 'Crafting performant, responsive interfaces with modern frameworks. From SPAs to micro-frontends, I deliver pixel-perfect experiences.',
-              pills: ['WebGL Shaders', 'Next.js', 'Design Systems', 'AI Integrations']
+              title: 'UNTANGLE',
+              desc: 'I enjoy taking complicated products and figuring out how they should actually work.',
+              pills: ['Complex Products', 'Enterprise UX', 'Workflow Logic', 'Problem Solving']
             },
             {
-              title: 'GRAPHICS ENGINE',
-              desc: 'Designing 60fps interactive visualizers, fluid control-point portals, and high-performance WebGL Canvas shader graphics.',
-              pills: ['Canvas API', 'Shader Math', 'Kinetic Parallax']
+              title: 'STRUCTURE',
+              desc: 'I turn scattered requirements and messy processes into clear product experiences.',
+              pills: ['Information Architecture', 'Product Structure', 'User Flows', 'Simplification']
             },
             {
-              title: 'SCALABLE SYSTEMS',
-              desc: 'Building reusable component token architectures and autonomous AI-powered search and discovery tools.',
-              pills: ['Design Tokens', 'AI Agents', 'Accessibility']
+              title: 'THINK BUSINESS',
+              desc: 'I design with an eye on users, business goals, product value, and what is actually feasible.',
+              pills: ['Product Thinking', 'Business Goals', 'Prioritization', 'Trade-offs']
             },
             {
-              title: 'USER VALIDATION',
-              desc: 'Conducting real user interviews, live usability tests, and iterative prototype validation to solve core product needs.',
-              pills: ['User Research', 'Usability Testing', 'A/B Validation']
+              title: 'BUILD',
+              desc: 'I understand the space between design and development, helping ideas move from Figma into real products.',
+              pills: ['Developer Collaboration', 'Design Handoff', 'Frontend Awareness', 'Feasibility']
             },
             {
-              title: 'COMPLEX WORKFLOWS',
-              desc: 'Transforming complex multi-brand enterprise flows into clear, intuitive, and frictionless user journeys.',
-              pills: ['Workflow UX', 'Multi-Brand', 'Information Arch']
+              title: 'MAKE IT BETTER',
+              desc: 'I bring strong visual thinking to functional products, turning usable experiences into polished ones.',
+              pills: ['Visual Design', 'Interaction', 'UI Craft', 'Design Systems']
             },
             {
-              title: 'PRODUCT PERFORMANCE',
-              desc: 'Streamlining performance architectures for rapid loading times, WCAG accessibility compliance, and high conversion.',
-              pills: ['Core Web Vitals', 'WCAG AAA', 'Conversion Opt']
+              title: 'OWN IT',
+              desc: 'I’m comfortable jumping between problems, learning fast, and taking an idea from ambiguity to execution.',
+              pills: ['Ownership', 'Curiosity', 'Adaptability', 'Fast Learner']
             }
           ];
 
@@ -787,8 +980,8 @@ export function initFluidCanvas() {
           // Initial start Y so Cards 1, 2, 3 sit centered in the 3-item middle window
           const startY = viewportTopY + 15;
 
-          // Cards scroll sequence (scrollProgress 0.40 -> 0.58)
-          const cardsScrollSeq = Math.min(Math.max((scrollProgress - 0.40) / 0.18, 0), 1.0);
+          // Cards scroll sequence (scrollProgress 0.48 -> 0.64)
+          const cardsScrollSeq = Math.min(Math.max((scrollProgress - 0.48) / 0.16, 0), 1.0);
           const easeCardsScroll = cardsScrollSeq * cardsScrollSeq * (3 - 2 * cardsScrollSeq);
 
           // End position so Cards 4, 5, 6 sit centered in the 3-item middle window
@@ -1013,11 +1206,11 @@ export function initFluidCanvas() {
       topCtx.globalAlpha = portalAlpha;
 
       // 2-STAGE TIMELINE MATH:
-      // STAGE 1: Portal expands from 30% to 100% open (scrollProgress 0.58 -> 0.72). Image 1 stays 100% stationary centered (slideRaw = 0).
-      // STAGE 2: AFTER portal is 100% open (scrollProgress >= 0.72), scrolling further slides Image 1 up and Image 2 into view!
+      // STAGE 1: Portal expands from 30% to 100% open (scrollProgress 0.68 -> 0.80). Image 1 stays 100% stationary centered (slideRaw = 0).
+      // STAGE 2: AFTER portal is 100% open (scrollProgress >= 0.80), scrolling further slides Image 1 up and Image 2 into view!
       let slideRaw = 0;
-      if (scrollProgress >= 0.72) {
-        slideRaw = Math.min((scrollProgress - 0.72) / 0.23, 1.0);
+      if (scrollProgress >= 0.80) {
+        slideRaw = Math.min((scrollProgress - 0.80) / 0.18, 1.0);
       }
       const easeSlide = slideRaw * slideRaw * (3 - 2 * slideRaw); // 0.0 -> 1.0 smooth cubic ease
 
@@ -1227,48 +1420,60 @@ export function initFluidCanvas() {
     smoothMouse.x += (mouse.x - smoothMouse.x) * 0.06;
     smoothMouse.y += (mouse.y - smoothMouse.y) * 0.06;
 
-    let scrollProgress = 0;
+    // VELOCITY-CAPPED INERTIAL LERP SMOOTH SCROLL ENGINE
     if (scrollWrapper) {
       const maxScroll = scrollWrapper.offsetHeight - window.innerHeight;
       if (maxScroll > 0) {
-        scrollProgress = Math.min(Math.max(window.scrollY / maxScroll, 0), 1);
+        rawScrollProgress = Math.min(Math.max(window.scrollY / maxScroll, 0), 1);
       }
     }
 
+    // Velocity-Capped Inertial Physics Loop:
+    const scrollDiff = rawScrollProgress - smoothScrollProgress;
+    const maxScrollSpeedPerFrame = 0.0075; // Controlled constant maximum speed cap
+    const scrollLerpFactor = 0.07;          // Smooth acceleration & deceleration curve
+
+    let scrollStep = scrollDiff * scrollLerpFactor;
+    if (Math.abs(scrollStep) > maxScrollSpeedPerFrame) {
+      scrollStep = Math.sign(scrollStep) * maxScrollSpeedPerFrame;
+    }
+
+    smoothScrollProgress += scrollStep;
+
     if (heroContent) {
-      if (scrollProgress > 0.04) {
+      if (smoothScrollProgress > 0.04) {
         heroContent.classList.add('fade-out-text');
       } else {
         heroContent.classList.remove('fade-out-text');
       }
     }
 
-    // White Organic Portal Expansion Progress (scrollProgress 0.58 -> 0.72)
+    // White Organic Portal Expansion Progress (smoothScrollProgress 0.68 -> 0.80)
     let whitePortalProgress = 0;
-    if (scrollProgress > 0.58) {
-      whitePortalProgress = Math.min((scrollProgress - 0.58) / 0.14, 1.0);
+    if (smoothScrollProgress > 0.68) {
+      whitePortalProgress = Math.min((smoothScrollProgress - 0.68) / 0.12, 1.0);
     }
 
     if (siteHeader) {
       if (whitePortalProgress > 0.35) {
         siteHeader.classList.remove('dark-header');
-      } else if (scrollProgress > 0.12) {
+      } else if (smoothScrollProgress > 0.04) {
         siteHeader.classList.add('dark-header');
       } else {
         siteHeader.classList.remove('dark-header');
       }
     }
 
-    // ABOUT ME STAGE: scrollProgress 0.04 -> 0.32
+    // ABOUT ME STAGE: smoothScrollProgress 0.04 -> 0.20
     let aboutOpacity = 0.0;
     let aboutScale = 1.0;
 
-    if (scrollProgress > 0.04 && scrollProgress < 0.32) {
-      if (scrollProgress < 0.12) {
-        aboutOpacity = Math.min((scrollProgress - 0.04) / 0.08, 1.0);
+    if (smoothScrollProgress > 0.04 && smoothScrollProgress < 0.20) {
+      if (smoothScrollProgress < 0.10) {
+        aboutOpacity = Math.min((smoothScrollProgress - 0.04) / 0.06, 1.0);
         aboutScale = 1.0;
-      } else if (scrollProgress > 0.24) {
-        const fadeProgress = Math.min((scrollProgress - 0.24) / 0.08, 1.0);
+      } else if (smoothScrollProgress > 0.16) {
+        const fadeProgress = Math.min((smoothScrollProgress - 0.16) / 0.04, 1.0);
         aboutOpacity = 1.0 - fadeProgress;
         aboutScale = 1.0 - fadeProgress * 0.12;
       } else {
@@ -1277,11 +1482,11 @@ export function initFluidCanvas() {
       }
     }
 
-    renderMediaTexture(time, scrollProgress, aboutOpacity, aboutScale, whitePortalProgress);
+    renderMediaTexture(time, smoothScrollProgress, aboutOpacity, aboutScale, whitePortalProgress);
 
     ctx.clearRect(0, 0, width, height);
 
-    const bgOpacity = Math.max(1 - scrollProgress * 2.8, 0);
+    const bgOpacity = Math.max(1 - smoothScrollProgress * 2.8, 0);
     ctx.fillStyle = `rgba(255, 255, 255, ${bgOpacity})`;
     ctx.fillRect(0, 0, width, height);
 
@@ -1290,53 +1495,63 @@ export function initFluidCanvas() {
       ctx.fillRect(0, 0, width, height);
     }
 
-    const zoomProgress = Math.min(scrollProgress / 0.18, 1);
+    const zoomProgress = Math.min(smoothScrollProgress / 0.18, 1);
     const easeScroll = Math.pow(zoomProgress, 2.2);
     const zoomScale = 1.0 + easeScroll * 18.0;
 
     const isMobile = width < 768;
-    const targetCenterX = isMobile ? width * 0.5 : width * 0.74;
+    const isTablet = width >= 768 && width < 1024;
+    const targetCenterX = isMobile ? width * 0.5 : (isTablet ? width * 0.82 : width * 0.78);
     const centerX = targetCenterX + (width * 0.5 - targetCenterX) * Math.min(zoomProgress * 1.5, 1);
     const centerY = height * 0.48;
-    const baseRadius = Math.min(width, height) * (isMobile ? 0.38 : 0.36) * zoomScale;
 
-    ctx.save();
-    ctx.beginPath();
+    // 1. ULTRA-COMPACT RESPONSIVE RADIUS FOR ORGANIC JELLY PORTAL
+    const baseRadius = Math.min(width, height) * (isMobile ? 0.18 : (isTablet ? 0.13 : 0.14)) * zoomScale;
 
-    // Map control points for fluid organic "A" portal silhouette
-    const points = baseAPoints.map((pt, index) => {
+    // 2. GENERATE 12 ORGANIC LIQUID JELLY CONTROL POINTS WITH INTERACTIVE MOUSE PUSH DEFORMATION
+    const numJellyPoints = 12;
+    const jellyPoints = [];
+
+    for (let i = 0; i < numJellyPoints; i++) {
+      const angle = (i / numJellyPoints) * Math.PI * 2;
+
+      // Organic jelly undulating sine waves (gelatin liquid motion)
       const waveDamp = Math.max(1 - zoomProgress * 0.8, 0.25);
-      const waveX = Math.sin(time * 1.3 + index * 0.8) * 0.035 * waveDamp;
-      const waveY = Math.cos(time * 1.1 - index * 0.6) * 0.035 * waveDamp;
-      
-      const px = centerX + (pt.rx + waveX) * baseRadius;
-      const py = centerY + (pt.ry + waveY) * baseRadius;
-      
+      const wave1 = Math.sin(time * 1.5 + i * 0.9) * 0.055 * waveDamp;
+      const wave2 = Math.cos(time * 1.2 - i * 0.7) * 0.035 * waveDamp;
+
+      const r = baseRadius * (1.0 + wave1 + wave2);
+
+      let px = centerX + Math.cos(angle) * r;
+      let py = centerY + Math.sin(angle) * r;
+
+      // Mouse distance push & deformation (changes shape when mouse goes near/over it!)
       const dx = mouse.x - px;
       const dy = mouse.y - py;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      let pushX = 0;
-      let pushY = 0;
-      if (dist > 0.001 && dist < 120 && zoomProgress < 0.3) {
-        const pushMag = (120 - dist) * 0.25;
-        pushX = (dx / dist) * pushMag;
-        pushY = (dy / dist) * pushMag;
+      if (dist > 0.001 && dist < 100 && zoomProgress < 0.35) {
+        const pushMag = (100 - dist) * 0.35;
+        px -= (dx / dist) * pushMag;
+        py -= (dy / dist) * pushMag;
       }
 
-      return {
-        x: px - pushX,
-        y: py - pushY,
-      };
-    });
+      jellyPoints.push({ x: px, y: py });
+    }
 
-    // Draw Smooth Organic Polygon Curve & Clip Media Canvas
-    ctx.moveTo((points[0].x + points[points.length - 1].x) / 2, (points[0].y + points[points.length - 1].y) / 2);
-    for (let i = 0; i < points.length; i++) {
-      const nextPt = points[(i + 1) % points.length];
-      const midX = (points[i].x + nextPt.x) / 2;
-      const midY = (points[i].y + nextPt.y) / 2;
-      ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
+    // 3. DRAW ORGANIC SMOOTH JELLY PORTAL MASK & CLIP MEDIA CANVAS
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(
+      (jellyPoints[0].x + jellyPoints[jellyPoints.length - 1].x) / 2,
+      (jellyPoints[0].y + jellyPoints[jellyPoints.length - 1].y) / 2
+    );
+
+    for (let i = 0; i < jellyPoints.length; i++) {
+      const nextPt = jellyPoints[(i + 1) % jellyPoints.length];
+      const midX = (jellyPoints[i].x + nextPt.x) / 2;
+      const midY = (jellyPoints[i].y + nextPt.y) / 2;
+      ctx.quadraticCurveTo(jellyPoints[i].x, jellyPoints[i].y, midX, midY);
     }
     ctx.closePath();
 
@@ -1344,23 +1559,36 @@ export function initFluidCanvas() {
     ctx.drawImage(mediaCanvas, 0, 0, width, height);
     ctx.restore();
 
-    // Subtle Outer Shadow Outline Stroke around Fluid "A" Portal
+    // 4. SUBTLE OUTER SHADOW STROKE AROUND DEFORMING JELLY PORTAL
     if (zoomProgress < 0.85) {
       ctx.save();
-      ctx.lineWidth = Math.max(14 * (1 - zoomProgress), 1);
-      ctx.strokeStyle = `rgba(0, 0, 0, ${0.14 * (1 - zoomProgress)})`;
-      ctx.filter = 'blur(10px)';
+      ctx.lineWidth = Math.max(10 * (1 - zoomProgress), 1);
+      ctx.strokeStyle = `rgba(0, 0, 0, ${0.12 * (1 - zoomProgress)})`;
+      ctx.filter = 'blur(6px)';
       ctx.beginPath();
-      ctx.moveTo((points[0].x + points[points.length - 1].x) / 2, (points[0].y + points[points.length - 1].y) / 2);
-      for (let i = 0; i < points.length; i++) {
-        const nextPt = points[(i + 1) % points.length];
-        const midX = (points[i].x + nextPt.x) / 2;
-        const midY = (points[i].y + nextPt.y) / 2;
-        ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
+      ctx.moveTo(
+        (jellyPoints[0].x + jellyPoints[jellyPoints.length - 1].x) / 2,
+        (jellyPoints[0].y + jellyPoints[jellyPoints.length - 1].y) / 2
+      );
+      for (let i = 0; i < jellyPoints.length; i++) {
+        const nextPt = jellyPoints[(i + 1) % jellyPoints.length];
+        const midX = (jellyPoints[i].x + nextPt.x) / 2;
+        const midY = (jellyPoints[i].y + nextPt.y) / 2;
+        ctx.quadraticCurveTo(jellyPoints[i].x, jellyPoints[i].y, midX, midY);
       }
       ctx.closePath();
       ctx.stroke();
       ctx.restore();
+    }
+
+    // 5. DRAW SLOW ELEGANT SPINNING CIRCULAR TEXT AROUND ULTRA-COMPACT JELLY PORTAL
+    if (zoomProgress < 0.55) {
+      const spinningTextAlpha = (1.0 - Math.min(zoomProgress / 0.40, 1.0));
+      const spinningTextRadius = baseRadius + 18;
+      const spinAngle = time * 0.14; // Reduced rotation speed as requested!
+      const circularTextCopy = "AKILESH  •  UI/UX DESIGNER  •  PRODUCT ARCHITECT  •  AKILESH  •  UI/UX DESIGNER  •  PRODUCT ARCHITECT  •  ";
+
+      drawSpinningCircularText(ctx, circularTextCopy, centerX, centerY, spinningTextRadius, spinAngle, spinningTextAlpha);
     }
 
     // Micro Particle Mouse Dust Trail
@@ -1384,7 +1612,7 @@ export function initFluidCanvas() {
       }
     }
 
-    renderTopTransition(time, whitePortalProgress, scrollProgress);
+    renderTopTransition(time, whitePortalProgress, smoothScrollProgress);
 
     requestAnimationFrame(animate);
   }

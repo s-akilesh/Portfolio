@@ -171,7 +171,7 @@ body {
 .hero-scroll-wrapper {
   position: relative;
   width: 100%;
-  height: 580vh;
+  height: 680vh;
 }
 
 .hero-section.sticky-hero {
@@ -226,45 +226,59 @@ body {
   transform: translateY(30px);
 }
 
-/* Center Vertically & Left-Align Text */
+/* Center Vertically & Left-Align Text with Generous Portal Gap */
 .about-hero-center {
-  max-width: 55%;
+  max-width: 48%;
   margin-top: auto;
   margin-bottom: auto;
   text-align: left;
+  z-index: 25;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
+  .about-hero-center {
+    max-width: 52%;
+  }
+}
+
+@media (max-width: 768px) {
   .about-hero-center {
     max-width: 100%;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
   }
+}
+
+.hero-tag-label {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: clamp(0.72rem, 0.9vw, 0.82rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #555555;
+  margin-bottom: 0.9rem;
 }
 
 .about-main-title {
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 4.2vw, 3.8rem);
+  font-size: clamp(1.8rem, 3.5vw, 3.4rem);
   font-weight: 900;
-  line-height: 1.05;
+  line-height: 1.06;
   letter-spacing: -0.03em;
   color: #000000;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.1rem;
   text-align: left;
-}
-
-.highlight-name {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 6px;
-  text-decoration-thickness: 3px;
+  text-transform: uppercase;
 }
 
 .about-lead-text {
   font-family: var(--font-body);
-  font-size: clamp(0.95rem, 1.5vw, 1.2rem);
-  line-height: 1.55;
+  font-size: clamp(0.9rem, 1.15vw, 1.08rem);
+  line-height: 1.5;
   color: #222222;
   font-weight: 500;
-  max-width: 620px;
+  max-width: 540px;
   text-align: left;
 }
 
@@ -277,17 +291,27 @@ body {
 
 .hero-stats {
   display: flex;
-  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 2.2rem);
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #333333;
+  letter-spacing: 0.03em;
+}
+
+.hero-stats > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  white-space: nowrap;
 }
 
 .hero-stats strong {
   font-family: var(--font-heading);
   font-size: 1.2rem;
-  font-weight: 800;
+  font-weight: 900;
   color: #000000;
 }
 

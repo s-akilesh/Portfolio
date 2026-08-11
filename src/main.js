@@ -27,6 +27,43 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Fluid Canvas & Portal Zoom Engine
   initFluidCanvas();
 
+  // Header Navigation Smooth Scroll Handlers
+  const navWork = document.getElementById('nav-work');
+  const navAbout = document.getElementById('nav-about');
+  const navContact = document.getElementById('nav-contact');
+  const headerLogo = document.querySelector('.header-logo');
+
+  function getHeroScrollMax() {
+    const scrollWrapper = document.getElementById('hero-scroll-wrapper');
+    if (!scrollWrapper) return 0;
+    return scrollWrapper.offsetHeight - window.innerHeight;
+  }
+
+  if (navAbout) {
+    navAbout.addEventListener('click', (e) => {
+      e.preventDefault();
+      const maxScroll = getHeroScrollMax();
+      const targetY = maxScroll * 0.10; // Smooth scroll directly to About Me section
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    });
+  }
+
+  if (navWork) {
+    navWork.addEventListener('click', (e) => {
+      e.preventDefault();
+      const maxScroll = getHeroScrollMax();
+      const targetY = maxScroll * 0.78; // Smooth scroll directly to Work Showcase section
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    });
+  }
+
+  if (headerLogo) {
+    headerLogo.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
   // Contact Modal Handlers
   const contactModal = document.getElementById('contact-modal');
   const openBtn = document.getElementById('open-contact-btn');
@@ -42,6 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contactModal) {
       contactModal.classList.add('hidden');
     }
+  }
+
+  if (navContact) {
+    navContact.addEventListener('click', (e) => {
+      e.preventDefault();
+      openContactModal();
+    });
   }
 
   if (openBtn) {
