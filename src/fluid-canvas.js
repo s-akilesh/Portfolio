@@ -984,8 +984,10 @@ export function initFluidCanvas() {
           imgW = imgH * videoAspect;
         }
 
-        // On mobile, position video frame UP near top of screen
-        const mobImgY = Math.max(height * 0.07, 62);
+        // On mobile, image enters at center of screen and glides UP to 10% padding from top
+        const startCenterY = (height * 0.50) - (imgH * 0.50);
+        const targetTopY = Math.max(height * 0.10, 75); // 10% padding above image from top of screen
+        const mobImgY = startCenterY + (targetTopY - startCenterY) * easeSlide;
         const deskImgY = height * 0.50 - imgH * 0.50;
         const imgY = isMobile ? mobImgY : deskImgY;
         const mobVideoBottomY = imgY + imgH;
