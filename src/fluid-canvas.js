@@ -710,7 +710,15 @@ export function initFluidCanvas() {
         const marginX = width * 0.08;
         const availableW = width - (marginX * 2);
 
-        const startY = Math.max(height * 0.15, 110) + 30;
+        const startY = isMobile ? Math.max(height * 0.08, 65) : Math.max(height * 0.15, 110) + 30;
+
+        // On mobile, calculate vertical scroll shift so content moves up smoothly as user scrolls
+        const estTotalHeight = startY + 80 + 3 * 220;
+        const overflowDist = isMobile ? Math.max(0, estTotalHeight - (height - 40)) : 0;
+        const mobileScrollShift = isMobile && overflowDist > 0 ? -secP * overflowDist : 0;
+
+        mctx.save();
+        mctx.translate(0, mobileScrollShift);
 
         // Header Title (Fades & slides up first)
         const headerP = Math.min(secP / 0.18, 1.0);
@@ -727,14 +735,14 @@ export function initFluidCanvas() {
         mctx.textBaseline = 'top';
         mctx.fillText('PROCESS', marginX, startY);
 
-        const titleFontSize = width < 768 ? 32 : 48;
+        const titleFontSize = width < 768 ? 30 : 48;
         mctx.font = `900 ${titleFontSize}px Poppins, sans-serif`;
         mctx.fillStyle = '#ffffff';
-        mctx.fillText('How I Work', marginX, startY + 24);
+        mctx.fillText('How I Work', marginX, startY + 22);
         mctx.restore();
 
         // 3 Columns Layout Geometry
-        const gridTopY = startY + (titleFontSize > 40 ? 120 : 100);
+        const gridTopY = startY + (isMobile ? 78 : (titleFontSize > 40 ? 120 : 100));
         const colGap = 40;
         const numCols = isMobile ? 1 : 3;
         const colWidth = (availableW - (colGap * (numCols - 1))) / numCols;
@@ -794,15 +802,15 @@ export function initFluidCanvas() {
           // Step Title (Understand, Shape, Evolve)
           mctx.font = '700 24px Poppins, sans-serif';
           mctx.fillStyle = '#ffffff';
-          mctx.fillText(s.title, cx, cy + 32);
+          mctx.fillText(s.title, cx, cy + 30);
 
           // Body Description
           mctx.font = '300 13px Poppins, sans-serif';
           mctx.fillStyle = 'rgba(255, 255, 255, 0.82)';
-          const nextY = wrapCanvasText(mctx, s.desc, cx, cy + 70, colWidth, 20);
+          const nextY = wrapCanvasText(mctx, s.desc, cx, cy + 66, colWidth, 20);
 
           // Flow Pill Tag
-          const flowY = nextY + 16;
+          const flowY = nextY + 14;
           mctx.font = '600 12px Poppins, sans-serif';
           const flowW = mctx.measureText(s.flow).width + 24;
 
@@ -824,73 +832,112 @@ export function initFluidCanvas() {
 
           mctx.restore();
 
-          // Calculate bottom position of current card and add 36px spacing for next card on mobile
-          currentMobileY = flowY + 28 + 36;
+          // On Mobile: Render individual divider line & rotating (+) nodes at bottom of EACH card
+          if (isMobile) {
+            const cardLineY = flowY + 28 + 18;
+
+            mctx.save();
+            mctx.globalAlpha = cardAlpha;
+
+            // Subtle background line
+            mctx.strokeStyle = 'rgba(255, 255, 255, 0.10)';
+            mctx.lineWidth = 1.0;
+            mctx.beginPath();
+            mctx.moveTo(marginX, cardLineY);
+            mctx.lineTo(width - marginX, cardLineY);
+            mctx.stroke();
+
+            // Active cyan line
+            if (s.triggerP > 0.01) {
+              const lineEnd = marginX + s.triggerP * availableW;
+              const cLineGrad = mctx.createLinearGradient(marginX, cardLineY, lineEnd, cardLineY);
+              cLineGrad.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
+              cLineGrad.addColorStop(1, '#38bdf8');
+              mctx.strokeStyle = cLineGrad;
+              mctx.lineWidth = 1.4;
+              mctx.beginPath();
+              mctx.moveTo(marginX, cardLineY);
+              mctx.lineTo(lineEnd, cardLineY);
+              mctx.stroke();
+            }
+
+            // Rotating (+) Nodes at start and end of card line
+            const rotAngle = (t * 1.5) + (idx * 0.6);
+            [marginX, width - marginX].forEach((nodeX) => {
+              mctx.save();
+              mctx.translate(nodeX, cardLineY);
+              mctx.rotate(rotAngle);
+              mctx.strokeStyle = '#38bdf8';
+              mctx.lineWidth = 1.4;
+              mctx.beginPath();
+              mctx.moveTo(-5, 0); mctx.lineTo(5, 0);
+              mctx.moveTo(0, -5); mctx.lineTo(0, 5);
+              mctx.stroke();
+              mctx.restore();
+            });
+
+            mctx.restore();
+
+            currentMobileY = cardLineY + 26;
+          } else {
+            currentMobileY = flowY + 28 + 36;
+          }
         });
 
-        // Bottom Architectural Axis Divider Line Length Expansion Based on Scroll
-        const lineP = Math.min(Math.max((secP - 0.08) / 0.70, 0), 1.0);
-        const lineY = isMobile ? currentMobileY + 10 : gridTopY + 265;
-        const currentLineEndX = marginX + lineP * availableW;
-
-        mctx.save();
-        mctx.globalAlpha = processOpacity;
-
-        // Background subtle guide line
-        mctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-        mctx.lineWidth = 1.0;
-        mctx.beginPath();
-        mctx.moveTo(marginX, lineY);
-        mctx.lineTo(width - marginX, lineY);
-        mctx.stroke();
-
-        // Expanding active cyan axis line
-        if (lineP > 0.001) {
-          const lineGrad = mctx.createLinearGradient(marginX, lineY, currentLineEndX, lineY);
-          lineGrad.addColorStop(0, 'rgba(56, 189, 248, 0.30)');
-          lineGrad.addColorStop(1, '#38bdf8');
-          mctx.strokeStyle = lineGrad;
-          mctx.lineWidth = 1.6;
-          mctx.beginPath();
-          mctx.moveTo(marginX, lineY);
-          mctx.lineTo(currentLineEndX, lineY);
-          mctx.stroke();
-        }
-
-        // Rotating Plus Nodes (+)
-        const nodes = isMobile ? [marginX, width - marginX] : [
-          marginX,
-          marginX + colWidth + colGap / 2,
-          marginX + 2 * colWidth + 1.5 * colGap,
-          width - marginX
-        ];
-
-        nodes.forEach((nx, idx) => {
-          const isReached = currentLineEndX >= nx - 5;
-          const nodeAlpha = isReached ? processOpacity : processOpacity * 0.25;
-
-          // Rotation angle driven by scroll
-          const spinAngle = (scrollProgress * Math.PI * 6) + idx * 0.785;
-          const nodeScale = isReached ? 1.0 : 0.7;
+        // Desktop: Bottom Architectural Axis Divider Line Length Expansion Based on Scroll
+        if (!isMobile) {
+          const lineP = Math.min(Math.max((secP - 0.08) / 0.70, 0), 1.0);
+          const lineY = gridTopY + 265;
+          const currentLineEndX = marginX + lineP * availableW;
 
           mctx.save();
-          mctx.globalAlpha = nodeAlpha;
-          mctx.translate(nx, lineY);
-          mctx.rotate(spinAngle);
-          mctx.scale(nodeScale, nodeScale);
+          mctx.globalAlpha = processOpacity;
 
-          mctx.strokeStyle = isReached ? '#38bdf8' : 'rgba(255, 255, 255, 0.40)';
-          mctx.lineWidth = isReached ? 1.8 : 1.0;
-
+          // Background subtle guide line
+          mctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+          mctx.lineWidth = 1.0;
           mctx.beginPath();
-          mctx.moveTo(-6, 0);
-          mctx.lineTo(6, 0);
-          mctx.moveTo(0, -6);
-          mctx.lineTo(0, 6);
+          mctx.moveTo(marginX, lineY);
+          mctx.lineTo(width - marginX, lineY);
           mctx.stroke();
 
+          // Expanding active cyan axis line
+          if (lineP > 0.001) {
+            const lineGrad = mctx.createLinearGradient(marginX, lineY, currentLineEndX, lineY);
+            lineGrad.addColorStop(0, 'rgba(56, 189, 248, 0.30)');
+            lineGrad.addColorStop(1, '#38bdf8');
+            mctx.strokeStyle = lineGrad;
+            mctx.lineWidth = 1.6;
+            mctx.beginPath();
+            mctx.moveTo(marginX, lineY);
+            mctx.lineTo(currentLineEndX, lineY);
+            mctx.stroke();
+          }
+
+          // Rotating Plus Nodes (+)
+          const nodes = [
+            marginX,
+            marginX + colWidth + colGap / 2,
+            marginX + 2 * colWidth + 1.5 * colGap,
+            width - marginX
+          ];
+
+          nodes.forEach((nx) => {
+            const rotAngle = t * 1.5;
+            mctx.save();
+            mctx.translate(nx, lineY);
+            mctx.rotate(rotAngle);
+            mctx.strokeStyle = '#38bdf8';
+            mctx.lineWidth = 1.5;
+            mctx.beginPath();
+            mctx.moveTo(-6, 0); mctx.lineTo(6, 0);
+            mctx.moveTo(0, -6); mctx.lineTo(0, 6);
+            mctx.stroke();
+            mctx.restore();
+          });
+
           mctx.restore();
-        });
+        }
 
         mctx.restore();
         mctx.restore();
