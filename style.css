@@ -950,3 +950,21 @@ body {
     min-height: 50vh;
   }
 }
+
+/* For devices without cursor (touch screens / mobile / coarse pointer), activate card hover state by default */
+@media (pointer: coarse), (hover: none), (max-width: 1100px) {
+  .vertical-project-card .vcard-img,
+  .portrait-card .portrait-img,
+  .cap-card .cap-icon,
+  .feature-card .feature-icon-box {
+    transform: scale(1.02);
+  }
+
+  .vertical-project-card,
+  .cap-card,
+  .feature-card,
+  .legal-card,
+  .portrait-card {
+    border-color: rgba(56, 189, 248, 0.40) !important;
+  }
+}

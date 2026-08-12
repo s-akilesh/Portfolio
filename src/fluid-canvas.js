@@ -1372,11 +1372,19 @@ export function initFluidCanvas() {
       // Mouse Parallax Offset (subtle)
       const mouseOffsetY = (smoothMouse.y - height * 0.5) * 0.015;
       let isCursorInsideImage = false;
+      const isNoCursorDevice = (
+        window.matchMedia('(pointer: coarse)').matches ||
+        ('ontouchstart' in window) ||
+        navigator.maxTouchPoints > 0 ||
+        width < 1100
+      );
 
       // Image 1: Catering Made Easy (Pinned stationary at y = 0)
       const img1Y = mouseOffsetY;
       let b1 = drawImageCover(topCtx, showcase1Img, 0, img1Y, width, height);
-      if (b1 && smoothMouse.x >= b1.dx && smoothMouse.x <= b1.dx + b1.dw &&
+      if (isNoCursorDevice) {
+        img1HoverFactor = 1.0;
+      } else if (b1 && smoothMouse.x >= b1.dx && smoothMouse.x <= b1.dx + b1.dw &&
           smoothMouse.y >= b1.dy && smoothMouse.y <= b1.dy + b1.dh && slideRaw < 0.85) {
         isCursorInsideImage = true;
         img1HoverFactor += (1.0 - img1HoverFactor) * 0.12;
@@ -1409,7 +1417,9 @@ export function initFluidCanvas() {
       let b2 = null;
       if (slideRaw > 0.001) {
         b2 = drawImageCover(topCtx, showcase2Img, 0, img2Y, width, height);
-        if (b2 && smoothMouse.x >= b2.dx && smoothMouse.x <= b2.dx + b2.dw &&
+        if (isNoCursorDevice) {
+          img2HoverFactor = 1.0;
+        } else if (b2 && smoothMouse.x >= b2.dx && smoothMouse.x <= b2.dx + b2.dw &&
             smoothMouse.y >= b2.dy && smoothMouse.y <= b2.dy + b2.dh && slideRaw >= 0.15 && slideRaw < 1.85) {
           isCursorInsideImage = true;
           img2HoverFactor += (1.0 - img2HoverFactor) * 0.12;
@@ -1434,7 +1444,7 @@ export function initFluidCanvas() {
           topCtx.restore();
         }
       } else {
-        img2HoverFactor = 0.0;
+        img2HoverFactor = isNoCursorDevice ? 1.0 : 0.0;
       }
 
       // Image 3: Habit Partner Mobile App (Slides up from bottom at slideRaw 1.0 -> 2.0)
@@ -1445,7 +1455,9 @@ export function initFluidCanvas() {
       let b3 = null;
       if (slideRaw > 1.001) {
         b3 = drawImageCover(topCtx, showcase3Img, 0, img3Y, width, height);
-        if (b3 && smoothMouse.x >= b3.dx && smoothMouse.x <= b3.dx + b3.dw &&
+        if (isNoCursorDevice) {
+          img3HoverFactor = 1.0;
+        } else if (b3 && smoothMouse.x >= b3.dx && smoothMouse.x <= b3.dx + b3.dw &&
             smoothMouse.y >= b3.dy && smoothMouse.y <= b3.dy + b3.dh && slideRaw >= 1.15) {
           isCursorInsideImage = true;
           img3HoverFactor += (1.0 - img3HoverFactor) * 0.12;
@@ -1470,7 +1482,7 @@ export function initFluidCanvas() {
           topCtx.restore();
         }
       } else {
-        img3HoverFactor = 0.0;
+        img3HoverFactor = isNoCursorDevice ? 1.0 : 0.0;
       }
 
       // RENDER REFERENCE DESIGN OVERLAY (VERTICALLY CENTERED ON SCREEN WITH SCROLL PROGRESS BAR LINE)
@@ -1578,33 +1590,35 @@ export function initFluidCanvas() {
       wrapCanvasText(topCtx, activeHeadline, headlineX, lineY + 38, headlineMaxW, titleFontSize * 1.28);
       topCtx.restore();
 
-      // RENDER INTERACTIVE NEGATIVE-COLOR BLEND HOVER CURSOR CIRCLE ("EXPLORE") ONLY WHEN CURSOR IS INSIDE THE VISIBLE IMAGE BOUNDS
-      const targetScale = isCursorInsideImage ? 1.0 : 0.0;
-      exploreCursor.scale += (targetScale - exploreCursor.scale) * 0.18;
-      exploreCursor.x += (smoothMouse.x - exploreCursor.x) * 0.18;
-      exploreCursor.y += (smoothMouse.y - exploreCursor.y) * 0.18;
+      // RENDER INTERACTIVE NEGATIVE-COLOR BLEND HOVER CURSOR CIRCLE ("EXPLORE") ONLY ON DEVICES WITH CURSOR
+      if (!isNoCursorDevice) {
+        const targetScale = isCursorInsideImage ? 1.0 : 0.0;
+        exploreCursor.scale += (targetScale - exploreCursor.scale) * 0.18;
+        exploreCursor.x += (smoothMouse.x - exploreCursor.x) * 0.18;
+        exploreCursor.y += (smoothMouse.y - exploreCursor.y) * 0.18;
 
-      const circleRadius = 56 * exploreCursor.scale;
+        const circleRadius = 56 * exploreCursor.scale;
 
-      if (circleRadius > 0.8) {
-        topCtx.save();
+        if (circleRadius > 0.8) {
+          topCtx.save();
 
-        // 1. Draw Solid White Circle with 'difference' composite mode to produce negative color inversion of image underneath!
-        topCtx.globalCompositeOperation = 'difference';
-        topCtx.fillStyle = '#ffffff';
-        topCtx.beginPath();
-        topCtx.arc(exploreCursor.x, exploreCursor.y, circleRadius, 0, Math.PI * 2);
-        topCtx.fill();
+          // 1. Draw Solid White Circle with 'difference' composite mode to produce negative color inversion of image underneath!
+          topCtx.globalCompositeOperation = 'difference';
+          topCtx.fillStyle = '#ffffff';
+          topCtx.beginPath();
+          topCtx.arc(exploreCursor.x, exploreCursor.y, circleRadius, 0, Math.PI * 2);
+          topCtx.fill();
 
-        // 2. Draw Centered Text "Explore" in 'difference' mode for dynamic inverse text contrast!
-        topCtx.font = '600 13px Poppins, sans-serif';
-        topCtx.letterSpacing = '1.5px';
-        topCtx.textAlign = 'center';
-        topCtx.textBaseline = 'middle';
-        topCtx.fillStyle = '#ffffff';
-        topCtx.fillText('Explore', exploreCursor.x, exploreCursor.y + 0.5);
+          // 2. Draw Centered Text "Explore" in 'difference' mode for dynamic inverse text contrast!
+          topCtx.font = '600 13px Poppins, sans-serif';
+          topCtx.letterSpacing = '1.5px';
+          topCtx.textAlign = 'center';
+          topCtx.textBaseline = 'middle';
+          topCtx.fillStyle = '#ffffff';
+          topCtx.fillText('Explore', exploreCursor.x, exploreCursor.y + 0.5);
 
-        topCtx.restore();
+          topCtx.restore();
+        }
       }
 
       topCtx.restore();
