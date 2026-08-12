@@ -968,9 +968,9 @@ export function initFluidCanvas() {
         const targetLeftX = isMobile ? width * 0.50 : Math.max(width * 0.26, 280);
         const currentAvatarX = startCenterX + (targetLeftX - startCenterX) * easeSlide;
 
-        // Video Size: 80% center zoom -> 58% on left side
-        const initialScaleW = isMobile ? width * 0.90 : width * 0.80;
-        const finalScaleW = isMobile ? width * 0.85 : Math.min(width * 0.58, 720);
+        // Video Size: 80% center zoom -> 58% on left side (or compact top center on mobile)
+        const initialScaleW = isMobile ? Math.min(width * 0.82, 340) : width * 0.80;
+        const finalScaleW = isMobile ? Math.min(width * 0.74, 310) : Math.min(width * 0.58, 720);
         let imgW = initialScaleW + (finalScaleW - initialScaleW) * easeSlide;
 
         const videoAspect = (animVideo.videoWidth && animVideo.videoHeight) 
@@ -978,13 +978,17 @@ export function initFluidCanvas() {
           : (1280 / 720);
         let imgH = imgW / videoAspect;
 
-        const maxAllowedH = (height * 0.80) + ((height * 0.58) - (height * 0.80)) * easeSlide;
+        const maxAllowedH = isMobile ? height * 0.35 : ((height * 0.80) + ((height * 0.58) - (height * 0.80)) * easeSlide);
         if (imgH > maxAllowedH) {
           imgH = maxAllowedH;
           imgW = imgH * videoAspect;
         }
 
-        const imgY = height * 0.50 - imgH * (isMobile ? 0.65 : 0.50);
+        // On mobile, position video frame UP near top of screen
+        const mobImgY = Math.max(height * 0.07, 62);
+        const deskImgY = height * 0.50 - imgH * 0.50;
+        const imgY = isMobile ? mobImgY : deskImgY;
+        const mobVideoBottomY = imgY + imgH;
 
         mctx.save();
         // Blend dark background seamlessly into dark obsidian environment
@@ -997,13 +1001,13 @@ export function initFluidCanvas() {
         }
         mctx.restore();
 
-        // Draw Right-Side Architectural Cards (FOCUSED 3-CARD MIDDLE VIEWPORT WINDOW WITH FADE MASKING)
+        // Draw Architectural Cards (Positioned BELOW video frame on mobile, or right side on desktop)
         if (easeSlide > 0.02) {
           const cardsFadeIn = Math.min(Math.max((scrollProgress - 0.46) / 0.05, 0), 1.0);
           const textOpacity = cardsFadeIn;
 
-          const textX = isMobile ? width * 0.06 : Math.max(width * 0.54, 580);
-          const cardWidth = isMobile ? width * 0.88 : Math.min(width * 0.40, 520);
+          const cardWidth = isMobile ? Math.min(width * 0.90, 390) : Math.min(width * 0.40, 520);
+          const textX = isMobile ? (width - cardWidth) / 2 : Math.max(width * 0.54, 580);
 
           const cardGap = 20;
           const innerPaddingX = 24; // 24PX INNER PADDING LEFT & RIGHT
@@ -1105,20 +1109,20 @@ export function initFluidCanvas() {
           });
 
           // 3-ITEM MIDDLE VIEWPORT WINDOW GEOMETRY
-          const middleWindowH = Math.min(height * 0.62, 450);
-          const middleWindowCenterY = height * 0.50;
-          const viewportTopY = middleWindowCenterY - middleWindowH / 2;
-          const viewportBotY = middleWindowCenterY + middleWindowH / 2;
-          const fadeZoneH = 50; // Smooth 50px fade-out at top & bottom boundaries
+          const middleWindowH = isMobile ? (height - mobVideoBottomY - 24) : Math.min(height * 0.62, 450);
+          const middleWindowCenterY = isMobile ? (mobVideoBottomY + (height - mobVideoBottomY) / 2) : (height * 0.50);
+          const viewportTopY = isMobile ? (mobVideoBottomY + 12) : (middleWindowCenterY - middleWindowH / 2);
+          const viewportBotY = isMobile ? (height - 14) : (middleWindowCenterY + middleWindowH / 2);
+          const fadeZoneH = isMobile ? 25 : 50;
 
-          // Initial start Y so Cards 1, 2, 3 sit centered in the 3-item middle window
-          const startY = viewportTopY + 15;
+          // Initial start Y so Cards sit in the clear viewport window
+          const startY = viewportTopY + 8;
 
           // Cards scroll sequence (scrollProgress 0.48 -> 0.64)
           const cardsScrollSeq = Math.min(Math.max((scrollProgress - 0.48) / 0.16, 0), 1.0);
           const easeCardsScroll = cardsScrollSeq * cardsScrollSeq * (3 - 2 * cardsScrollSeq);
 
-          // End position so Cards 4, 5, 6 sit centered in the 3-item middle window
+          // End position so Cards sit centered in the viewport window
           const initialCard6BottomY = startY + totalCardsStackH - cardGap;
           const targetCard6BottomY = viewportBotY - 15;
           const maxScrollDistance = Math.max(initialCard6BottomY - targetCard6BottomY, 0);
@@ -1142,7 +1146,7 @@ export function initFluidCanvas() {
             }
             const hFactor = (cardHoverFactors && cardHoverFactors[idx]) || 0;
 
-            // FADE AND HIDE TOP & BOTTOM CONTENT OUTSIDE 3-ITEM MIDDLE WINDOW
+            // FADE AND HIDE TOP & BOTTOM CONTENT OUTSIDE VIEWPORT WINDOW
             const cardCenterY = currentCardY + cardHeight * 0.5;
 
             let topFade = 1.0;
@@ -1156,6 +1160,24 @@ export function initFluidCanvas() {
             }
 
             const cardEdgeAlpha = Math.min(topFade, botFade);
+
+            // Render Glassmorphic dark card background on mobile for crystal clear text legibility
+            if (isMobile && cardEdgeAlpha > 0.02 && textOpacity * cardEdgeAlpha > 0.02) {
+              mctx.save();
+              mctx.globalAlpha = textOpacity * cardEdgeAlpha * 0.95;
+              mctx.fillStyle = 'rgba(10, 14, 20, 0.88)';
+              mctx.strokeStyle = 'rgba(56, 189, 248, 0.18)';
+              mctx.lineWidth = 1.0;
+              mctx.beginPath();
+              if (mctx.roundRect) {
+                mctx.roundRect(textX - 10, currentCardY - 4, cardWidth + 20, cardHeight + 8, 14);
+              } else {
+                mctx.rect(textX - 10, currentCardY - 4, cardWidth + 20, cardHeight + 8);
+              }
+              mctx.fill();
+              mctx.stroke();
+              mctx.restore();
+            }
 
             // Render Card Content & Mild Division Lines ONLY IF within visible middle 3-item window
             if (cardEdgeAlpha > 0.01) {
