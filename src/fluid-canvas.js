@@ -113,8 +113,8 @@ export function initFluidCanvas() {
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    width = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
-    height = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
+    width = window.innerWidth;
+    height = window.innerHeight;
 
     if (!width || !height) return;
 
