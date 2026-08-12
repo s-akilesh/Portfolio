@@ -64,20 +64,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Handle Hash / Query Parameter Scroll on Page Load (e.g. /#projects or /#work)
+  // Force manual scroll restoration so reloads always land on top of Home Screen
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
+  // Force landing on top of Home Screen on initial page load / refresh
+  window.scrollTo(0, 0);
+
+  // Handle Hash Scroll ONLY when user explicitly navigates to #projects or #work
   function handleInitialHashScroll() {
     const hash = window.location.hash;
-    const search = window.location.search;
-    if (hash === '#projects' || hash === '#work' || search.includes('projects')) {
+    if (hash === '#projects' || hash === '#work') {
       setTimeout(() => {
         const maxScroll = getHeroScrollMax();
-        const targetY = maxScroll * 0.78; // Scroll directly to Projects Showcase
+        const targetY = maxScroll * 0.78; // Scroll to Projects Showcase
         window.scrollTo({ top: targetY, behavior: 'smooth' });
-      }, 350);
+      }, 250);
     }
   }
 
-  handleInitialHashScroll();
+  // On page reload, clear any leftover hash so page lands cleanly on Home Screen
+  if (window.performance && window.performance.navigation && window.performance.navigation.type === 1) {
+    if (window.location.hash) {
+      history.replaceState('', document.title, window.location.pathname + window.location.search);
+    }
+    window.scrollTo(0, 0);
+  } else if (window.location.hash === '#projects' || window.location.hash === '#work') {
+    handleInitialHashScroll();
+  } else {
+    window.scrollTo(0, 0);
+  }
+
   window.addEventListener('hashchange', handleInitialHashScroll);
 
   // Contact Modal Handlers
