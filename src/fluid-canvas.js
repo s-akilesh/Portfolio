@@ -487,7 +487,6 @@ export function initFluidCanvas() {
     }
 
     // 1. RENDER ABOUT ME SECTION (scrollProgress 0.04 -> 0.20)
-    // 1. RENDER ABOUT ME SECTION (scrollProgress 0.04 -> 0.20)
     if (aboutOpacity > 0.01) {
       const isMobile = width < 1100;
 
@@ -548,105 +547,19 @@ export function initFluidCanvas() {
         mctx.restore();
       }
 
-      const portalTextX = isMobile ? width * 0.5 : Math.max(width * 0.50, 540);
-      const textMaxWidth = isMobile ? width * 0.88 : Math.min(width * 0.42, 560);
-
-      const portraitCardHeight = Math.min(Math.max(500, height * 0.82), 840);
-      const exactPortraitTopY = (height * 0.52) - (portraitCardHeight / 2);
-
-      const topAlignY = isMobile ? Math.max(height * 0.07, 75) : Math.max(exactPortraitTopY + 20, 115);
-
-      mctx.save();
-      
-      mctx.translate(portalTextX, topAlignY);
-      mctx.scale(aboutScale, aboutScale);
-      mctx.translate(-portalTextX, -topAlignY);
-
-      mctx.textAlign = isMobile ? 'center' : 'left';
-      mctx.textBaseline = 'top';
-      mctx.shadowBlur = 0;
-      mctx.shadowColor = 'transparent';
-
-      const textFloatY = topAlignY + Math.sin(t * 1.5) * 3;
-
-      mctx.font = '500 12px Poppins, sans-serif';
-      mctx.fillStyle = '#94a3b8';
-      mctx.letterSpacing = '2px';
-      mctx.fillText('ABOUT ME', portalTextX, textFloatY);
-
-      let lastContentY = textFloatY + 30;
-
-      if (scrollProgress > 0.04) {
-        isTypingTriggered = true;
-      } else if (scrollProgress < 0.02) {
-        isTypingTriggered = false;
-        typedCharFloat = 0;
-      }
-
-      if (isTypingTriggered) {
-        if (typedCharFloat < ABOUT_TITLE.length) {
-          typedCharFloat += 2.0;
-        }
-
-        const charsToShow = Math.min(Math.floor(typedCharFloat), ABOUT_TITLE.length);
-        const visibleTitle = ABOUT_TITLE.substring(0, charsToShow) + (charsToShow < ABOUT_TITLE.length ? '|' : '');
-
-        let currentY = textFloatY + 30;
-        const fontSize = width < 768 ? 17 : 24;
-
-        mctx.font = `900 ${fontSize}px Poppins, sans-serif`;
-        mctx.fillStyle = '#ffffff';
-
-        currentY = wrapCanvasText(mctx, visibleTitle, portalTextX, currentY, textMaxWidth, 26);
-        currentY += 12;
-
-        if (charsToShow > 8) {
-          mctx.font = '400 12.5px Poppins, sans-serif';
-          mctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
-
-          currentY = wrapCanvasText(mctx, ABOUT_BIO, portalTextX, currentY, textMaxWidth, 18);
-          currentY += 18;
-
-          mctx.font = '500 11.5px Poppins, sans-serif';
-          mctx.fillStyle = '#94a3b8';
-          mctx.letterSpacing = '2px';
-          mctx.fillText('COMPANIES', portalTextX, currentY);
-
-          const logoY = currentY + 18;
-
-          if (dolpvizImg.complete && dolpvizImg.naturalWidth > 0) {
-            const w1 = width < 768 ? 110 : 140;
-            const h1 = (dolpvizImg.naturalHeight / dolpvizImg.naturalWidth) * w1;
-            const l1X = isMobile ? portalTextX - (w1 + 10) : portalTextX;
-            mctx.drawImage(dolpvizImg, l1X, logoY, w1, h1);
-          }
-
-          if (saarcImg.complete && saarcImg.naturalWidth > 0) {
-            const w2 = width < 768 ? 125 : 155;
-            const h2 = (saarcImg.naturalHeight / saarcImg.naturalWidth) * w2;
-            const l2X = isMobile ? portalTextX + 10 : portalTextX + 170;
-            mctx.drawImage(saarcImg, l2X, logoY + 2, w2, h2);
-          }
-
-          lastContentY = logoY + 45;
-        } else {
-          lastContentY = currentY + 20;
-        }
-      }
-
-      mctx.restore();
-
-      // Mobile Portrait Image Card (Shown BELOW About Me text, occupying 40% screen height)
+      // Mobile Portrait Image Card (Rendered ABOVE About Me text, occupying 38-40% screen height)
+      let mobImageBottomY = 0;
       if (isMobile && akileshPortraitImg.complete && akileshPortraitImg.naturalWidth > 0) {
         const mobCardWidth = Math.min(width * 0.90, 390);
-        const mobCardHeight = Math.min(height * 0.40, 360);
+        const mobCardHeight = Math.min(height * 0.38, 310);
         const mobCardX = (width - mobCardWidth) / 2;
-        const mobCardY = Math.min(height - mobCardHeight - 16, Math.max(lastContentY, height * 0.54));
+        const mobCardY = Math.max(height * 0.08, 62);
+        mobImageBottomY = mobCardY + mobCardHeight;
 
         mctx.save();
         mctx.beginPath();
         if (mctx.roundRect) {
-          mctx.roundRect(mobCardX, mobCardY, mobCardWidth, mobCardHeight, 20);
+          mctx.roundRect(mobCardX, mobCardY, mobCardWidth, mobCardHeight, 18);
         } else {
           mctx.rect(mobCardX, mobCardY, mobCardWidth, mobCardHeight);
         }
@@ -671,26 +584,109 @@ export function initFluidCanvas() {
         mctx.drawImage(akileshPortraitImg, drawX, drawY, drawW, drawH);
 
         // Badge & Overlay on mobile card
-        const mobBadgeGrad = mctx.createLinearGradient(mobCardX, mobCardY + mobCardHeight - 80, mobCardX, mobCardY + mobCardHeight);
+        const mobBadgeGrad = mctx.createLinearGradient(mobCardX, mobCardY + mobCardHeight - 70, mobCardX, mobCardY + mobCardHeight);
         mobBadgeGrad.addColorStop(0, 'transparent');
-        mobBadgeGrad.addColorStop(1, 'rgba(10, 14, 20, 0.95)');
+        mobBadgeGrad.addColorStop(1, 'rgba(10, 14, 20, 0.94)');
         mctx.fillStyle = mobBadgeGrad;
-        mctx.fillRect(mobCardX, mobCardY + mobCardHeight - 80, mobCardWidth, 80);
+        mctx.fillRect(mobCardX, mobCardY + mobCardHeight - 70, mobCardWidth, 70);
 
-        mctx.font = '900 16px Poppins, sans-serif';
+        mctx.font = '900 15px Poppins, sans-serif';
         mctx.fillStyle = '#ffffff';
         mctx.textAlign = 'left';
         mctx.textBaseline = 'alphabetic';
-        mctx.fillText('AKILESH', mobCardX + 18, mobCardY + mobCardHeight - 32);
+        mctx.fillText('AKILESH', mobCardX + 16, mobCardY + mobCardHeight - 28);
 
-        mctx.font = '600 11px Poppins, sans-serif';
+        mctx.font = '600 10.5px Poppins, sans-serif';
         mctx.fillStyle = '#38bdf8';
         mctx.letterSpacing = '1px';
-        mctx.fillText('CREATIVE DIRECTOR', mobCardX + 18, mobCardY + mobCardHeight - 14);
+        mctx.fillText('CREATIVE DIRECTOR', mobCardX + 16, mobCardY + mobCardHeight - 12);
 
         mctx.restore();
       }
 
+      const portalTextX = isMobile ? width * 0.5 : Math.max(width * 0.50, 540);
+      const textMaxWidth = isMobile ? width * 0.88 : Math.min(width * 0.42, 560);
+
+      const portraitCardHeight = Math.min(Math.max(500, height * 0.82), 840);
+      const exactPortraitTopY = (height * 0.52) - (portraitCardHeight / 2);
+
+      const topAlignY = isMobile 
+        ? (mobImageBottomY > 0 ? mobImageBottomY + 16 : Math.max(height * 0.07, 75)) 
+        : Math.max(exactPortraitTopY + 20, 115);
+
+      mctx.save();
+      
+      mctx.translate(portalTextX, topAlignY);
+      mctx.scale(aboutScale, aboutScale);
+      mctx.translate(-portalTextX, -topAlignY);
+
+      mctx.textAlign = isMobile ? 'center' : 'left';
+      mctx.textBaseline = 'top';
+      mctx.shadowBlur = 0;
+      mctx.shadowColor = 'transparent';
+
+      const textFloatY = topAlignY + Math.sin(t * 1.5) * 3;
+
+      mctx.font = '500 11.5px Poppins, sans-serif';
+      mctx.fillStyle = '#94a3b8';
+      mctx.letterSpacing = '2px';
+      mctx.fillText('ABOUT ME', portalTextX, textFloatY);
+
+      if (scrollProgress > 0.04) {
+        isTypingTriggered = true;
+      } else if (scrollProgress < 0.02) {
+        isTypingTriggered = false;
+        typedCharFloat = 0;
+      }
+
+      if (isTypingTriggered) {
+        if (typedCharFloat < ABOUT_TITLE.length) {
+          typedCharFloat += 2.0;
+        }
+
+        const charsToShow = Math.min(Math.floor(typedCharFloat), ABOUT_TITLE.length);
+        const visibleTitle = ABOUT_TITLE.substring(0, charsToShow) + (charsToShow < ABOUT_TITLE.length ? '|' : '');
+
+        let currentY = textFloatY + 26;
+        const fontSize = width < 768 ? 16 : 24;
+
+        mctx.font = `900 ${fontSize}px Poppins, sans-serif`;
+        mctx.fillStyle = '#ffffff';
+
+        currentY = wrapCanvasText(mctx, visibleTitle, portalTextX, currentY, textMaxWidth, 24);
+        currentY += 10;
+
+        if (charsToShow > 8) {
+          mctx.font = '400 12px Poppins, sans-serif';
+          mctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+
+          currentY = wrapCanvasText(mctx, ABOUT_BIO, portalTextX, currentY, textMaxWidth, 17);
+          currentY += 14;
+
+          mctx.font = '500 11px Poppins, sans-serif';
+          mctx.fillStyle = '#94a3b8';
+          mctx.letterSpacing = '2px';
+          mctx.fillText('COMPANIES', portalTextX, currentY);
+
+          const logoY = currentY + 16;
+
+          if (dolpvizImg.complete && dolpvizImg.naturalWidth > 0) {
+            const w1 = width < 768 ? 105 : 140;
+            const h1 = (dolpvizImg.naturalHeight / dolpvizImg.naturalWidth) * w1;
+            const l1X = isMobile ? portalTextX - (w1 + 10) : portalTextX;
+            mctx.drawImage(dolpvizImg, l1X, logoY, w1, h1);
+          }
+
+          if (saarcImg.complete && saarcImg.naturalWidth > 0) {
+            const w2 = width < 768 ? 120 : 155;
+            const h2 = (saarcImg.naturalHeight / saarcImg.naturalWidth) * w2;
+            const l2X = isMobile ? portalTextX + 10 : portalTextX + 170;
+            mctx.drawImage(saarcImg, l2X, logoY + 2, w2, h2);
+          }
+        }
+      }
+
+      mctx.restore();
       mctx.restore();
     }
 
