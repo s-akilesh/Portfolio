@@ -1578,16 +1578,18 @@ export function initFluidCanvas() {
       topCtx.textBaseline = 'top';
       topCtx.font = '500 13px Poppins, sans-serif';
       topCtx.fillStyle = 'rgba(255, 255, 255, 0.78)';
-      topCtx.fillText(activeSub, marginX, lineY + 28);
+      const subLabelY = lineY + 20;
+      topCtx.fillText(activeSub, marginX, subLabelY);
 
-      // 5. Main Center Editorial Headline
+      // 5. Main Center Editorial Headline (positioned with exact 12px gap below activeSub)
       const headlineX = width < 900 ? marginX : Math.max(width * 0.32, 340);
       const headlineMaxW = width < 900 ? width - marginX * 2 : Math.min(width * 0.58, 720);
+      const headlineY = width < 900 ? subLabelY + 13 + 12 : lineY + 52; // 12px gap below sub-label!
 
       topCtx.font = `700 ${titleFontSize}px Poppins, sans-serif`;
       topCtx.fillStyle = '#ffffff';
 
-      wrapCanvasText(topCtx, activeHeadline, headlineX, lineY + 38, headlineMaxW, titleFontSize * 1.28);
+      wrapCanvasText(topCtx, activeHeadline, headlineX, headlineY, headlineMaxW, titleFontSize * 1.28);
       topCtx.restore();
 
       // RENDER INTERACTIVE NEGATIVE-COLOR BLEND HOVER CURSOR CIRCLE ("EXPLORE") ONLY ON DEVICES WITH CURSOR
