@@ -64,6 +64,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Handle Hash / Query Parameter Scroll on Page Load (e.g. /#projects or /#work)
+  function handleInitialHashScroll() {
+    const hash = window.location.hash;
+    const search = window.location.search;
+    if (hash === '#projects' || hash === '#work' || search.includes('projects')) {
+      setTimeout(() => {
+        const maxScroll = getHeroScrollMax();
+        const targetY = maxScroll * 0.78; // Scroll directly to Projects Showcase
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      }, 350);
+    }
+  }
+
+  handleInitialHashScroll();
+  window.addEventListener('hashchange', handleInitialHashScroll);
+
   // Contact Modal Handlers
   const contactModal = document.getElementById('contact-modal');
   const openBtn = document.getElementById('open-contact-btn');
