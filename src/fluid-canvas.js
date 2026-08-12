@@ -151,7 +151,7 @@ export function initFluidCanvas() {
       if (activeIndexGlobal === 0) {
         window.location.href = './flyer-eats.html';
       } else if (activeIndexGlobal === 2) {
-        window.location.href = './habit-partner.html';
+        window.location.href = '/habit-partner/home';
       }
     }
   };

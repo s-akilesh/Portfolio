@@ -1,0 +1,20 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/habit-partner", "destination": "/habit-partner/home/index.html" },
+    { "source": "/habit-partner/", "destination": "/habit-partner/home/index.html" },
+    { "source": "/habit-partner/home", "destination": "/habit-partner/home/index.html" },
+    { "source": "/habit-partner/policy", "destination": "/habit-partner/policy/index.html" },
+    { "source": "/habit-partner/privacy", "destination": "/habit-partner/policy/index.html" },
+    { "source": "/habit-partner/terms", "destination": "/habit-partner/terms/index.html" },
+    { "source": "/habit-partner.html", "destination": "/habit-partner/home/index.html" },
+    { "source": "/habit-partner-privacy.html", "destination": "/habit-partner/policy/index.html" },
+    { "source": "/habit-partner-terms.html", "destination": "/habit-partner/terms/index.html" },
+    { "source": "/flyer-eats", "destination": "/flyer-eats.html" },
+    { "source": "/privacy", "destination": "/habit-partner/policy/index.html" },
+    { "source": "/privacy.html", "destination": "/habit-partner/policy/index.html" },
+    { "source": "/terms", "destination": "/habit-partner/terms/index.html" },
+    { "source": "/terms.html", "destination": "/habit-partner/terms/index.html" }
+  ]
+}
