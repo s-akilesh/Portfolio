@@ -764,6 +764,8 @@ export function initFluidCanvas() {
         ];
 
         // Draw 3 Process Step Columns with Sequential Stagger Reveal
+        let currentMobileY = gridTopY;
+
         processSteps.forEach((s, idx) => {
           if (s.triggerP <= 0.005) return;
 
@@ -773,7 +775,7 @@ export function initFluidCanvas() {
           let cx, cy;
           if (isMobile) {
             cx = marginX;
-            cy = gridTopY + idx * 165;
+            cy = currentMobileY;
           } else {
             cx = marginX + idx * (colWidth + colGap);
             cy = gridTopY;
@@ -789,18 +791,18 @@ export function initFluidCanvas() {
           mctx.letterSpacing = '1.5px';
           mctx.fillText(s.step, cx, cy);
 
-          // Step Title (Understand, Shape, Evolve) - Increased space (+12px)
+          // Step Title (Understand, Shape, Evolve)
           mctx.font = '700 24px Poppins, sans-serif';
           mctx.fillStyle = '#ffffff';
-          mctx.fillText(s.title, cx, cy + 38);
+          mctx.fillText(s.title, cx, cy + 32);
 
-          // Body Description - Increased space (+12px+)
+          // Body Description
           mctx.font = '300 13px Poppins, sans-serif';
           mctx.fillStyle = 'rgba(255, 255, 255, 0.82)';
-          const nextY = wrapCanvasText(mctx, s.desc, cx, cy + 84, colWidth, 20);
+          const nextY = wrapCanvasText(mctx, s.desc, cx, cy + 70, colWidth, 20);
 
-          // Flow Pill Tag - Increased space (+12px)
-          const flowY = nextY + 20;
+          // Flow Pill Tag
+          const flowY = nextY + 16;
           mctx.font = '600 12px Poppins, sans-serif';
           const flowW = mctx.measureText(s.flow).width + 24;
 
@@ -821,11 +823,14 @@ export function initFluidCanvas() {
           mctx.textBaseline = 'top';
 
           mctx.restore();
+
+          // Calculate bottom position of current card and add 36px spacing for next card on mobile
+          currentMobileY = flowY + 28 + 36;
         });
 
         // Bottom Architectural Axis Divider Line Length Expansion Based on Scroll
         const lineP = Math.min(Math.max((secP - 0.08) / 0.70, 0), 1.0);
-        const lineY = isMobile ? gridTopY + 3 * 200 + 10 : gridTopY + 265;
+        const lineY = isMobile ? currentMobileY + 10 : gridTopY + 265;
         const currentLineEndX = marginX + lineP * availableW;
 
         mctx.save();
