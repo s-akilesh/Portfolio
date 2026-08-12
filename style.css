@@ -179,6 +179,8 @@ body {
   top: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
+  height: 100svh; /* Small Viewport Height so content fits when mobile browser URL/search bar is expanded! */
   overflow: hidden;
   background-color: var(--color-bg-light);
 }
@@ -212,11 +214,15 @@ body {
 .hero-content.about-hero-overlay {
   position: absolute;
   inset: 0;
+  height: 100%;
+  height: 100dvh;
+  height: 100svh;
   z-index: 20;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: calc(var(--header-height) + 2rem) var(--grid-margin) var(--grid-margin);
+  padding: calc(var(--header-height) + 1.2rem) var(--grid-margin) calc(var(--grid-margin) + 0.2rem);
+  box-sizing: border-box;
   pointer-events: none;
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
@@ -889,10 +895,51 @@ body {
     font-size: 2rem;
   }
   
+  .hero-content.about-hero-overlay {
+    padding: calc(var(--header-height) + 0.4rem) 1.2rem clamp(0.8rem, 2vh, 1.4rem) 1.2rem;
+    height: 100svh;
+  }
+
+  .about-hero-center {
+    max-width: 100%;
+    margin-top: 0.2rem;
+    margin-bottom: 0;
+  }
+
+  .about-main-title {
+    font-size: clamp(1.5rem, 6.2vw, 2.2rem);
+    margin-bottom: 0.6rem;
+  }
+
+  .about-lead-text {
+    font-size: clamp(0.82rem, 3.1vw, 0.92rem);
+    line-height: 1.42;
+  }
+
   .about-hero-bottom {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.6rem;
+    width: 100%;
+    padding-bottom: 0.2rem;
+  }
+
+  .hero-stats {
+    gap: 0.4rem 0.9rem;
+    font-size: 0.74rem;
+  }
+
+  .hero-stats strong {
+    font-size: 1.05rem;
+  }
+
+  .scroll-down-indicator {
+    font-size: 0.72rem;
+    gap: 0.4rem;
+  }
+
+  .scroll-line {
+    width: 20px;
   }
 }
 

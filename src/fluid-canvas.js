@@ -166,6 +166,9 @@ export function initFluidCanvas() {
   }
 
   window.addEventListener('resize', resize);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', resize);
+  }
   resize();
 
   // Mouse move event
