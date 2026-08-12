@@ -64,6 +64,62 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Mobile Hamburger & Drawer Navigation Handlers (Google Material Icons)
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+  const mobNavWork = document.getElementById('mob-nav-work');
+  const mobNavAbout = document.getElementById('mob-nav-about');
+  const mobNavContact = document.getElementById('mob-nav-contact');
+
+  function toggleMobileMenu() {
+    const isActive = mobileNavOverlay ? mobileNavOverlay.classList.contains('active') : false;
+    if (isActive) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  }
+
+  function openMobileMenu() {
+    if (mobileNavOverlay) mobileNavOverlay.classList.add('active');
+    if (hamburgerBtn) hamburgerBtn.classList.add('active');
+  }
+
+  function closeMobileMenu() {
+    if (mobileNavOverlay) mobileNavOverlay.classList.remove('active');
+    if (hamburgerBtn) hamburgerBtn.classList.remove('active');
+  }
+
+  if (hamburgerBtn) hamburgerBtn.addEventListener('click', toggleMobileMenu);
+
+  if (mobNavAbout) {
+    mobNavAbout.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileMenu();
+      const maxScroll = getHeroScrollMax();
+      const targetY = maxScroll * 0.10;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    });
+  }
+
+  if (mobNavWork) {
+    mobNavWork.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileMenu();
+      const maxScroll = getHeroScrollMax();
+      const targetY = maxScroll * 0.78;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    });
+  }
+
+  if (mobNavContact) {
+    mobNavContact.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileMenu();
+      openContactModal();
+    });
+  }
+
   // Force manual scroll restoration so reloads always land on top of Home Screen
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';

@@ -165,6 +165,97 @@ body {
   width: 100%;
 }
 
+/* Mobile Hamburger Button (Google Material Symbols) */
+.hamburger-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  z-index: 300; /* Higher than overlay (250) so it's always accessible! */
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  position: relative;
+  transition: transform 0.25s ease;
+}
+
+.hamburger-btn .menu-icon-open,
+.hamburger-btn .menu-icon-close {
+  font-size: 2.2rem;
+  line-height: 1;
+  display: block;
+}
+
+.hamburger-btn .menu-icon-close {
+  display: none;
+  color: #ffffff;
+}
+
+.hamburger-btn.active .menu-icon-open {
+  display: none;
+}
+
+.hamburger-btn.active .menu-icon-close {
+  display: block;
+}
+
+.dark-header .hamburger-btn {
+  color: #ffffff;
+}
+
+/* Mobile Nav Overlay Drawer */
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  background: rgba(8, 12, 18, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.mobile-nav-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mobile-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4rem;
+}
+
+.mobile-nav-link {
+  background: transparent;
+  border: none;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.mobile-nav-link:hover {
+  color: #38bdf8;
+  transform: scale(1.05);
+}
+
 /* --------------------------------------------------------------------------
    Pinned Hero Section & Multi-Stage Scroll Portal Zoom Track (580vh)
    -------------------------------------------------------------------------- */
@@ -889,6 +980,14 @@ body {
 
 /* Responsive queries */
 @media (max-width: 768px) {
+  .nav-links {
+    display: none !important;
+  }
+
+  .hamburger-btn {
+    display: flex !important;
+  }
+
   .hero-tagline {
     font-size: 2rem;
   }

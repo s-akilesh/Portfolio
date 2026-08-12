@@ -1562,7 +1562,9 @@ export function initFluidCanvas() {
       const pillX = (width * 0.40) - (pillW / 2);
       const pillY = lineY - 14;
 
-      topCtx.fillStyle = 'rgba(147, 197, 253, 0.35)';
+      topCtx.fillStyle = 'rgba(20, 30, 45, 0.80)';
+      topCtx.strokeStyle = 'rgba(147, 197, 253, 0.35)';
+      topCtx.lineWidth = 1.0;
       topCtx.beginPath();
       if (topCtx.roundRect) {
         topCtx.roundRect(pillX, pillY, pillW, 28, 14);
@@ -1570,6 +1572,7 @@ export function initFluidCanvas() {
         topCtx.rect(pillX, pillY, pillW, 28);
       }
       topCtx.fill();
+      topCtx.stroke();
 
       topCtx.fillStyle = '#ffffff';
       topCtx.textAlign = 'center';

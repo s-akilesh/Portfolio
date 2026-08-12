@@ -6,10 +6,11 @@
     <title>AKILESH — Creative Director & Full-Stack Architect</title>
     <meta name="description" content="Portfolio of Akilesh — Creative Director, Product Architect & Developer working across content experiences, AI products, and design systems." />
     
-    <!-- Google Fonts: Universal Poppins -->
+    <!-- Google Fonts: Universal Poppins & Material Symbols Outlined -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     
     <link rel="stylesheet" href="./style.css" />
   </head>
@@ -33,7 +34,22 @@
           <li><button type="button" class="nav-link" id="nav-contact">contact</button></li>
         </ul>
       </nav>
+
+      <!-- Mobile Hamburger Button with Google Material Icons -->
+      <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Toggle Navigation Menu">
+        <span class="material-symbols-outlined menu-icon-open">menu</span>
+        <span class="material-symbols-outlined menu-icon-close">close</span>
+      </button>
     </header>
+
+    <!-- Mobile Fullscreen Drawer Navigation Menu -->
+    <div id="mobile-nav-overlay" class="mobile-nav-overlay">
+      <ul class="mobile-nav-links">
+        <li><button type="button" class="mobile-nav-link" id="mob-nav-work">projects</button></li>
+        <li><button type="button" class="mobile-nav-link" id="mob-nav-about">about me</button></li>
+        <li><button type="button" class="mobile-nav-link" id="mob-nav-contact">contact</button></li>
+      </ul>
+    </div>
 
     <!-- Multi-Stage Scroll Portal Zoom Track (Pinned Hero Section) -->
     <div id="hero-scroll-wrapper" class="hero-scroll-wrapper">
