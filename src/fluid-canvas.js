@@ -358,7 +358,7 @@ export function initFluidCanvas() {
     mctx.clearRect(0, 0, width, height);
 
     const portalCenterX = width * 0.5;
-    const portalCenterY = height * 0.5;
+    const portalCenterY = (width < 768) ? height * 0.58 : height * 0.5;
 
     const blackShiftProgress = Math.min(Math.max((scrollProgress - 0.04) / 0.08, 0), 1);
 
@@ -1826,7 +1826,7 @@ export function initFluidCanvas() {
     const isTablet = width >= 768 && width < 1024;
     const targetCenterX = isMobile ? width * 0.5 : (isTablet ? width * 0.82 : width * 0.78);
     const centerX = targetCenterX + (width * 0.5 - targetCenterX) * Math.min(zoomProgress * 1.5, 1);
-    const centerY = height * 0.48;
+    const centerY = isMobile ? height * 0.58 : (isTablet ? height * 0.52 : height * 0.48);
 
     // 1. ULTRA-COMPACT RESPONSIVE RADIUS FOR ORGANIC JELLY PORTAL
     const baseRadius = Math.min(width, height) * (isMobile ? 0.18 : (isTablet ? 0.13 : 0.14)) * zoomScale;
