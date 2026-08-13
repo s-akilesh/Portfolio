@@ -4,24 +4,24 @@
 */
 
 :root {
-  /* Color Palette */
-  --bg-primary: #0b0f17;
-  --bg-secondary: #111827;
-  --bg-card: #1f2937;
-  --bg-card-hover: #374151;
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-focus: #3b82f6;
+  /* Color Palette - Emerald Green Theme (#03B156) */
+  --bg-primary: #050806;
+  --bg-secondary: #080d0a;
+  --bg-card: #090e0b;
+  --bg-card-hover: #101813;
+  --border-color: rgba(3, 177, 86, 0.15);
+  --border-focus: #03B156;
   
-  --text-primary: #f9fafb;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
+  --text-primary: #f4fbf7;
+  --text-secondary: #a3c2b2;
+  --text-muted: #6b8a7b;
   
-  --accent-primary: #2563eb;
-  --accent-light: #3b82f6;
-  --accent-glow: rgba(59, 130, 246, 0.15);
+  --accent-primary: #03B156;
+  --accent-light: #03B156;
+  --accent-glow: rgba(3, 177, 86, 0.18);
   
-  --accent-purple: #60a5fa;
-  --accent-purple-glow: rgba(96, 165, 250, 0.15);
+  --accent-purple: #10b981;
+  --accent-purple-glow: rgba(16, 185, 129, 0.18);
   
   /* Spacing */
   --container-max: 1140px;
@@ -73,7 +73,7 @@ a {
 }
 
 a:hover {
-  color: #93c5fd;
+  color: #10b981;
 }
 
 /* Accessibility Focus States */
@@ -94,11 +94,11 @@ a:focus-visible, button:focus-visible {
   position: sticky;
   top: 0;
   z-index: 100;
-  padding: 24px 6%;
-  background: rgba(11, 15, 23, 0.85);
+  padding: 20px 6%;
+  background: rgba(8, 13, 10, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(3, 177, 86, 0.18);
 }
 
 .nav-wrapper {
@@ -151,49 +151,126 @@ a:focus-visible, button:focus-visible {
   color: var(--text-primary);
 }
 
-.brand-badge {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-}
-
-.nav-links {
+.hp-desktop-nav .hp-nav-list {
   display: flex;
   align-items: center;
   gap: 1.75rem;
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.nav-link {
+.hp-nav-item {
   color: var(--text-secondary);
   font-size: 0.95rem;
   font-weight: 500;
   padding: 0.5rem 0;
+  text-decoration: none;
 }
 
-.nav-link:hover, .nav-link.active {
+.hp-nav-item:hover, .hp-nav-item.active {
   color: var(--text-primary);
 }
 
-.nav-link.active {
+.hp-nav-item.active {
   border-bottom: 2px solid var(--accent-light);
 }
 
 .hp-back-btn {
-  color: #38bdf8 !important;
+  color: #03B156 !important;
   font-weight: 600 !important;
 }
 
-/* Mobile Nav Toggle */
+/* Mobile Toggle & Dedicated Mobile Drawer Overlay */
 .mobile-toggle {
   display: none;
-  background: none;
+  background: transparent;
   border: none;
   color: var(--text-primary);
   cursor: pointer;
   padding: 0.5rem;
+  z-index: 10001;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+}
+
+.mobile-toggle .menu-icon-open,
+.mobile-toggle .menu-icon-close {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.mobile-toggle .menu-icon-close {
+  display: none;
+}
+
+.mobile-toggle.active .menu-icon-open {
+  display: none;
+}
+
+.mobile-toggle.active .menu-icon-close {
+  display: block;
+}
+
+/* Dedicated Habit Partner Mobile Nav Drawer Overlay */
+.hp-mobile-drawer {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  background: rgba(8, 13, 10, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(3, 177, 86, 0.20);
+  z-index: 9999;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.hp-mobile-drawer.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.hp-mobile-nav-list {
+  list-style: none;
+  padding: 1.5rem 2rem 2rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.hp-mobile-nav-link {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hp-mobile-nav-link.hp-back-btn {
+  color: #03B156;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .hp-desktop-nav {
+    display: none !important;
+  }
+
+  .mobile-toggle {
+    display: flex !important;
+  }
 }
 
 /* Hero Section */
@@ -223,8 +300,11 @@ a:focus-visible, button:focus-visible {
   gap: 0.5rem;
   padding: 0.35rem 0.9rem;
   border-radius: 999px;
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.25);
+  border: 1px solid transparent;
+  background-image: linear-gradient(rgba(3, 177, 86, 0.12), rgba(3, 177, 86, 0.12)),
+                    linear-gradient(135deg, rgba(3, 177, 86, 1) 0%, rgba(3, 177, 86, 0.15) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   color: var(--accent-light);
   font-size: 0.85rem;
   font-weight: 600;
@@ -279,11 +359,11 @@ a:focus-visible, button:focus-visible {
 .btn-primary {
   background: var(--accent-primary);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 14px rgba(3, 177, 86, 0.35);
 }
 
 .btn-primary:hover {
-  background: #1d4ed8;
+  background: #028e44;
   color: #ffffff;
   transform: translateY(-1px);
 }
@@ -326,18 +406,71 @@ a:focus-visible, button:focus-visible {
   gap: 1.75rem;
 }
 
-.feature-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+/* ==========================================================================
+   REUSABLE COMPONENT SYSTEM: GRADIENT CARD (.hp-card & .hp-card-inner)
+   40% Emerald Green -> 10% Emerald Green Faded Border
+   ========================================================================== */
+.hp-card {
+  position: relative;
   border-radius: var(--radius-lg);
-  padding: 2rem;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid transparent !important;
+  background-image: linear-gradient(#090e0b, #090e0b),
+                    linear-gradient(135deg, rgba(3, 177, 86, 0.40) 0%, rgba(3, 177, 86, 0.10) 100%) !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
 }
 
-.feature-card:hover {
+.hp-card:hover,
+.hp-card-interactive:hover {
   transform: translateY(-3px);
-  border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  background-image: linear-gradient(#090e0b, #090e0b),
+                    linear-gradient(135deg, rgba(3, 177, 86, 0.65) 0%, rgba(3, 177, 86, 0.20) 100%) !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+  box-shadow: 0 14px 40px -10px rgba(3, 177, 86, 0.25) !important;
+}
+
+.hp-card-inner {
+  border-radius: var(--radius-md);
+  border: 1px solid transparent !important;
+  background-image: linear-gradient(#060a08, #060a08),
+                    linear-gradient(135deg, rgba(3, 177, 86, 0.40) 0%, rgba(3, 177, 86, 0.10) 100%) !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+}
+
+.hero-badge,
+.hp-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid transparent !important;
+  background-image: linear-gradient(rgba(3, 177, 86, 0.16), rgba(3, 177, 86, 0.16)),
+                    linear-gradient(135deg, rgba(3, 177, 86, 0.40) 0%, rgba(3, 177, 86, 0.10) 100%) !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+  color: #ffffff !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 1.5rem;
+}
+
+.hero-badge svg,
+.hp-pill-badge svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.feature-card {
+  padding: 2rem;
 }
 
 .feature-icon-box {
@@ -433,8 +566,12 @@ a:focus-visible, button:focus-visible {
   max-width: 900px;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  border: 1px solid transparent;
+  background-image: linear-gradient(#080d0a, #080d0a),
+                    linear-gradient(135deg, rgba(3, 177, 86, 1) 0%, rgba(3, 177, 86, 0.15) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
 }
 
 .hp-showcase-img {
@@ -443,36 +580,43 @@ a:focus-visible, button:focus-visible {
   display: block;
 }
 
-/* Mobile Nav Drawer */
 @media (max-width: 768px) {
-  .mobile-toggle {
-    display: block;
-  }
-  
-  .nav-links {
-    display: none;
-    position: absolute;
-    top: 72px;
-    left: 0;
-    right: 0;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
-    flex-direction: column;
-    padding: 1.5rem;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .nav-links.open {
-    display: flex;
-  }
-  
   .hero-title {
-    font-size: 2.35rem;
+    font-size: 2.15rem;
   }
   
   .hero-tagline {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
+  }
+
+  /* Terms of Service & Privacy Policy Mobile Typography */
+  .legal-card-title,
+  .legal-card-content h2,
+  .legal-card-content h3,
+  .hp-contact-title {
+    font-size: 18px !important;
+    line-height: 1.35 !important;
+  }
+
+  .legal-subtitle,
+  .legal-card-content p,
+  .legal-card-content li,
+  .legal-card-content span,
+  .hp-contact-desc,
+  .toc-link,
+  .toc-title {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  .legal-num-badge {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 13px !important;
+  }
+
+  .legal-card {
+    padding: 1.35rem 1.25rem !important;
   }
 }
 
@@ -490,7 +634,8 @@ a:focus-visible, button:focus-visible {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0;
 }
 
 .legal-pill {
@@ -499,8 +644,11 @@ a:focus-visible, button:focus-visible {
   gap: 0.4rem;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  background: rgba(59, 130, 246, 0.12);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  border: 1px solid transparent;
+  background-image: linear-gradient(rgba(3, 177, 86, 0.12), rgba(3, 177, 86, 0.12)),
+                    linear-gradient(135deg, rgba(3, 177, 86, 1) 0%, rgba(3, 177, 86, 0.15) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   color: var(--accent-light);
   font-size: 0.78rem;
   font-weight: 700;
@@ -558,11 +706,8 @@ a:focus-visible, button:focus-visible {
 .legal-sidebar {
   position: sticky;
   top: 100px;
-  background: rgba(17, 24, 39, 0.7);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
   padding: 1.5rem;
 }
 
@@ -603,7 +748,7 @@ a:focus-visible, button:focus-visible {
 
 .toc-link:hover, .toc-link.active {
   color: #ffffff;
-  background: rgba(59, 130, 246, 0.15);
+  background: rgba(3, 177, 86, 0.15);
   padding-left: 0.85rem;
 }
 
@@ -615,17 +760,8 @@ a:focus-visible, button:focus-visible {
 }
 
 .legal-card {
-  background: rgba(17, 24, 39, 0.5);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
   padding: 2.25rem;
   scroll-margin-top: 110px;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.legal-card:hover {
-  border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
 }
 
 .legal-card-header {
@@ -644,8 +780,8 @@ a:focus-visible, button:focus-visible {
   width: 38px;
   height: 38px;
   border-radius: var(--radius-md);
-  background: rgba(59, 130, 246, 0.12);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(3, 177, 86, 0.12);
+  border: 1px solid rgba(3, 177, 86, 0.3);
   color: var(--accent-light);
   font-weight: 700;
   font-size: 0.95rem;
@@ -699,7 +835,7 @@ a:focus-visible, button:focus-visible {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: rgba(59, 130, 246, 0.2);
+  background: rgba(3, 177, 86, 0.2);
   color: var(--accent-light);
   font-size: 0.7rem;
   font-weight: 800;
@@ -716,13 +852,16 @@ a:focus-visible, button:focus-visible {
 /* Code Scope Pill Styling */
 .code-scope-box {
   display: inline-block;
-  background: #0f172a;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  border: 1px solid transparent;
+  background-image: linear-gradient(#07100b, #07100b),
+                    linear-gradient(135deg, rgba(3, 177, 86, 1) 0%, rgba(3, 177, 86, 0.15) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   padding: 0.6rem 1.2rem;
   border-radius: var(--radius-md);
   font-family: 'Fira Code', monospace, sans-serif;
   font-size: 0.95rem;
-  color: #60a5fa;
+  color: #03B156;
   margin: 0.75rem 0 1.25rem;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
 }
@@ -732,8 +871,11 @@ a:focus-visible, button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(17, 24, 39, 0.8) 100%);
-  border: 1px solid rgba(59, 130, 246, 0.35);
+  border: 1px solid transparent;
+  background-image: linear-gradient(135deg, rgba(3, 177, 86, 0.18) 0%, #0d1410 100%),
+                    linear-gradient(135deg, rgba(3, 177, 86, 1) 0%, rgba(3, 177, 86, 0.15) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   border-radius: var(--radius-md);
   padding: 1.25rem 1.5rem;
   margin-top: 1rem;
@@ -760,7 +902,7 @@ a:focus-visible, button:focus-visible {
 }
 
 .contact-copy-btn:hover {
-  background: #1d4ed8;
+  background: #028e44;
   transform: translateY(-1px);
 }
 
@@ -791,11 +933,14 @@ a:focus-visible, button:focus-visible {
   position: relative;
   width: 100%;
   max-width: 620px;
-  background: #0b0f17;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid transparent;
+  background-image: linear-gradient(#080d0a, #080d0a),
+                    linear-gradient(135deg, rgba(3, 177, 86, 1) 0%, rgba(3, 177, 86, 0.15) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   border-radius: 20px;
   padding: 3rem 2.5rem 2.5rem;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
   transform: scale(1);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -848,8 +993,11 @@ a:focus-visible, button:focus-visible {
 }
 
 .hp-support-inner-card {
-  background: #111827;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid transparent;
+  background-image: linear-gradient(#0d1410, #0d1410),
+                    linear-gradient(135deg, rgba(3, 177, 86, 1) 0%, rgba(3, 177, 86, 0.15) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   border-radius: 16px;
   padding: 2rem;
 }
@@ -898,12 +1046,12 @@ a:focus-visible, button:focus-visible {
 .hp-email-text {
   font-size: 1.15rem;
   font-weight: 600;
-  color: #3b82f6;
+  color: #03B156;
   transition: color 0.2s ease;
 }
 
 .hp-copy-email-btn:hover .hp-email-text {
-  color: #60a5fa;
+  color: #10b981;
   text-decoration: underline;
 }
 

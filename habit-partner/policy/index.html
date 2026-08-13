@@ -6,9 +6,11 @@
   <title>Privacy Policy - Habit Tracker | AKILESH</title>
   <meta name="description" content="Habit Tracker Privacy Policy outlining information handling, Google Account authentication, Google Drive backup scope, data deletion, and Google API Limited Use compliance.">
   
+  <!-- Google Fonts: Universal Poppins & Material Symbols Outlined -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
   
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/habit-partner.css">
@@ -16,56 +18,66 @@
 <body>
 
   <!-- Navigation Header -->
-  <header class="site-header">
+  <header id="site-header" class="site-header">
     <div class="container nav-wrapper">
       <a href="/habit-partner/home" class="brand" aria-label="Habit Partner Home">
         <div class="brand-logo-wrapper">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#03B156" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
         </div>
         <div class="brand-title-group">
           <span class="brand-name">Habit Tracker</span>
-          <span class="brand-badge">Android App</span>
         </div>
       </a>
 
-      <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
-        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-
-      <nav>
-        <ul class="nav-links" id="navLinks">
-          <li><a href="/#projects" class="nav-link hp-back-btn">← Back to Projects</a></li>
-          <li><a href="/habit-partner/home" class="nav-link">Home</a></li>
-          <li><a href="/habit-partner/policy" class="nav-link active">Privacy</a></li>
-          <li><a href="/habit-partner/terms" class="nav-link">Terms</a></li>
-          <li><a href="#support" class="nav-link hp-support-trigger">Support</a></li>
+      <!-- Desktop Links -->
+      <nav class="hp-desktop-nav">
+        <ul class="hp-nav-list">
+          <li><a href="/#projects" class="hp-nav-item hp-back-btn">← Back to Projects</a></li>
+          <li><a href="/habit-partner/home" class="hp-nav-item">Home</a></li>
+          <li><a href="/habit-partner/policy" class="hp-nav-item active">Privacy</a></li>
+          <li><a href="/habit-partner/terms" class="hp-nav-item">Terms</a></li>
+          <li><a href="#support" class="hp-nav-item hp-support-trigger">Support</a></li>
         </ul>
       </nav>
+
+      <!-- Mobile Hamburger Button -->
+      <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="material-symbols-outlined menu-icon-open">menu</span>
+        <span class="material-symbols-outlined menu-icon-close">close</span>
+      </button>
     </div>
   </header>
+
+  <!-- Dedicated Habit Partner Mobile Nav Drawer Overlay -->
+  <div id="hp-mobile-drawer" class="hp-mobile-drawer">
+    <ul class="hp-mobile-nav-list">
+      <li><a href="/#projects" class="hp-mobile-nav-link hp-back-btn">← Back to Projects</a></li>
+      <li><a href="/habit-partner/home" class="hp-mobile-nav-link">Home</a></li>
+      <li><a href="/habit-partner/policy" class="hp-mobile-nav-link active">Privacy</a></li>
+      <li><a href="/habit-partner/terms" class="hp-mobile-nav-link">Terms</a></li>
+      <li><a href="#support" class="hp-mobile-nav-link hp-support-trigger">Support</a></li>
+    </ul>
+  </div>
 
   <main class="container">
     <!-- Hero Banner -->
     <div class="legal-hero">
-      <div class="legal-badge-group">
-        <span class="legal-pill">🔒 Privacy Architecture</span>
-        <span class="legal-date-pill">Last Updated: August 11, 2026</span>
-      </div>
       <h1 class="legal-page-title">Privacy Policy</h1>
       <p class="legal-subtitle">
         We are committed to protecting your privacy and handling your information responsibly. Learn how Habit Tracker collects, uses, stores, and protects your data.
       </p>
+      <div class="legal-badge-group">
+        <span class="legal-date-pill">Last Updated: August 11, 2026</span>
+      </div>
     </div>
 
     <!-- 2-Column Layout with Sticky TOC -->
     <div class="legal-layout">
       <!-- Sticky Sidebar Table of Contents -->
-      <aside class="legal-sidebar">
+      <aside class="legal-sidebar hp-card">
         <div class="toc-title">Table of Contents</div>
         <ul class="toc-list">
           <li><a href="#sec-1" class="toc-link">1. Introduction</a></li>
@@ -90,7 +102,7 @@
       <div class="legal-body">
 
         <!-- 1. Introduction -->
-        <article id="sec-1" class="legal-card">
+        <article id="sec-1" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">01</span>
             <h2 class="legal-card-title">Introduction</h2>
@@ -104,7 +116,7 @@
         </article>
 
         <!-- 2. Information We Handle -->
-        <article id="sec-2" class="legal-card">
+        <article id="sec-2" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">02</span>
             <h2 class="legal-card-title">Information We Handle</h2>
@@ -112,7 +124,7 @@
           <div class="legal-card-content">
             <p>Depending on the features you use, Habit Tracker may handle the following categories of information.</p>
             
-            <h3 style="color: #60a5fa; margin: 1.25rem 0 0.5rem; font-size: 1.15rem;">2.1 Habit and App Data</h3>
+            <h3 style="color: #03B156; margin: 1.25rem 0 0.5rem; font-size: 1.15rem;">2.1 Habit and App Data</h3>
             <p>The App may store information that you create within Habit Tracker, such as:</p>
             <ul>
               <li>Habit names and descriptions</li>
@@ -125,7 +137,7 @@
             </ul>
             <p>This information is used to provide the habit-tracking functionality of the App.</p>
 
-            <h3 style="color: #60a5fa; margin: 1.5rem 0 0.5rem; font-size: 1.15rem;">2.2 Google Account Information</h3>
+            <h3 style="color: #03B156; margin: 1.5rem 0 0.5rem; font-size: 1.15rem;">2.2 Google Account Information</h3>
             <p>If you choose to connect your Google Account, we may receive limited information necessary to authenticate you and provide Google-related features.</p>
             <p>Depending on the permissions you grant, this may include information such as:</p>
             <ul>
@@ -136,7 +148,7 @@
             </ul>
             <p>We do not request access to Google information that is not necessary for the functionality you choose to use.</p>
 
-            <h3 style="color: #60a5fa; margin: 1.5rem 0 0.5rem; font-size: 1.15rem;">2.3 Google Drive Data</h3>
+            <h3 style="color: #03B156; margin: 1.5rem 0 0.5rem; font-size: 1.15rem;">2.3 Google Drive Data</h3>
             <p>If you choose to enable Google Drive backup, Habit Tracker may access and manage the application data or files necessary to provide the backup and restore functionality.</p>
             <p>Your habit data may be stored in your connected Google Drive account for backup purposes.</p>
             <p>Habit Tracker uses Google Drive only to provide the backup and restore functionality described in the App.</p>
@@ -147,7 +159,7 @@
               <li>We do not allow third parties to use your Google Drive data for their own advertising or marketing purposes.</li>
             </ul>
 
-            <h3 style="color: #60a5fa; margin: 1.5rem 0 0.5rem; font-size: 1.15rem;">2.4 Device and Technical Information</h3>
+            <h3 style="color: #03B156; margin: 1.5rem 0 0.5rem; font-size: 1.15rem;">2.4 Device and Technical Information</h3>
             <p>The App or third-party services used by the App may process limited technical information necessary to operate, secure, and troubleshoot the App. Depending on the services and SDKs included in the current version of the App, this may include:</p>
             <ul>
               <li>Device type</li>
@@ -161,7 +173,7 @@
         </article>
 
         <!-- 3. How We Use Information -->
-        <article id="sec-3" class="legal-card">
+        <article id="sec-3" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">03</span>
             <h2 class="legal-card-title">How We Use Information</h2>
@@ -185,7 +197,7 @@
         </article>
 
         <!-- 4. Google Services -->
-        <article id="sec-4" class="legal-card">
+        <article id="sec-4" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">04</span>
             <h2 class="legal-card-title">Google Services</h2>
@@ -199,7 +211,7 @@
         </article>
 
         <!-- 5. Data Sharing -->
-        <article id="sec-5" class="legal-card">
+        <article id="sec-5" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">05</span>
             <h2 class="legal-card-title">Data Sharing</h2>
@@ -219,7 +231,7 @@
         </article>
 
         <!-- 6. Data Storage and Security -->
-        <article id="sec-6" class="legal-card">
+        <article id="sec-6" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">06</span>
             <h2 class="legal-card-title">Data Storage and Security</h2>
@@ -233,7 +245,7 @@
         </article>
 
         <!-- 7. Data Retention -->
-        <article id="sec-7" class="legal-card">
+        <article id="sec-7" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">07</span>
             <h2 class="legal-card-title">Data Retention</h2>
@@ -246,7 +258,7 @@
         </article>
 
         <!-- 8. Data Deletion -->
-        <article id="sec-8" class="legal-card">
+        <article id="sec-8" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">08</span>
             <h2 class="legal-card-title">Data Deletion</h2>
@@ -261,7 +273,7 @@
         </article>
 
         <!-- 9. Disconnecting Google Drive -->
-        <article id="sec-9" class="legal-card">
+        <article id="sec-9" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">09</span>
             <h2 class="legal-card-title">Disconnecting Google Drive</h2>
@@ -274,7 +286,7 @@
         </article>
 
         <!-- 10. Children's Privacy -->
-        <article id="sec-10" class="legal-card">
+        <article id="sec-10" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">10</span>
             <h2 class="legal-card-title">Children's Privacy</h2>
@@ -286,7 +298,7 @@
         </article>
 
         <!-- 11. Third-Party Services -->
-        <article id="sec-11" class="legal-card">
+        <article id="sec-11" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">11</span>
             <h2 class="legal-card-title">Third-Party Services</h2>
@@ -300,7 +312,7 @@
         </article>
 
         <!-- 12. Your Choices -->
-        <article id="sec-12" class="legal-card">
+        <article id="sec-12" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">12</span>
             <h2 class="legal-card-title">Your Choices</h2>
@@ -319,7 +331,7 @@
         </article>
 
         <!-- 13. Changes to This Privacy Policy -->
-        <article id="sec-13" class="legal-card">
+        <article id="sec-13" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">13</span>
             <h2 class="legal-card-title">Changes to This Privacy Policy</h2>
@@ -332,7 +344,7 @@
         </article>
 
         <!-- 14. Contact Us -->
-        <article id="sec-14" class="legal-card">
+        <article id="sec-14" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">14</span>
             <h2 class="legal-card-title">Contact Us</h2>
@@ -353,7 +365,7 @@
         </article>
 
         <!-- 15. Google API Services -->
-        <article id="sec-15" class="legal-card">
+        <article id="sec-15" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">15</span>
             <h2 class="legal-card-title">Google API Services</h2>
@@ -464,6 +476,44 @@
             setTimeout(() => copyBtn.classList.remove('copied'), 2000);
           });
         }
+      });
+    }
+
+    // Dedicated Habit Partner Mobile Nav Drawer Toggle Handler
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const hpMobileDrawer = document.getElementById('hp-mobile-drawer');
+
+    if (mobileMenuBtn && hpMobileDrawer) {
+      mobileMenuBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isActive = hpMobileDrawer.classList.contains('active');
+        if (isActive) {
+          hpMobileDrawer.classList.remove('active');
+          mobileMenuBtn.classList.remove('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        } else {
+          hpMobileDrawer.classList.add('active');
+          mobileMenuBtn.classList.add('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (hpMobileDrawer.classList.contains('active') && !hpMobileDrawer.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          hpMobileDrawer.classList.remove('active');
+          mobileMenuBtn.classList.remove('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      const drawerLinks = hpMobileDrawer.querySelectorAll('a');
+      drawerLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          hpMobileDrawer.classList.remove('active');
+          mobileMenuBtn.classList.remove('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        });
       });
     }
   </script>

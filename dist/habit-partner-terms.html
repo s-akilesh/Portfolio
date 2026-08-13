@@ -5,67 +5,78 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Terms of Service - Habit Tracker | AKILESH</title>
   <meta name="description" content="Terms of Service for the Habit Tracker Android habit tracking application.">
-  
+    <!-- Google Fonts: Universal Poppins & Material Symbols Outlined -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
   
-  <link rel="stylesheet" crossorigin href="/assets/style-D6CHR256.css">
-  <link rel="stylesheet" crossorigin href="/assets/habit-partner-D2v-yJaW.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-CG72K_a7.css">
+  <link rel="stylesheet" crossorigin href="/assets/habit-partner-DH0Adij2.css">
 </head>
 <body>
 
   <!-- Navigation Header -->
-  <header class="site-header">
+  <header id="site-header" class="site-header">
     <div class="container nav-wrapper">
-      <a href="habit-partner.html" class="brand" aria-label="Habit Partner Home">
+      <a href="/habit-partner/home" class="brand" aria-label="Habit Partner Home">
         <div class="brand-logo-wrapper">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#03B156" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
         </div>
         <div class="brand-title-group">
           <span class="brand-name">Habit Tracker</span>
-          <span class="brand-badge">Android App</span>
         </div>
       </a>
 
-      <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
-        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-
-      <nav>
-        <ul class="nav-links" id="navLinks">
-          <li><a href="./index.html" class="nav-link hp-back-btn">← Back to Projects</a></li>
-          <li><a href="habit-partner.html" class="nav-link">Home</a></li>
-          <li><a href="privacy.html" class="nav-link">Privacy</a></li>
-          <li><a href="terms.html" class="nav-link active">Terms</a></li>
-          <li><a href="#support" class="nav-link hp-support-trigger">Support</a></li>
+      <!-- Desktop Links -->
+      <nav class="hp-desktop-nav">
+        <ul class="hp-nav-list">
+          <li><a href="/#projects" class="hp-nav-item hp-back-btn">← Back to Projects</a></li>
+          <li><a href="/habit-partner/home" class="hp-nav-item">Home</a></li>
+          <li><a href="/habit-partner/policy" class="hp-nav-item">Privacy</a></li>
+          <li><a href="/habit-partner/terms" class="hp-nav-item active">Terms</a></li>
+          <li><a href="#support" class="hp-nav-item hp-support-trigger">Support</a></li>
         </ul>
       </nav>
+
+      <!-- Mobile Hamburger Button -->
+      <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="material-symbols-outlined menu-icon-open">menu</span>
+        <span class="material-symbols-outlined menu-icon-close">close</span>
+      </button>
     </div>
   </header>
+
+  <!-- Dedicated Habit Partner Mobile Nav Drawer Overlay -->
+  <div id="hp-mobile-drawer" class="hp-mobile-drawer">
+    <ul class="hp-mobile-nav-list">
+      <li><a href="/#projects" class="hp-mobile-nav-link hp-back-btn">← Back to Projects</a></li>
+      <li><a href="/habit-partner/home" class="hp-mobile-nav-link">Home</a></li>
+      <li><a href="/habit-partner/policy" class="hp-mobile-nav-link">Privacy</a></li>
+      <li><a href="/habit-partner/terms" class="hp-mobile-nav-link active">Terms</a></li>
+      <li><a href="#support" class="hp-mobile-nav-link hp-support-trigger">Support</a></li>
+    </ul>
+  </div>
 
   <main class="container">
     <!-- Hero Banner -->
     <div class="legal-hero">
-      <div class="legal-badge-group">
-        <span class="legal-pill">📜 Terms of Service</span>
-        <span class="legal-date-pill">Last Updated: August 11, 2026</span>
-      </div>
       <h1 class="legal-page-title">Terms of Service</h1>
       <p class="legal-subtitle">
         Please review the terms governing your download, access, and personal use of the Habit Tracker application.
       </p>
+      <div class="legal-badge-group">
+        <span class="legal-date-pill">Last Updated: August 11, 2026</span>
+      </div>
     </div>
 
     <!-- 2-Column Layout with Sticky TOC -->
     <div class="legal-layout">
       <!-- Sticky Sidebar Table of Contents -->
-      <aside class="legal-sidebar">
+      <aside class="legal-sidebar hp-card">
         <div class="toc-title">Table of Contents</div>
         <ul class="toc-list">
           <li><a href="#t-sec-1" class="toc-link">1. Acceptance of Terms</a></li>
@@ -93,7 +104,7 @@
       <div class="legal-body">
 
         <!-- 1. Acceptance of Terms -->
-        <article id="t-sec-1" class="legal-card">
+        <article id="t-sec-1" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">01</span>
             <h2 class="legal-card-title">Acceptance of Terms</h2>
@@ -107,7 +118,7 @@
         </article>
 
         <!-- 2. Description of the Service -->
-        <article id="t-sec-2" class="legal-card">
+        <article id="t-sec-2" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">02</span>
             <h2 class="legal-card-title">Description of the Service</h2>
@@ -129,7 +140,7 @@
         </article>
 
         <!-- 3. User Responsibilities -->
-        <article id="t-sec-3" class="legal-card">
+        <article id="t-sec-3" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">03</span>
             <h2 class="legal-card-title">User Responsibilities</h2>
@@ -149,7 +160,7 @@
         </article>
 
         <!-- 4. Your Data -->
-        <article id="t-sec-4" class="legal-card">
+        <article id="t-sec-4" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">04</span>
             <h2 class="legal-card-title">Your Data</h2>
@@ -162,7 +173,7 @@
         </article>
 
         <!-- 5. Google Drive Backup -->
-        <article id="t-sec-5" class="legal-card">
+        <article id="t-sec-5" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">05</span>
             <h2 class="legal-card-title">Google Drive Backup</h2>
@@ -176,7 +187,7 @@
         </article>
 
         <!-- 6. Reminders -->
-        <article id="t-sec-6" class="legal-card">
+        <article id="t-sec-6" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">06</span>
             <h2 class="legal-card-title">Reminders</h2>
@@ -189,7 +200,7 @@
         </article>
 
         <!-- 7. No Medical or Professional Advice -->
-        <article id="t-sec-7" class="legal-card">
+        <article id="t-sec-7" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">07</span>
             <h2 class="legal-card-title">No Medical or Professional Advice</h2>
@@ -202,7 +213,7 @@
         </article>
 
         <!-- 8. Availability of the Service -->
-        <article id="t-sec-8" class="legal-card">
+        <article id="t-sec-8" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">08</span>
             <h2 class="legal-card-title">Availability of the Service</h2>
@@ -214,7 +225,7 @@
         </article>
 
         <!-- 9. Data Loss -->
-        <article id="t-sec-9" class="legal-card">
+        <article id="t-sec-9" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">09</span>
             <h2 class="legal-card-title">Data Loss</h2>
@@ -227,7 +238,7 @@
         </article>
 
         <!-- 10. Intellectual Property -->
-        <article id="t-sec-10" class="legal-card">
+        <article id="t-sec-10" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">10</span>
             <h2 class="legal-card-title">Intellectual Property</h2>
@@ -239,7 +250,7 @@
         </article>
 
         <!-- 11. Third-Party Services -->
-        <article id="t-sec-11" class="legal-card">
+        <article id="t-sec-11" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">11</span>
             <h2 class="legal-card-title">Third-Party Services</h2>
@@ -252,7 +263,7 @@
         </article>
 
         <!-- 12. Prohibited Use -->
-        <article id="t-sec-12" class="legal-card">
+        <article id="t-sec-12" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">12</span>
             <h2 class="legal-card-title">Prohibited Use</h2>
@@ -271,7 +282,7 @@
         </article>
 
         <!-- 13. Termination -->
-        <article id="t-sec-13" class="legal-card">
+        <article id="t-sec-13" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">13</span>
             <h2 class="legal-card-title">Termination</h2>
@@ -284,7 +295,7 @@
         </article>
 
         <!-- 14. Disclaimer -->
-        <article id="t-sec-14" class="legal-card">
+        <article id="t-sec-14" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">14</span>
             <h2 class="legal-card-title">Disclaimer</h2>
@@ -297,7 +308,7 @@
         </article>
 
         <!-- 15. Limitation of Liability -->
-        <article id="t-sec-15" class="legal-card">
+        <article id="t-sec-15" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">15</span>
             <h2 class="legal-card-title">Limitation of Liability</h2>
@@ -309,7 +320,7 @@
         </article>
 
         <!-- 16. Changes to These Terms -->
-        <article id="t-sec-16" class="legal-card">
+        <article id="t-sec-16" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">16</span>
             <h2 class="legal-card-title">Changes to These Terms</h2>
@@ -322,7 +333,7 @@
         </article>
 
         <!-- 17. Governing Law -->
-        <article id="t-sec-17" class="legal-card">
+        <article id="t-sec-17" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">17</span>
             <h2 class="legal-card-title">Governing Law</h2>
@@ -334,7 +345,7 @@
         </article>
 
         <!-- 18. Contact -->
-        <article id="t-sec-18" class="legal-card">
+        <article id="t-sec-18" class="legal-card hp-card hp-card-interactive">
           <div class="legal-card-header">
             <span class="legal-num-badge">18</span>
             <h2 class="legal-card-title">Contact</h2>
@@ -453,6 +464,44 @@
             setTimeout(() => copyBtn.classList.remove('copied'), 2000);
           });
         }
+      });
+    }
+
+    // Dedicated Habit Partner Mobile Nav Drawer Toggle Handler
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const hpMobileDrawer = document.getElementById('hp-mobile-drawer');
+
+    if (mobileMenuBtn && hpMobileDrawer) {
+      mobileMenuBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isActive = hpMobileDrawer.classList.contains('active');
+        if (isActive) {
+          hpMobileDrawer.classList.remove('active');
+          mobileMenuBtn.classList.remove('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        } else {
+          hpMobileDrawer.classList.add('active');
+          mobileMenuBtn.classList.add('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (hpMobileDrawer.classList.contains('active') && !hpMobileDrawer.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          hpMobileDrawer.classList.remove('active');
+          mobileMenuBtn.classList.remove('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      const drawerLinks = hpMobileDrawer.querySelectorAll('a');
+      drawerLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          hpMobileDrawer.classList.remove('active');
+          mobileMenuBtn.classList.remove('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        });
       });
     }
   </script>
