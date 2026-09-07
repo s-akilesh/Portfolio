@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Moirai+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Gothic:wdth,wght@100,400..900&family=Luckiest+Guy&family=Moirai+One&display=swap');
 
 /* ==========================================================================
    AKILESH GLOBAL — LUXURY CINEMATIC DESIGN SYSTEM & STYLES (UNIVERSAL POPPINS)
@@ -17,6 +17,7 @@
   --frame-radius: 40px;
 
   --font-heading: 'Luckiest Guy', cursive, sans-serif;
+  --font-menu: 'League Gothic', sans-serif;
   --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
   
   --header-height: 80px;
@@ -31,6 +32,7 @@
   font-family: inherit;
   -ms-overflow-style: none !important; /* IE and Edge */
   scrollbar-width: none !important;  /* Firefox */
+  cursor: url('/cursor-svgrepo-com.svg') 0 0, auto;
 }
 
 /* Hide scrollbars for Chrome, Safari, Edge, Opera */
@@ -50,6 +52,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   user-select: text;
   -webkit-user-select: text;
+  cursor: url('/cursor-svgrepo-com.svg') 0 0, auto;
 }
 
 body {
@@ -59,6 +62,71 @@ body {
   font-family: var(--font-body);
   user-select: text;
   -webkit-user-select: text;
+  cursor: url('/cursor-svgrepo-com.svg') 0 0, auto;
+}
+
+a, button, [role="button"], input, select, textarea, .project-row, .nav-pill-link, .nav-pill-menu-btn, .mobile-nav-link, .modal-close-btn, .copy-email-btn, .about-detail-back-btn, .clickable {
+  cursor: url('/cursor-svgrepo-com.svg') 0 0, pointer !important;
+}
+
+/* --------------------------------------------------------------------------
+   Dynamic Inverted Cursor for Dark / Black Backgrounds
+   -------------------------------------------------------------------------- */
+body.dark-bg-active,
+body.dark-bg-active *,
+.about-detail-overlay,
+.about-detail-overlay *,
+.mobile-nav-overlay,
+.mobile-nav-overlay *,
+.dark-section,
+.dark-section *,
+.contact-modal-backdrop,
+.contact-modal-backdrop *,
+[data-theme="dark"],
+[data-theme="dark"] * {
+  cursor: url('/cursor-white.svg') 0 0, auto !important;
+}
+
+body.dark-bg-active a,
+body.dark-bg-active button,
+body.dark-bg-active [role="button"],
+body.dark-bg-active input,
+body.dark-bg-active select,
+body.dark-bg-active textarea,
+body.dark-bg-active .clickable,
+body.dark-bg-active .project-row,
+.about-detail-overlay a,
+.about-detail-overlay button,
+.about-detail-overlay [role="button"],
+.about-detail-overlay .clickable,
+.about-detail-overlay .about-detail-back-btn,
+.about-detail-overlay .process-step-card,
+.mobile-nav-overlay a,
+.mobile-nav-overlay button,
+.mobile-nav-overlay .mobile-nav-link,
+.contact-modal-backdrop .modal-close-btn,
+.contact-modal-backdrop .copy-email-btn {
+  cursor: url('/cursor-white.svg') 0 0, pointer !important;
+}
+
+/* Maintain black cursor on specific light elements within dark sections */
+body.dark-bg-active .nav-pill-inner,
+body.dark-bg-active .nav-pill-inner *,
+body.dark-bg-active .header-logo,
+.contact-card,
+.contact-card * {
+  cursor: url('/cursor-svgrepo-com.svg') 0 0, auto !important;
+}
+
+body.dark-bg-active .nav-pill-link,
+body.dark-bg-active .nav-pill-menu-btn,
+body.dark-bg-active .nav-pill-inner button,
+.contact-card a,
+.contact-card button,
+.contact-card [role="button"],
+.contact-card .modal-close-btn,
+.contact-card .copy-email-btn {
+  cursor: url('/cursor-svgrepo-com.svg') 0 0, pointer !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -121,6 +189,7 @@ body {
   background: transparent;
   pointer-events: none;
   box-sizing: border-box;
+  color: #0E1726;
   transition: color 0.4s ease;
 }
 
@@ -149,15 +218,9 @@ body {
   color: currentColor;
   text-decoration: none;
   pointer-events: auto;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.site-header.scrolled .header-logo,
-.site-header.dark-header .header-logo {
   opacity: 1;
   visibility: visible;
+  transition: opacity 0.3s ease, color 0.4s ease;
 }
 
 .header-logo:hover {
@@ -171,6 +234,7 @@ body {
   letter-spacing: -0.04em;
   text-transform: uppercase;
   color: currentColor;
+  transition: color 0.4s ease;
 }
 
 /* Floating Capsule Pill Navigation (Mockup Design) */
@@ -195,14 +259,14 @@ body {
 }
 
 .nav-pill-inner:hover {
-  padding: 0 6px 0 24px;
+  padding: 0 6px 0 28px;
   box-shadow: 0 6px 26px rgba(0, 0, 0, 0.12);
 }
 
 .nav-pill-list {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -216,22 +280,23 @@ body {
 }
 
 .nav-pill-inner:hover .nav-pill-list {
-  max-width: 520px;
+  max-width: 620px;
   opacity: 1;
   pointer-events: auto;
 }
 
 .nav-pill-link {
-  font-family: var(--font-heading);
-  font-size: 16px;
-  font-weight: 800;
+  font-family: var(--font-menu);
+  font-size: 20px;
+  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  line-height: 1;
   color: #0E1726;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px 0;
+  padding: 4px 0;
   position: relative;
   transition: opacity 0.2s ease, color 0.2s ease;
 }
@@ -253,30 +318,30 @@ body {
   border-radius: 999px;
   padding: 0 20px;
   margin-left: 0;
-  cursor: pointer;
-  font-family: var(--font-heading);
-  font-size: 16px;
-  font-weight: 900;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: var(--font-menu);
+  font-size: 20px;
+  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  line-height: 1;
   transition: margin-left 0.42s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.2s var(--transition-smooth),
               background-color 0.2s ease;
 }
 
 .nav-pill-inner:hover .nav-pill-menu-btn {
-  margin-left: 32px;
-}
-
-.nav-pill-menu-btn:hover {
-  transform: scale(1.03);
-  background-color: #E2BC0D;
+  margin-left: 28px;
 }
 
 .menu-label {
-  font-family: var(--font-heading);
-  font-weight: 900;
-  font-size: 16px;
+  font-family: var(--font-menu);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.04em;
   line-height: 1;
 }
 
@@ -342,12 +407,12 @@ body {
 .mobile-nav-link {
   background: transparent;
   border: none;
-  font-family: var(--font-heading);
-  font-size: clamp(2rem, 8vw, 3rem);
-  font-weight: 800;
+  font-family: var(--font-menu);
+  font-size: clamp(2.8rem, 11vw, 4.2rem);
+  font-weight: 400;
   color: #ffffff;
-  text-transform: lowercase;
-  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   cursor: pointer;
   transition: color 0.25s ease, transform 0.25s ease;
 }
@@ -422,11 +487,11 @@ body {
   display: block;
 }
 
-/* Top Transition Canvas (Renders OVER Cards, Z-Index 40) */
+/* Top Transition Canvas (Renders OVER Hero Text, UNDER Projects Section) */
 .top-transition-canvas {
   position: absolute;
   inset: 0;
-  z-index: 40;
+  z-index: 35;
   width: 100%;
   height: 100%;
   pointer-events: none;
@@ -448,7 +513,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(3.5rem, 6.5vh, 5.5rem) clamp(1.5rem, 3.5vw, 3.5rem) clamp(1.8rem, 3.5vh, 2.5rem);
+  padding: calc(clamp(3.5rem, 6.5vh, 5.5rem) + 70px) clamp(1.5rem, 3.5vw, 3.5rem) clamp(1.8rem, 3.5vh, 2.5rem);
   box-sizing: border-box;
   opacity: 0;
   pointer-events: none;
@@ -771,7 +836,7 @@ body {
 /* Mobile Responsive */
 @media (max-width: 850px) {
   .projects-section {
-    padding: clamp(4.5rem, 9vh, 6rem) clamp(1.2rem, 3vw, 2rem) 2rem;
+    padding: calc(clamp(4.5rem, 9vh, 6rem) + 70px) clamp(1.2rem, 3vw, 2rem) 2rem;
   }
 
   .projects-heading {
@@ -830,7 +895,7 @@ body {
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 50;
+  z-index: 20;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -858,7 +923,7 @@ body {
   margin-top: auto;
   margin-bottom: auto;
   text-align: left;
-  z-index: 50;
+  z-index: 20;
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
@@ -948,7 +1013,7 @@ span.title-line {
   justify-content: flex-end;
   width: 100%;
   margin-top: auto;
-  z-index: 50;
+  z-index: 20;
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;

@@ -37,6 +37,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  cursor: url('/cursor-white.svg') 0 0, auto;
 }
 
 html {
@@ -45,12 +46,18 @@ html {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
+  cursor: url('/cursor-white.svg') 0 0, auto;
 }
 
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  cursor: url('/cursor-white.svg') 0 0, auto;
+}
+
+a, button, [role="button"], input, select, textarea, .btn, .card {
+  cursor: url('/cursor-white.svg') 0 0, pointer !important;
 }
 
 /* Typography Helpers */

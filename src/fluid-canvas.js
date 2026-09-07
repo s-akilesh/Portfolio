@@ -112,7 +112,10 @@ export function initFluidCanvas() {
   // Persistent smooth lerp hover factors for 6 right-side Figma cards
   const cardHoverFactors = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
-  let particles = [];
+  let colorTrailPoints = [];
+  let lastTrailMouse = { x: -1000, y: -1000, time: 0 };
+  let currentHeadHue = 320;
+  let wavePhaseCounter = 0;
   let whiteDustParticles = [];
 
   // Kinetic Architectural Grid Setup
@@ -264,7 +267,7 @@ export function initFluidCanvas() {
   }
   resize();
 
-  // Mouse move event
+  // Mouse move event & Base1 Iridescent Comet Trail Generation (Matching Reference Video)
   window.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
     const nx = e.clientX - rect.left;
@@ -278,18 +281,54 @@ export function initFluidCanvas() {
     mouse.y = ny;
 
     if (nx > 0 && nx < width && ny > 0 && ny < height) {
-      const pCount = Math.min(Math.max(Math.floor(mouse.speed / 1.2), 3), 24);
-      for (let i = 0; i < pCount; i++) {
-        particles.push({
-          x: nx + (Math.random() - 0.5) * 24,
-          y: ny + (Math.random() - 0.5) * 24,
-          vx: (Math.random() - 0.5) * 2.8,
-          vy: (Math.random() - 0.5) * 2.8 - 0.6,
-          size: Math.random() * 1.8 + 0.6,
-          life: 1.0,
-          decay: Math.random() * 0.018 + 0.009,
-        });
+      if (lastTrailMouse.x > -500) {
+        const moveDist = Math.hypot(nx - lastTrailMouse.x, ny - lastTrailMouse.y);
+        if (moveDist > 3) {
+          const dirX = (nx - lastTrailMouse.x) / moveDist;
+          const dirY = (ny - lastTrailMouse.y) / moveDist;
+
+          // Forward impulse speed proportional to motion speed
+          const impulse = Math.min(Math.max(moveDist * 0.14, 0.8), 4.5);
+
+          // Advance chromatic hue along the rainbow spectrum
+          currentHeadHue = (currentHeadHue + moveDist * 0.45) % 360;
+
+          const steps = Math.max(1, Math.min(Math.floor(moveDist / 5.5), 18));
+
+          for (let s = 1; s <= steps; s++) {
+            const t = s / steps;
+            const px = lastTrailMouse.x + (nx - lastTrailMouse.x) * t;
+            const py = lastTrailMouse.y + (ny - lastTrailMouse.y) * t;
+            const nodeHue = (currentHeadHue - (1 - t) * (moveDist * 0.45) + 360) % 360;
+
+            colorTrailPoints.push({
+              x: px,
+              y: py,
+              // Forward momentum when cursor stops
+              vx: dirX * impulse,
+              vy: dirY * impulse,
+              birthHue: nodeHue,
+              radius: Math.min(42 + mouse.speed * 0.26, 62),
+              maxRadius: Math.min(130 + mouse.speed * 0.75, 185),
+              life: 1.0,
+              decay: Math.random() * 0.004 + 0.014, // Graceful smooth dissipation (~1.1s - 1.4s)
+            });
+          }
+          lastTrailMouse.x = nx;
+          lastTrailMouse.y = ny;
+        }
+      } else {
+        lastTrailMouse.x = nx;
+        lastTrailMouse.y = ny;
       }
+
+      // Keep array optimal for consistent 60fps performance
+      if (colorTrailPoints.length > 120) {
+        colorTrailPoints.splice(0, colorTrailPoints.length - 120);
+      }
+    } else {
+      lastTrailMouse.x = -1000;
+      lastTrailMouse.y = -1000;
     }
   });
 
@@ -588,7 +627,7 @@ export function initFluidCanvas() {
         currentDomeCoords = { x: contentCenterX, y: currentDomeY };
 
         // Update cursor pointer
-        const activeCursor = isOverDomeGlobal ? 'pointer' : 'default';
+        const activeCursor = isOverDomeGlobal ? "url('/cursor-svgrepo-com.svg') 0 0, pointer" : "url('/cursor-svgrepo-com.svg') 0 0, auto";
         if (canvas && canvas.style.cursor !== activeCursor) canvas.style.cursor = activeCursor;
         if (topCanvas && topCanvas.style.cursor !== activeCursor) topCanvas.style.cursor = activeCursor;
 
@@ -771,10 +810,10 @@ export function initFluidCanvas() {
 
     const projectsSection = document.getElementById('projects-section');
     if (projectsSection) {
-      if (whitePortalProgress > 0.02 || smoothScrollProgress > 0.30) {
-        const pAlpha = Math.min(Math.max((smoothScrollProgress - 0.30) / 0.50, 0), 1.0);
+      if (whitePortalProgress >= 0.80) {
+        const pAlpha = Math.min((whitePortalProgress - 0.80) / 0.18, 1.0);
         projectsSection.style.opacity = pAlpha;
-        projectsSection.style.pointerEvents = 'auto';
+        projectsSection.style.pointerEvents = pAlpha > 0.5 ? 'auto' : 'none';
         projectsSection.style.visibility = 'visible';
       } else {
         projectsSection.style.opacity = '0';
@@ -783,14 +822,13 @@ export function initFluidCanvas() {
       }
     }
 
-    if (siteHeader) {
-      if (whitePortalProgress > 0.35) {
-        siteHeader.classList.remove('dark-header');
-      } else if (smoothScrollProgress > 0.08) {
-        siteHeader.classList.add('dark-header');
-      } else {
-        siteHeader.classList.remove('dark-header');
-      }
+    const isDarkBackground = smoothScrollProgress > 0.06 && whitePortalProgress < 0.65;
+    if (isDarkBackground) {
+      document.body.classList.add('dark-bg-active');
+      if (siteHeader) siteHeader.classList.add('dark-header');
+    } else {
+      document.body.classList.remove('dark-bg-active');
+      if (siteHeader) siteHeader.classList.remove('dark-header');
     }
 
     // ABOUT ME STAGE: smoothScrollProgress 0.00 -> 0.55
@@ -916,28 +954,79 @@ export function initFluidCanvas() {
       drawSpinningCircularText(ctx, circularTextCopy, centerX, centerY, spinningTextRadius, spinAngle, spinningTextAlpha);
     }
 
-    // Micro Particle Mouse Dust Trail
-    if (zoomProgress < 0.55) {
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
+    renderTopTransition(time, whitePortalProgress, smoothScrollProgress);
+
+    // Base1 Dynamic Iridescent Comet Trail (Renders ABOVE Hero Text & Foreground Layer)
+    const trailCtx = topCtx || ctx;
+    if (colorTrailPoints.length > 0 && whitePortalProgress < 0.95 && trailCtx) {
+      trailCtx.save();
+      trailCtx.globalCompositeOperation = 'source-over';
+
+      const fadeOverall = (1.0 - whitePortalProgress);
+
+      for (let i = colorTrailPoints.length - 1; i >= 0; i--) {
+        const p = colorTrailPoints[i];
+
+        // 1. Forward Momentum Propagation: When cursor stops, comet tail glides forward and dissolves
         p.x += p.vx;
         p.y += p.vy;
+
+        // Fluid viscous deceleration
+        p.vx *= 0.954;
+        p.vy *= 0.954;
+
         p.life -= p.decay;
 
         if (p.life <= 0) {
-          particles.splice(i, 1);
+          colorTrailPoints.splice(i, 1);
           continue;
         }
 
-        const alpha = p.life * 0.85 * (1 - zoomProgress * 1.8);
-        ctx.fillStyle = `rgba(15, 23, 42, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
+        // 2. Chromatic spectrum shift along the trailing comet body
+        const nodeHue = (p.birthHue - (1.0 - p.life) * 45 + 360) % 360;
 
-    renderTopTransition(time, whitePortalProgress, smoothScrollProgress);
+        // 3. Volumetric radius expansion / taper
+        const spreadProgress = Math.pow(1.0 - p.life, 0.60);
+        const curRadius = p.radius + (p.maxRadius - p.radius) * spreadProgress;
+
+        // 4. Soft, translucent volumetric alpha (reduced opacity for light airy feel)
+        const easeLife = Math.pow(p.life, 1.20);
+        const alpha = easeLife * 0.22 * fadeOverall;
+
+        // Multi-stop volumetric radial gradient matching Base1 reference video
+        const grad = trailCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, curRadius);
+        grad.addColorStop(0.0, `hsla(${nodeHue}, 100%, 75%, ${alpha * 0.90})`);                 // Luminous bright core
+        grad.addColorStop(0.28, `hsla(${nodeHue}, 96%, 58%, ${alpha * 0.55})`);                 // Rich saturated body
+        grad.addColorStop(0.60, `hsla(${(nodeHue + 38) % 360}, 90%, 48%, ${alpha * 0.20})`);    // Chromatic iridescent fringe
+        grad.addColorStop(0.85, `hsla(${(nodeHue + 50) % 360}, 80%, 35%, ${alpha * 0.05})`);    // Soft outer atmosphere
+        grad.addColorStop(1.0, `hsla(${(nodeHue + 50) % 360}, 70%, 25%, 0)`);                  // Feathered edge
+
+        trailCtx.fillStyle = grad;
+        trailCtx.beginPath();
+        trailCtx.arc(p.x, p.y, curRadius, 0, Math.PI * 2);
+        trailCtx.fill();
+      }
+
+      // 5. Soft Glowing Spherical Comet Head (Directly at Cursor Tip)
+      if (mouse.x > 0 && mouse.x < width && mouse.y > 0 && mouse.y < height) {
+        const headAlpha = 0.32 * fadeOverall;
+        const headRad = Math.min(45 + mouse.speed * 0.32, 75);
+
+        // Multi-layer glowing orb with softer, lighter transparency
+        const headGrad = trailCtx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, headRad);
+        headGrad.addColorStop(0.0, `hsla(${currentHeadHue}, 100%, 95%, ${headAlpha * 0.95})`);               // White-hot nucleus
+        headGrad.addColorStop(0.25, `hsla(${currentHeadHue}, 100%, 65%, ${headAlpha * 0.70})`);             // Vibrant neon orb
+        headGrad.addColorStop(0.60, `hsla(${(currentHeadHue + 30) % 360}, 95%, 52%, ${headAlpha * 0.25})`); // Chromatic bloom
+        headGrad.addColorStop(1.0, `hsla(${(currentHeadHue + 45) % 360}, 85%, 40%, 0)`);                    // Outer halo
+
+        trailCtx.fillStyle = headGrad;
+        trailCtx.beginPath();
+        trailCtx.arc(mouse.x, mouse.y, headRad, 0, Math.PI * 2);
+        trailCtx.fill();
+      }
+
+      trailCtx.restore();
+    }
 
     animFrameId = requestAnimationFrame(animate);
   }

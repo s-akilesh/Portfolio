@@ -1,5 +1,9 @@
 /* Flyer Eats UX Case Study Dedicated Stylesheet */
 
+*, *::before, *::after {
+  cursor: url('/cursor-white.svg') 0 0, auto;
+}
+
 body.case-study-body {
   background-color: #05070b;
   color: #ffffff;
@@ -8,6 +12,11 @@ body.case-study-body {
   padding: 0;
   overflow-x: hidden;
   line-height: 1.6;
+  cursor: url('/cursor-white.svg') 0 0, auto;
+}
+
+a, button, [role="button"], input, select, textarea {
+  cursor: url('/cursor-white.svg') 0 0, pointer !important;
 }
 
 /* Header Adjustments */
