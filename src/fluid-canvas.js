@@ -2,7 +2,23 @@
  * Fluid Canvas Module — "How I Work" Process Section with Sequential Card Stagger Reveal, Expanding Axis Line & Rotating (+) Nodes, About Me Section ("I LIKE MAKING THINGS MAKE SENSE"), Ultra-Compact Organic Liquid Jelly Portal with Slow Elegant Spinning Outer Circular Text ("AKILESH • UI/UX DESIGNER • PRODUCT ARCHITECT"), Velocity-Capped Inertial Lerp Smooth Scroll Engine, 3D Character Animation Video Section (Focused 3-Card Viewport Window), Organic Dust White Portal with 16:9 Image Slide & Interactive Negative-Color Blend Hover Cursor Circle ("EXPLORE") & Kinetic Dashed Grid
  */
 
+let animFrameId = null;
+
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    if (animFrameId) {
+      cancelAnimationFrame(animFrameId);
+      animFrameId = null;
+    }
+  });
+}
+
 export function initFluidCanvas() {
+  if (animFrameId) {
+    cancelAnimationFrame(animFrameId);
+    animFrameId = null;
+  }
+
   const canvas = document.getElementById('hero-canvas');
   const topCanvas = document.getElementById('transition-canvas');
   const scrollWrapper = document.getElementById('hero-scroll-wrapper');
@@ -12,9 +28,19 @@ export function initFluidCanvas() {
 
   if (!canvas) return;
 
+  // Preload Mohave, Luckiest Guy, Moirai One & Archivo Black Google Fonts for canvas 2D text rendering
+  if (typeof document !== 'undefined' && document.fonts && document.fonts.load) {
+    document.fonts.load('400 48px "Luckiest Guy"');
+    document.fonts.load('400 80px "Moirai One"');
+    document.fonts.load('700 80px Mohave');
+    document.fonts.load('700 24px Mohave');
+    document.fonts.load('400 48px "Archivo Black"');
+    document.fonts.load('900 48px Syne');
+  }
+
   // Load Real Uploaded Akilesh Portrait Image
   const akileshPortraitImg = new Image();
-  akileshPortraitImg.src = '/akilesh_portrait.jpg';
+  akileshPortraitImg.src = '/Akilesh_img.png';
 
   // Load 3D Avatar Workspace Fallback Image
   const avatar3dImg = new Image();
@@ -145,25 +171,92 @@ export function initFluidCanvas() {
   let isImage2Past50Global = false;
   let isCursorInsideImageGlobal = false;
   let activeIndexGlobal = 0;
+  let isOverDomeGlobal = false;
+  let isDetailOverlayOpen = false;
+  let domeHoverTimer = null;
+  let domeHoverFactor = 0.0;
+  let currentDomeCoords = { x: 0, y: 0 };
 
-  const handleShowcaseClick = (e) => {
-    if (smoothScrollProgress >= 0.68) {
-      if (activeIndexGlobal === 0) {
-        window.location.href = './flyer-eats.html';
-      } else if (activeIndexGlobal === 2) {
-        window.location.href = '/habit-partner/home';
-      }
+  window.openAboutDetail = function(x, y) {
+    if (isDetailOverlayOpen) return;
+    const overlay = document.getElementById('about-detail-overlay');
+    if (!overlay) return;
+    const targetX = x !== undefined ? x : (currentDomeCoords.x || window.innerWidth * 0.7);
+    const targetY = y !== undefined ? y : (currentDomeCoords.y || window.innerHeight * 0.95);
+    overlay.style.setProperty('--dome-x', `${targetX}px`);
+    overlay.style.setProperty('--dome-y', `${targetY}px`);
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    isDetailOverlayOpen = true;
+
+    if (siteHeader) {
+      siteHeader.classList.add('hide-for-overlay');
+    }
+
+    // Start video playback
+    const vid = document.getElementById('about-character-video');
+    if (vid) {
+      vid.currentTime = 0;
+      vid.play().catch(() => {});
     }
   };
 
-  if (topCanvas) {
-    topCanvas.style.cursor = 'pointer';
-    topCanvas.addEventListener('click', handleShowcaseClick);
+  window.closeAboutDetail = function() {
+    const overlay = document.getElementById('about-detail-overlay');
+    if (!overlay) return;
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+    isDetailOverlayOpen = false;
+
+    if (siteHeader) {
+      siteHeader.classList.remove('hide-for-overlay');
+    }
+
+    if (domeHoverTimer) {
+      clearTimeout(domeHoverTimer);
+      domeHoverTimer = null;
+    }
+  };
+
+  const backBtn = document.getElementById('about-detail-back-btn');
+  if (backBtn) {
+    const handleClose = (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      window.closeAboutDetail();
+    };
+    backBtn.addEventListener('click', handleClose);
+    backBtn.addEventListener('pointerdown', handleClose);
+    backBtn.addEventListener('touchend', handleClose);
   }
-  if (canvas) {
-    canvas.style.cursor = 'pointer';
-    canvas.addEventListener('click', handleShowcaseClick);
-  }
+
+  const handleShowcaseClick = (e) => {
+    if (isOverDomeGlobal && !isDetailOverlayOpen) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      window.openAboutDetail(currentDomeCoords.x, currentDomeCoords.y);
+      return;
+    }
+  };
+
+  [topCanvas, canvas].forEach((c) => {
+    if (!c) return;
+    c.addEventListener('click', handleShowcaseClick);
+    c.addEventListener('pointerdown', (e) => {
+      if (isOverDomeGlobal && !isDetailOverlayOpen) {
+        handleShowcaseClick(e);
+      }
+    });
+    c.addEventListener('touchend', (e) => {
+      if (isOverDomeGlobal && !isDetailOverlayOpen) {
+        handleShowcaseClick(e);
+      }
+    });
+  });
 
   window.addEventListener('resize', resize);
   if (window.visualViewport) {
@@ -360,952 +453,194 @@ export function initFluidCanvas() {
   function renderMediaTexture(t, scrollProgress, aboutOpacity, aboutScale, whitePortalProgress) {
     mctx.clearRect(0, 0, width, height);
 
-    const portalCenterX = width * 0.5;
-    const portalCenterY = (width < 768) ? height * 0.58 : height * 0.5;
+    // Base dark background for Process & 3D Avatar sections
+    mctx.fillStyle = '#050608';
+    mctx.fillRect(0, 0, width, height);
 
-    const blackShiftProgress = Math.min(Math.max((scrollProgress - 0.04) / 0.08, 0), 1);
 
-    if (blackShiftProgress < 1) {
-      const bgGrad = mctx.createRadialGradient(
-        portalCenterX, portalCenterY, 50,
-        portalCenterX, portalCenterY, Math.max(width, height) * 0.8
-      );
-      bgGrad.addColorStop(0, '#151c28');
-      bgGrad.addColorStop(0.5, '#0a0d14');
-      bgGrad.addColorStop(1, '#050608');
-      mctx.fillStyle = bgGrad;
-      mctx.fillRect(0, 0, width, height);
 
-      const orbAlpha = (1 - blackShiftProgress);
-      const orb1X = portalCenterX + Math.sin(t * 0.8) * 90;
-      const orb1Y = portalCenterY - 20 + Math.cos(t * 0.6) * 60;
-      const orb1Grad = mctx.createRadialGradient(orb1X, orb1Y, 10, orb1X, orb1Y, 260);
-      orb1Grad.addColorStop(0, `rgba(56, 189, 248, ${0.32 * orbAlpha})`);
-      orb1Grad.addColorStop(0.6, `rgba(30, 58, 138, ${0.1 * orbAlpha})`);
-      orb1Grad.addColorStop(1, 'transparent');
-      mctx.fillStyle = orb1Grad;
-      mctx.fillRect(0, 0, width, height);
-
-      const orb2X = portalCenterX + Math.cos(t * 0.7) * 80;
-      const orb2Y = portalCenterY + 40 + Math.sin(t * 0.9) * 70;
-      const orb2Grad = mctx.createRadialGradient(orb2X, orb2Y, 10, orb2X, orb2Y, 300);
-      orb2Grad.addColorStop(0, `rgba(168, 85, 247, ${0.25 * orbAlpha})`);
-      orb2Grad.addColorStop(0.6, `rgba(88, 28, 135, ${0.06 * orbAlpha})`);
-      orb2Grad.addColorStop(1, 'transparent');
-      mctx.fillStyle = orb2Grad;
-      mctx.fillRect(0, 0, width, height);
-
-      mctx.strokeStyle = `rgba(255, 255, 255, ${0.08 * orbAlpha})`;
-      mctx.lineWidth = 1.5;
-      mctx.beginPath();
-      for (let i = 0; i < 6; i++) {
-        const y = height * 0.25 + i * 55 + Math.sin(t * 1.2 + i) * 18;
-        mctx.moveTo(0, y);
-        mctx.bezierCurveTo(width * 0.3, y + 35, width * 0.7, y - 35, width, y);
-      }
-      mctx.stroke();
-    }
-
-    if (blackShiftProgress > 0) {
-      mctx.fillStyle = `rgba(0, 0, 0, ${blackShiftProgress})`;
-      mctx.fillRect(0, 0, width, height);
-    }
-
-    // RENDER KINETIC ARCHITECTURAL DASHED GRID FOR AVATAR & PROCESS SCREENS
-    if (scrollProgress > 0.16 && whitePortalProgress < 0.95) {
-      const gridAlpha = Math.min((scrollProgress - 0.16) / 0.08, 1.0) * (1 - whitePortalProgress);
-
-      if (gridAlpha > 0.01) {
-        const mouseOffsetX = (smoothMouse.x - width * 0.5);
-        const mouseOffsetY = (smoothMouse.y - height * 0.5);
-
-        mctx.save();
-        mctx.globalAlpha = gridAlpha * 0.55;
-        mctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-        mctx.lineWidth = 1.2;
-        mctx.setLineDash([8, 8]);
-
-        const computedVertLines = verticalGridLines.map((line) => {
-          const shiftY = mouseOffsetY * line.speed;
-          const x = width * line.baseRatio;
-          return { x, shiftY, speed: line.speed };
-        });
-
-        const computedHorizLines = horizontalGridLines.map((line) => {
-          const shiftX = mouseOffsetX * line.speed;
-          const y = height * line.baseRatio;
-          return { y, shiftX, speed: line.speed };
-        });
-
-        computedVertLines.forEach((vLine) => {
-          mctx.beginPath();
-          mctx.moveTo(vLine.x, 0);
-          mctx.lineTo(vLine.x, height);
-          mctx.stroke();
-        });
-
-        computedHorizLines.forEach((hLine) => {
-          mctx.beginPath();
-          mctx.moveTo(0, hLine.y);
-          mctx.lineTo(width, hLine.y);
-          mctx.stroke();
-        });
-
-        mctx.setLineDash([]);
-        mctx.strokeStyle = 'rgba(56, 189, 248, 0.40)';
-        mctx.lineWidth = 1.4;
-
-        computedVertLines.forEach((vLine, colIdx) => {
-          computedHorizLines.forEach((hLine, rowIdx) => {
-            const ix = vLine.x + hLine.shiftX * 0.5;
-            const iy = hLine.y + vLine.shiftY * 0.5;
-
-            mctx.beginPath();
-            mctx.moveTo(ix - 7, iy);
-            mctx.lineTo(ix + 7, iy);
-            mctx.moveTo(ix, iy - 7);
-            mctx.lineTo(ix, iy + 7);
-            mctx.stroke();
-
-            if ((colIdx + rowIdx) % 2 === 1) {
-              const boxSize = 14;
-              const offsetX = ((colIdx % 3) - 1) * 22;
-              const offsetY = ((rowIdx % 2) - 0.5) * 28;
-
-              const bx = ix + offsetX;
-              const by = iy + offsetY;
-
-              mctx.save();
-              mctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
-              mctx.lineWidth = 1.0;
-              mctx.setLineDash([3, 3]);
-              mctx.strokeRect(bx - boxSize / 2, by - boxSize / 2, boxSize, boxSize);
-              mctx.restore();
-            }
-          });
-        });
-
-        mctx.restore();
-      }
-    }
-
-    // 1. RENDER ABOUT ME SECTION (scrollProgress 0.04 -> 0.20)
+    // 1. RENDER ABOUT ME SECTION (scrollProgress 0.04 -> 0.28)
+    // Entire screen matches user's reference composition: full-bleed sunny yellow background (#FCEA63),
+    // large 'AKILESH' in Mohave font across the background.
+    // Interactive Animation: As user scrolls, the image glides from center to left side,
+    // then the right-side content ("UI/UX DESIGNER - PRODUCT THINKER", "I LIKE MAKING THINGS MAKE SENSE",
+    // and bottom dome "VIEW MORE ABOUT AKILESH") smoothly fades & rises into place.
     if (aboutOpacity > 0.01) {
-      const isMobile = width < 1100;
-
       mctx.save();
       mctx.globalAlpha = aboutOpacity;
 
-      // Desktop Portrait Card (Left Side)
-      if (!isMobile && akileshPortraitImg.complete && akileshPortraitImg.naturalWidth > 0) {
-        const cardX = Math.max(width * 0.05, 50);
-        const cardWidth = Math.min(Math.max(320, width * 0.36), 500);
-        const cardHeight = Math.min(Math.max(500, height * 0.82), 840);
-        const cardY = (height * 0.52) - (cardHeight / 2);
+      // 1. Full-bleed Vibrant Sunny Yellow Background (matches exact #FCEA63 from reference image)
+      mctx.fillStyle = '#FCEA63';
+      mctx.fillRect(0, 0, width, height);
 
+      const isMobile = width < 768;
+      const isTablet = width >= 768 && width < 1100;
+
+      // Landing Screen (scrollProgress <= 0.04):
+      // The portal circle shows the clean sunny yellow background without the photo.
+      // As the user scrolls (0.04 -> 0.10), the portal expands by 18x to full screen,
+      // and Akilesh's cutout and background text smoothly fade into view in the center!
+      const revealP = Math.min(Math.max((scrollProgress - 0.04) / 0.06, 0.0), 1.0);
+
+      // 2. Large Outlined Name 'AKILESH' in Font Family 'Moirai One' (Centered in Background)
+      if (revealP > 0.01) {
         mctx.save();
-        mctx.beginPath();
-        if (mctx.roundRect) {
-          mctx.roundRect(cardX, cardY, cardWidth, cardHeight, 24);
-        } else {
-          mctx.rect(cardX, cardY, cardWidth, cardHeight);
+        mctx.globalAlpha = aboutOpacity * revealP;
+        const nameFontSize = Math.round(
+          isMobile 
+            ? Math.min(width * 0.25, height * 0.18) 
+            : (isTablet ? Math.min(width * 0.22, height * 0.24) : Math.min(width * 0.20, height * 0.26))
+        );
+        
+        const nameCenterY = isMobile ? height * 0.26 : height * 0.24;
+
+        mctx.font = `400 ${nameFontSize}px "Moirai One", cursive, sans-serif`;
+        mctx.textAlign = 'center';
+        mctx.textBaseline = 'middle';
+        mctx.strokeStyle = 'rgba(255, 255, 255, 0.58)';
+        mctx.lineWidth = isMobile ? 2.5 : Math.max(width * 0.003, 3.2);
+        mctx.lineJoin = 'round';
+        mctx.lineCap = 'round';
+        if ('letterSpacing' in mctx) {
+          mctx.letterSpacing = '0.04em';
         }
-        mctx.clip();
-
-        const imgAspect = akileshPortraitImg.naturalWidth / akileshPortraitImg.naturalHeight;
-        const cardAspect = cardWidth / cardHeight;
-
-        let drawW, drawH, drawX, drawY;
-        if (imgAspect > cardAspect) {
-          drawH = cardHeight;
-          drawW = cardHeight * imgAspect;
-          drawX = cardX - (drawW - cardWidth) / 2;
-          drawY = cardY;
-        } else {
-          drawW = cardWidth;
-          drawH = cardWidth / imgAspect;
-          drawX = cardX;
-          drawY = cardY;
-        }
-
-        mctx.drawImage(akileshPortraitImg, drawX, drawY, drawW, drawH);
-
-        const badgeGrad = mctx.createLinearGradient(cardX, cardY + cardHeight - 120, cardX, cardY + cardHeight);
-        badgeGrad.addColorStop(0, 'transparent');
-        badgeGrad.addColorStop(1, 'rgba(10, 14, 20, 0.96)');
-        mctx.fillStyle = badgeGrad;
-        mctx.fillRect(cardX, cardY + cardHeight - 120, cardWidth, 120);
-
-        mctx.font = '900 20px Poppins, sans-serif';
-        mctx.fillStyle = '#ffffff';
-        mctx.textAlign = 'left';
-        mctx.textBaseline = 'alphabetic';
-        mctx.fillText('AKILESH', cardX + 24, cardY + cardHeight - 48);
-
-        mctx.font = '600 13px Poppins, sans-serif';
-        mctx.fillStyle = '#38bdf8';
-        mctx.letterSpacing = '1px';
-        mctx.fillText('CREATIVE DIRECTOR', cardX + 24, cardY + cardHeight - 24);
-
+        mctx.strokeText('AKILESH', width * 0.5, nameCenterY);
         mctx.restore();
       }
 
-      // Mobile Portrait Image Card (Rendered ABOVE About Me text, occupying 38-40% screen height)
-      let mobImageBottomY = 0;
-      if (isMobile && akileshPortraitImg.complete && akileshPortraitImg.naturalWidth > 0) {
-        const mobCardWidth = Math.min(width * 0.90, 390);
-        const mobCardHeight = Math.min(height * 0.38, 310);
-        const mobCardX = (width - mobCardWidth) / 2;
-        const mobCardY = Math.max(height * 0.08, 62);
-        mobImageBottomY = mobCardY + mobCardHeight;
+      // 3. Image Horizontal Slide Motion:
+      // Starts centered at width * 0.5 on the full screen, and slides from Center to Left Side (0.10 -> 0.16)
+      const moveRaw = Math.min(Math.max((scrollProgress - 0.10) / 0.06, 0.0), 1.0);
+      const easeMove = moveRaw * moveRaw * (3.0 - 2.0 * moveRaw); // Smooth cubic ease
 
+      // 4. Right-side Content Reveal Animation (0.13 -> 0.19)
+      const contentRaw = Math.min(Math.max((scrollProgress - 0.13) / 0.06, 0.0), 1.0);
+      const easeContent = contentRaw * contentRaw * (3.0 - 2.0 * contentRaw);
+
+      // Draw Cutout Akilesh (Revealed ONLY on scroll as portal expands to full screen; NEVER on landing screen)
+      if (revealP > 0.01 && akileshPortraitImg.complete && akileshPortraitImg.naturalWidth > 0) {
         mctx.save();
-        mctx.beginPath();
-        if (mctx.roundRect) {
-          mctx.roundRect(mobCardX, mobCardY, mobCardWidth, mobCardHeight, 18);
-        } else {
-          mctx.rect(mobCardX, mobCardY, mobCardWidth, mobCardHeight);
-        }
-        mctx.clip();
+        mctx.globalAlpha = aboutOpacity * revealP;
 
-        const imgAspect = akileshPortraitImg.naturalWidth / akileshPortraitImg.naturalHeight;
-        const mobCardAspect = mobCardWidth / mobCardHeight;
+        const imgAspect = akileshPortraitImg.naturalWidth / akileshPortraitImg.naturalHeight; // 4960 / 3120 = ~1.5897
+        
+        const drawH = isMobile ? height * 0.90 : height * 0.98;
+        const drawW = drawH * imgAspect;
+        
+        const fullScreenCenterX = width * 0.5;
+        const targetLeftCenterX = isMobile ? width * 0.25 : (isTablet ? width * 0.26 : width * 0.25);
+        const currentCenterX = fullScreenCenterX + (targetLeftCenterX - fullScreenCenterX) * easeMove;
 
-        let drawW, drawH, drawX, drawY;
-        if (imgAspect > mobCardAspect) {
-          drawH = mobCardHeight;
-          drawW = mobCardHeight * imgAspect;
-          drawX = mobCardX - (drawW - mobCardWidth) / 2;
-          drawY = mobCardY;
-        } else {
-          drawW = mobCardWidth;
-          drawH = mobCardWidth / imgAspect;
-          drawX = mobCardX;
-          drawY = mobCardY - (drawH - mobCardHeight) / 2;
-        }
+        const drawX = currentCenterX - drawW * 0.5;
+        const drawY = height - drawH;
 
         mctx.drawImage(akileshPortraitImg, drawX, drawY, drawW, drawH);
-
-        // Badge & Overlay on mobile card
-        const mobBadgeGrad = mctx.createLinearGradient(mobCardX, mobCardY + mobCardHeight - 70, mobCardX, mobCardY + mobCardHeight);
-        mobBadgeGrad.addColorStop(0, 'transparent');
-        mobBadgeGrad.addColorStop(1, 'rgba(10, 14, 20, 0.94)');
-        mctx.fillStyle = mobBadgeGrad;
-        mctx.fillRect(mobCardX, mobCardY + mobCardHeight - 70, mobCardWidth, 70);
-
-        mctx.font = '900 15px Poppins, sans-serif';
-        mctx.fillStyle = '#ffffff';
-        mctx.textAlign = 'left';
-        mctx.textBaseline = 'alphabetic';
-        mctx.fillText('AKILESH', mobCardX + 16, mobCardY + mobCardHeight - 28);
-
-        mctx.font = '600 10.5px Poppins, sans-serif';
-        mctx.fillStyle = '#38bdf8';
-        mctx.letterSpacing = '1px';
-        mctx.fillText('CREATIVE DIRECTOR', mobCardX + 16, mobCardY + mobCardHeight - 12);
-
         mctx.restore();
       }
 
-      const portalTextX = isMobile ? width * 0.5 : Math.max(width * 0.50, 540);
-      const textMaxWidth = isMobile ? width * 0.88 : Math.min(width * 0.42, 560);
+      // Draw Right Side Content ("UI/UX DESIGNER...", "I LIKE MAKING THINGS MAKE SENSE", and Dome badge)
+      if (easeContent > 0.005) {
+        mctx.save();
+        mctx.globalAlpha = aboutOpacity * easeContent;
 
-      const portraitCardHeight = Math.min(Math.max(500, height * 0.82), 840);
-      const exactPortraitTopY = (height * 0.52) - (portraitCardHeight / 2);
+        const contentCenterX = isMobile ? width * 0.68 : (isTablet ? width * 0.69 : width * 0.70);
+        const contentFloatY = (1.0 - easeContent) * 25; // Floats smoothly up into position
 
-      const topAlignY = isMobile 
-        ? (mobImageBottomY > 0 ? mobImageBottomY + 16 : Math.max(height * 0.07, 75)) 
-        : Math.max(exactPortraitTopY + 20, 115);
+        // 5. Headline ("I LIKE MAKING THINGS MAKE SENSE") in Luckiest Guy 82px
+        const titleFontSize = Math.round(
+          isMobile 
+            ? Math.min(width * 0.065, 40) 
+            : (isTablet ? Math.min(width * 0.055, 64) : Math.min(width * 0.048, 82))
+        );
+        const titleLineSpacing = titleFontSize * 1.14;
+        const headlineCenterY = (isMobile ? height * 0.48 : height * 0.50) - contentFloatY;
 
-      mctx.save();
-      
-      mctx.translate(portalTextX, topAlignY);
-      mctx.scale(aboutScale, aboutScale);
-      mctx.translate(-portalTextX, -topAlignY);
 
-      mctx.textAlign = isMobile ? 'center' : 'left';
-      mctx.textBaseline = 'top';
-      mctx.shadowBlur = 0;
-      mctx.shadowColor = 'transparent';
 
-      const textFloatY = topAlignY + Math.sin(t * 1.5) * 3;
-
-      mctx.font = '500 11.5px Poppins, sans-serif';
-      mctx.fillStyle = '#94a3b8';
-      mctx.letterSpacing = '2px';
-      mctx.fillText('ABOUT ME', portalTextX, textFloatY);
-
-      if (scrollProgress > 0.04) {
-        isTypingTriggered = true;
-      } else if (scrollProgress < 0.02) {
-        isTypingTriggered = false;
-        typedCharFloat = 0;
-      }
-
-      if (isTypingTriggered) {
-        if (typedCharFloat < ABOUT_TITLE.length) {
-          typedCharFloat += 2.0;
+        // Draw Headline Lines ("I LIKE MAKING THINGS MAKE SENSE") in Luckiest Guy
+        mctx.save();
+        mctx.font = `400 ${titleFontSize}px "Luckiest Guy", cursive, sans-serif`;
+        mctx.fillStyle = '#02202E';
+        mctx.textAlign = 'center';
+        mctx.textBaseline = 'middle';
+        if ('letterSpacing' in mctx) {
+          mctx.letterSpacing = '0.01em';
         }
+        mctx.fillText('I LIKE MAKING', contentCenterX, headlineCenterY - titleLineSpacing * 0.5);
+        mctx.fillText('THINGS MAKE SENSE', contentCenterX, headlineCenterY + titleLineSpacing * 0.5);
+        mctx.restore();
 
-        const charsToShow = Math.min(Math.floor(typedCharFloat), ABOUT_TITLE.length);
-        const visibleTitle = ABOUT_TITLE.substring(0, charsToShow) + (charsToShow < ABOUT_TITLE.length ? '|' : '');
+        // 7. Bottom Dome Badge ("VIEW MORE ABOUT AKILESH")
+        const baseDomeRadius = Math.round(
+          isMobile 
+            ? Math.min(width * 0.22, 95) 
+            : (isTablet ? Math.min(width * 0.15, 125) : Math.min(width * 0.13, 145))
+        );
+        
+        // Dome rises up smoothly from bottom edge
+        const domeSlideOffset = (1.0 - easeContent) * (baseDomeRadius * 1.25);
+        const currentDomeY = height + domeSlideOffset;
 
-        let currentY = textFloatY + 26;
-        const fontSize = width < 768 ? 16 : 24;
+        // Check hover over dome (with slightly larger hit target for comfortable interaction)
+        const distToDome = Math.hypot(mouse.x - contentCenterX, mouse.y - currentDomeY);
+        const isHoverDome = distToDome <= (baseDomeRadius * 1.12) && mouse.y <= height;
+        isOverDomeGlobal = isHoverDome && easeContent > 0.7;
+        currentDomeCoords = { x: contentCenterX, y: currentDomeY };
 
-        mctx.font = `900 ${fontSize}px Poppins, sans-serif`;
-        mctx.fillStyle = '#ffffff';
+        // Update cursor pointer
+        const activeCursor = isOverDomeGlobal ? 'pointer' : 'default';
+        if (canvas && canvas.style.cursor !== activeCursor) canvas.style.cursor = activeCursor;
+        if (topCanvas && topCanvas.style.cursor !== activeCursor) topCanvas.style.cursor = activeCursor;
 
-        currentY = wrapCanvasText(mctx, visibleTitle, portalTextX, currentY, textMaxWidth, 24);
-        currentY += 10;
+        // Smooth lerp hover factor for fluid 60fps size expansion & text animation
+        const targetDomeHover = isOverDomeGlobal ? 1.0 : 0.0;
+        domeHoverFactor += (targetDomeHover - domeHoverFactor) * 0.14;
 
-        if (charsToShow > 8) {
-          mctx.font = '400 12px Poppins, sans-serif';
-          mctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+        // 1. Scale Animation: Slightly increase size on hover (8.5% scale boost)
+        const domeScale = 1.0 + domeHoverFactor * 0.085;
+        const currentDomeRadius = baseDomeRadius * domeScale;
 
-          currentY = wrapCanvasText(mctx, ABOUT_BIO, portalTextX, currentY, textMaxWidth, 17);
-          currentY += 14;
+        // Outer Ring Arc (Moss Green #4D5D3E with brightened hover state)
+        mctx.save();
+        mctx.beginPath();
+        mctx.arc(contentCenterX, currentDomeY, currentDomeRadius, Math.PI, Math.PI * 2, false);
+        mctx.fillStyle = isOverDomeGlobal ? '#5C704A' : '#4D5D3E';
+        mctx.fill();
 
-          mctx.font = '500 11px Poppins, sans-serif';
-          mctx.fillStyle = '#94a3b8';
-          mctx.letterSpacing = '2px';
-          mctx.fillText('COMPANIES', portalTextX, currentY);
+        // Inner Dome Arc (Deep Dark Teal #02202E with highlighted hover state)
+        const ringThickness = Math.max(7, Math.round(baseDomeRadius * 0.08));
+        const innerRadius = (baseDomeRadius - ringThickness) * domeScale;
+        mctx.beginPath();
+        mctx.arc(contentCenterX, currentDomeY, innerRadius, Math.PI, Math.PI * 2, false);
+        mctx.fillStyle = isOverDomeGlobal ? '#042C3D' : '#02202E';
+        mctx.fill();
 
-          const logoY = currentY + 16;
+        // 2. Animated Text: Light floating oscillation + gentle pulse scale on hover
+        const textBounceY = Math.sin(time * 5.2) * 1.6 * domeHoverFactor;
+        const textPulseScale = 1.0 + Math.sin(time * 3.8) * 0.035 * domeHoverFactor;
 
-          if (dolpvizImg.complete && dolpvizImg.naturalWidth > 0) {
-            const w1 = width < 768 ? 105 : 140;
-            const h1 = (dolpvizImg.naturalHeight / dolpvizImg.naturalWidth) * w1;
-            const l1X = isMobile ? portalTextX - (w1 + 10) : portalTextX;
-            mctx.drawImage(dolpvizImg, l1X, logoY, w1, h1);
-          }
+        const baseDomeFontSize = Math.round(isMobile ? 11 : (isTablet ? 12 : Math.min(width * 0.011, 14)));
+        const domeFontSize = baseDomeFontSize * domeScale * textPulseScale;
+        const domeTextCenterY = currentDomeY - innerRadius * 0.52 + textBounceY;
 
-          if (saarcImg.complete && saarcImg.naturalWidth > 0) {
-            const w2 = width < 768 ? 120 : 155;
-            const h2 = (saarcImg.naturalHeight / saarcImg.naturalWidth) * w2;
-            const l2X = isMobile ? portalTextX + 10 : portalTextX + 170;
-            mctx.drawImage(saarcImg, l2X, logoY + 2, w2, h2);
-          }
+        mctx.font = `700 ${domeFontSize}px Mohave, sans-serif`;
+        mctx.fillStyle = '#FFFFFF';
+        mctx.textAlign = 'center';
+        mctx.textBaseline = 'middle';
+        if ('letterSpacing' in mctx) {
+          mctx.letterSpacing = (0.06 + domeHoverFactor * 0.03) + 'em';
         }
+        mctx.fillText('VIEW MORE ABOUT', contentCenterX, domeTextCenterY - domeFontSize * 0.65);
+        mctx.fillText('AKILESH', contentCenterX, domeTextCenterY + domeFontSize * 0.65);
+
+        mctx.restore();
+        mctx.restore();
       }
 
       mctx.restore();
-      mctx.restore();
     }
 
-    // 2. RENDER "HOW I WORK" PROCESS SECTION WITH SEQUENTIAL CARD STAGGER REVEAL, EXPANDING AXIS LINE & ROTATING (+) NODES
-    let processOpacity = 0.0;
-    if (scrollProgress > 0.19 && scrollProgress < 0.45) {
-      const secP = (scrollProgress - 0.19) / 0.26; // 0.0 -> 1.0
-
-      if (secP < 0.12) {
-        processOpacity = Math.min(secP / 0.12, 1.0);
-      } else if (secP > 0.84) {
-        processOpacity = 1.0 - Math.min((secP - 0.84) / 0.16, 1.0);
-      } else {
-        processOpacity = 1.0;
-      }
-
-      if (processOpacity > 0.01) {
-        mctx.save();
-
-        const isMobile = width < 900;
-        const marginX = width * 0.08;
-        const availableW = width - (marginX * 2);
-
-        const startY = isMobile ? Math.max(height * 0.08, 65) : Math.max(height * 0.15, 110) + 30;
-
-        // On mobile, calculate vertical scroll shift so content moves up smoothly as user scrolls
-        const estTotalHeight = startY + 80 + 3 * 220;
-        const overflowDist = isMobile ? Math.max(0, estTotalHeight - (height - 40)) : 0;
-        const mobileScrollShift = isMobile && overflowDist > 0 ? -secP * overflowDist : 0;
-
-        mctx.save();
-        mctx.translate(0, mobileScrollShift);
-
-        // Header Title (Fades & slides up first)
-        const headerP = Math.min(secP / 0.18, 1.0);
-        const headerOffsetY = (1.0 - headerP) * 20;
-
-        mctx.save();
-        mctx.globalAlpha = processOpacity * headerP;
-        mctx.translate(0, headerOffsetY);
-
-        mctx.font = '500 13px Poppins, sans-serif';
-        mctx.fillStyle = '#94a3b8';
-        mctx.letterSpacing = '2px';
-        mctx.textAlign = 'left';
-        mctx.textBaseline = 'top';
-        mctx.fillText('PROCESS', marginX, startY);
-
-        const titleFontSize = width < 768 ? 30 : 48;
-        mctx.font = `900 ${titleFontSize}px Poppins, sans-serif`;
-        mctx.fillStyle = '#ffffff';
-        mctx.fillText('How I Work', marginX, startY + 22);
-        mctx.restore();
-
-        // 3 Columns Layout Geometry
-        const gridTopY = startY + (isMobile ? 78 : (titleFontSize > 40 ? 120 : 100));
-        const colGap = 40;
-        const numCols = isMobile ? 1 : 3;
-        const colWidth = (availableW - (colGap * (numCols - 1))) / numCols;
-
-        const processSteps = [
-          {
-            step: 'STEP — 01',
-            title: 'Understand',
-            desc: 'I start with the business and the people — understanding goals, users, context, and the problem worth solving.',
-            flow: 'Business → Users → Insights',
-            triggerP: Math.min(Math.max((secP - 0.12) / 0.22, 0), 1.0)
-          },
-          {
-            step: 'STEP — 02',
-            title: 'Shape',
-            desc: 'I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.',
-            flow: 'Gaps → Structure → Design',
-            triggerP: Math.min(Math.max((secP - 0.30) / 0.22, 0), 1.0)
-          },
-          {
-            step: 'STEP — 03',
-            title: 'Evolve',
-            desc: 'I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.',
-            flow: 'Validate → Improve → Grow',
-            triggerP: Math.min(Math.max((secP - 0.48) / 0.22, 0), 1.0)
-          }
-        ];
-
-        // Draw 3 Process Step Columns with Sequential Stagger Reveal
-        let currentMobileY = gridTopY;
-
-        processSteps.forEach((s, idx) => {
-          if (s.triggerP <= 0.005) return;
-
-          const cardAlpha = s.triggerP * processOpacity;
-          const cardOffsetY = (1.0 - s.triggerP) * 32;
-
-          let cx, cy;
-          if (isMobile) {
-            cx = marginX;
-            cy = currentMobileY;
-          } else {
-            cx = marginX + idx * (colWidth + colGap);
-            cy = gridTopY;
-          }
-
-          mctx.save();
-          mctx.globalAlpha = cardAlpha;
-          mctx.translate(0, cardOffsetY);
-
-          // Step Counter Tag (STEP — 01)
-          mctx.font = '600 11.5px Poppins, sans-serif';
-          mctx.fillStyle = '#94a3b8';
-          mctx.letterSpacing = '1.5px';
-          mctx.fillText(s.step, cx, cy);
-
-          // Step Title (Understand, Shape, Evolve)
-          mctx.font = '700 24px Poppins, sans-serif';
-          mctx.fillStyle = '#ffffff';
-          mctx.fillText(s.title, cx, cy + 30);
-
-          // Body Description
-          mctx.font = '300 13px Poppins, sans-serif';
-          mctx.fillStyle = 'rgba(255, 255, 255, 0.82)';
-          const nextY = wrapCanvasText(mctx, s.desc, cx, cy + 66, colWidth, 20);
-
-          // Flow Pill Tag
-          const flowY = nextY + 14;
-          mctx.font = '600 12px Poppins, sans-serif';
-          const flowW = mctx.measureText(s.flow).width + 24;
-
-          mctx.fillStyle = 'rgba(56, 189, 248, 0.12)';
-          mctx.beginPath();
-          if (mctx.roundRect) {
-            mctx.roundRect(cx, flowY, flowW, 28, 14);
-          } else {
-            mctx.rect(cx, flowY, flowW, 28);
-          }
-          mctx.fill();
-
-          mctx.fillStyle = '#38bdf8';
-          mctx.textAlign = 'center';
-          mctx.textBaseline = 'middle';
-          mctx.fillText(s.flow, cx + flowW / 2, flowY + 14.5);
-          mctx.textAlign = 'left';
-          mctx.textBaseline = 'top';
-
-          mctx.restore();
-
-          // On Mobile: Render individual divider line & rotating (+) nodes at bottom of EACH card
-          if (isMobile) {
-            const cardLineY = flowY + 28 + 18;
-
-            mctx.save();
-            mctx.globalAlpha = cardAlpha;
-
-            // Subtle background line
-            mctx.strokeStyle = 'rgba(255, 255, 255, 0.10)';
-            mctx.lineWidth = 1.0;
-            mctx.beginPath();
-            mctx.moveTo(marginX, cardLineY);
-            mctx.lineTo(width - marginX, cardLineY);
-            mctx.stroke();
-
-            // Active cyan line
-            if (s.triggerP > 0.01) {
-              const lineEnd = marginX + s.triggerP * availableW;
-              const cLineGrad = mctx.createLinearGradient(marginX, cardLineY, lineEnd, cardLineY);
-              cLineGrad.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
-              cLineGrad.addColorStop(1, '#38bdf8');
-              mctx.strokeStyle = cLineGrad;
-              mctx.lineWidth = 1.4;
-              mctx.beginPath();
-              mctx.moveTo(marginX, cardLineY);
-              mctx.lineTo(lineEnd, cardLineY);
-              mctx.stroke();
-            }
-
-            // Rotating (+) Nodes at start and end of card line
-            const rotAngle = (t * 1.5) + (idx * 0.6);
-            [marginX, width - marginX].forEach((nodeX) => {
-              mctx.save();
-              mctx.translate(nodeX, cardLineY);
-              mctx.rotate(rotAngle);
-              mctx.strokeStyle = '#38bdf8';
-              mctx.lineWidth = 1.4;
-              mctx.beginPath();
-              mctx.moveTo(-5, 0); mctx.lineTo(5, 0);
-              mctx.moveTo(0, -5); mctx.lineTo(0, 5);
-              mctx.stroke();
-              mctx.restore();
-            });
-
-            mctx.restore();
-
-            currentMobileY = cardLineY + 26;
-          } else {
-            currentMobileY = flowY + 28 + 36;
-          }
-        });
-
-        // Desktop: Bottom Architectural Axis Divider Line Length Expansion Based on Scroll
-        if (!isMobile) {
-          const lineP = Math.min(Math.max((secP - 0.08) / 0.70, 0), 1.0);
-          const lineY = gridTopY + 265;
-          const currentLineEndX = marginX + lineP * availableW;
-
-          mctx.save();
-          mctx.globalAlpha = processOpacity;
-
-          // Background subtle guide line
-          mctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-          mctx.lineWidth = 1.0;
-          mctx.beginPath();
-          mctx.moveTo(marginX, lineY);
-          mctx.lineTo(width - marginX, lineY);
-          mctx.stroke();
-
-          // Expanding active cyan axis line
-          if (lineP > 0.001) {
-            const lineGrad = mctx.createLinearGradient(marginX, lineY, currentLineEndX, lineY);
-            lineGrad.addColorStop(0, 'rgba(56, 189, 248, 0.30)');
-            lineGrad.addColorStop(1, '#38bdf8');
-            mctx.strokeStyle = lineGrad;
-            mctx.lineWidth = 1.6;
-            mctx.beginPath();
-            mctx.moveTo(marginX, lineY);
-            mctx.lineTo(currentLineEndX, lineY);
-            mctx.stroke();
-          }
-
-          // Rotating Plus Nodes (+)
-          const nodes = [
-            marginX,
-            marginX + colWidth + colGap / 2,
-            marginX + 2 * colWidth + 1.5 * colGap,
-            width - marginX
-          ];
-
-          nodes.forEach((nx) => {
-            const rotAngle = t * 1.5;
-            mctx.save();
-            mctx.translate(nx, lineY);
-            mctx.rotate(rotAngle);
-            mctx.strokeStyle = '#38bdf8';
-            mctx.lineWidth = 1.5;
-            mctx.beginPath();
-            mctx.moveTo(-6, 0); mctx.lineTo(6, 0);
-            mctx.moveTo(0, -6); mctx.lineTo(0, 6);
-            mctx.stroke();
-            mctx.restore();
-          });
-
-          mctx.restore();
-        }
-
-        mctx.restore();
-        mctx.restore();
-      }
-    }
-
-    // 3. RENDER 3D CHARACTER ANIMATION VIDEO SECTION (scrollProgress 0.42 -> 0.68)
-    if (scrollProgress > 0.42 && scrollProgress < 0.68) {
-      const avatarAlpha = scrollProgress < 0.48 
-        ? Math.min((scrollProgress - 0.42) / 0.06, 1.0)
-        : (scrollProgress > 0.62 ? 1.0 - Math.min((scrollProgress - 0.62) / 0.06, 1.0) : 1.0);
-
-      if (avatarAlpha > 0.01) {
-        // Video slide to left completes by scrollProgress = 0.50
-        const slideProgress = Math.min(Math.max((scrollProgress - 0.44) / 0.06, 0), 1.0);
-        const easeSlide = slideProgress * slideProgress * (3 - 2 * slideProgress);
-
-        // Ensure video plays continuously at full 60fps
-        if (animVideo.paused) {
-          animVideo.play().catch(() => {});
-        }
-
-        mctx.save();
-        mctx.globalAlpha = avatarAlpha;
-
-        const isMobile = width < 1000;
-        const startCenterX = width * 0.50;
-        const targetLeftX = isMobile ? width * 0.50 : Math.max(width * 0.26, 280);
-        const currentAvatarX = startCenterX + (targetLeftX - startCenterX) * easeSlide;
-
-        // Video Size: 80% center zoom -> 58% on left side (or compact top center on mobile)
-        const initialScaleW = isMobile ? Math.min(width * 0.82, 340) : width * 0.80;
-        const finalScaleW = isMobile ? Math.min(width * 0.74, 310) : Math.min(width * 0.58, 720);
-        let imgW = initialScaleW + (finalScaleW - initialScaleW) * easeSlide;
-
-        const videoAspect = (animVideo.videoWidth && animVideo.videoHeight) 
-          ? (animVideo.videoWidth / animVideo.videoHeight) 
-          : (1280 / 720);
-        let imgH = imgW / videoAspect;
-
-        const maxAllowedH = isMobile ? height * 0.35 : ((height * 0.80) + ((height * 0.58) - (height * 0.80)) * easeSlide);
-        if (imgH > maxAllowedH) {
-          imgH = maxAllowedH;
-          imgW = imgH * videoAspect;
-        }
-
-        // On mobile, image enters at center of screen and glides UP to 10% padding from top
-        const startCenterY = (height * 0.50) - (imgH * 0.50);
-        const targetTopY = Math.max(height * 0.10, 75); // 10% padding above image from top of screen
-        const mobImgY = startCenterY + (targetTopY - startCenterY) * easeSlide;
-        const deskImgY = height * 0.50 - imgH * 0.50;
-        const imgY = isMobile ? mobImgY : deskImgY;
-        const mobVideoBottomY = imgY + imgH;
-
-        mctx.save();
-        // Blend dark background seamlessly into dark obsidian environment
-        mctx.globalCompositeOperation = 'screen';
-
-        if (animVideo.readyState >= 2) {
-          mctx.drawImage(animVideo, currentAvatarX - imgW / 2, imgY, imgW, imgH);
-        } else if (avatar3dImg.complete && avatar3dImg.naturalWidth > 0) {
-          mctx.drawImage(avatar3dImg, currentAvatarX - imgW / 2, imgY, imgW, imgH);
-        }
-        mctx.restore();
-
-        // Draw Architectural Cards (Positioned BELOW video frame on mobile, or right side on desktop)
-        if (easeSlide > 0.02) {
-          const cardsFadeIn = Math.min(Math.max((scrollProgress - 0.46) / 0.05, 0), 1.0);
-          const textOpacity = cardsFadeIn;
-
-          const cardWidth = isMobile ? Math.min(width * 0.90, 390) : Math.min(width * 0.40, 520);
-          const textX = isMobile ? (width - cardWidth) / 2 : Math.max(width * 0.54, 580);
-
-          const cardGap = 20;
-          const innerPaddingX = 24; // 24PX INNER PADDING LEFT & RIGHT
-          const innerPaddingY = 24; // 24PX INNER PADDING TOP & BOTTOM
-
-          // CARDS DATA
-          const cardsData = [
-            {
-              title: 'UNTANGLE',
-              desc: 'I enjoy taking complicated products and figuring out how they should actually work.',
-              pills: ['Complex Products', 'Enterprise UX', 'Workflow Logic', 'Problem Solving']
-            },
-            {
-              title: 'STRUCTURE',
-              desc: 'I turn scattered requirements and messy processes into clear product experiences.',
-              pills: ['Information Architecture', 'Product Structure', 'User Flows', 'Simplification']
-            },
-            {
-              title: 'THINK BUSINESS',
-              desc: 'I design with an eye on users, business goals, product value, and what is actually feasible.',
-              pills: ['Product Thinking', 'Business Goals', 'Prioritization', 'Trade-offs']
-            },
-            {
-              title: 'BUILD',
-              desc: 'I understand the space between design and development, helping ideas move from Figma into real products.',
-              pills: ['Developer Collaboration', 'Design Handoff', 'Frontend Awareness', 'Feasibility']
-            },
-            {
-              title: 'MAKE IT BETTER',
-              desc: 'I bring strong visual thinking to functional products, turning usable experiences into polished ones.',
-              pills: ['Visual Design', 'Interaction', 'UI Craft', 'Design Systems']
-            },
-            {
-              title: 'OWN IT',
-              desc: 'I’m comfortable jumping between problems, learning fast, and taking an idea from ambiguity to execution.',
-              pills: ['Ownership', 'Curiosity', 'Adaptability', 'Fast Learner']
-            }
-          ];
-
-          // Compute total stack height of all 6 cards
-          let totalCardsStackH = 0;
-          const cardHeights = [];
-
-          const pillPaddingX = 14; // 14px left/right
-          const pillHeight = 28;   // 28px total height
-          const pillGapX = 8;
-          const pillGapY = 8;
-
-          cardsData.forEach((c, idx) => {
-            const maxContentWidth = Math.max(cardWidth - (innerPaddingX * 2), 120);
-
-            // 1. Calculate wrapped lines for description paragraph
-            const words = c.desc.split(' ');
-            let line = '';
-            let lineCount = 1;
-            mctx.font = '300 12.5px Poppins, sans-serif';
-            for (let n = 0; n < words.length; n++) {
-              const testLine = line + words[n] + ' ';
-              if (mctx.measureText(testLine).width > maxContentWidth && n > 0) {
-                line = words[n] + ' ';
-                lineCount++;
-              } else {
-                line = testLine;
-              }
-            }
-            const descTextHeight = lineCount * 18;
-
-            // 2. Calculate multi-row wrapped layout for pills (Weight 500)
-            mctx.font = '500 13.5px Poppins, sans-serif';
-            const pillRows = [];
-            let currentRow = [];
-            let currentRowWidth = 0;
-
-            c.pills.forEach((p) => {
-              const pWidth = pillPaddingX + mctx.measureText(p).width + pillPaddingX;
-              if (currentRow.length > 0 && (currentRowWidth + pillGapX + pWidth) > maxContentWidth) {
-                pillRows.push({ pills: currentRow, totalWidth: currentRowWidth });
-                currentRow = [{ name: p, width: pWidth }];
-                currentRowWidth = pWidth;
-              } else {
-                if (currentRow.length > 0) currentRowWidth += pillGapX;
-                currentRow.push({ name: p, width: pWidth });
-                currentRowWidth += pWidth;
-              }
-            });
-            if (currentRow.length > 0) {
-              pillRows.push({ pills: currentRow, totalWidth: currentRowWidth });
-            }
-
-            const pillRowsCount = pillRows.length;
-            const totalPillsHeight = pillRowsCount * pillHeight + Math.max(pillRowsCount - 1, 0) * pillGapY;
-
-            const hFactor = (cardHoverFactors && cardHoverFactors[idx]) || 0;
-
-            // Title (22px) + Gap (12px) + Desc + Pills gap (12px + totalPillsHeight)
-            const cardH = (innerPaddingY + 22 + 12 + descTextHeight) + (12 + totalPillsHeight) * hFactor + innerPaddingY;
-            cardHeights.push(cardH);
-            totalCardsStackH += cardH + cardGap;
-          });
-
-          // 3-ITEM MIDDLE VIEWPORT WINDOW GEOMETRY
-          const middleWindowH = isMobile ? (height - mobVideoBottomY - 24) : Math.min(height * 0.62, 450);
-          const middleWindowCenterY = isMobile ? (mobVideoBottomY + (height - mobVideoBottomY) / 2) : (height * 0.50);
-          const viewportTopY = isMobile ? (mobVideoBottomY + 12) : (middleWindowCenterY - middleWindowH / 2);
-          const viewportBotY = isMobile ? (height - 14) : (middleWindowCenterY + middleWindowH / 2);
-          const fadeZoneH = isMobile ? 25 : 50;
-
-          // Initial start Y so Cards sit in the clear viewport window
-          const startY = viewportTopY + 8;
-
-          // Cards scroll sequence (scrollProgress 0.48 -> 0.64)
-          const cardsScrollSeq = Math.min(Math.max((scrollProgress - 0.48) / 0.16, 0), 1.0);
-          const easeCardsScroll = cardsScrollSeq * cardsScrollSeq * (3 - 2 * cardsScrollSeq);
-
-          // End position so Cards sit centered in the viewport window
-          const initialCard6BottomY = startY + totalCardsStackH - cardGap;
-          const targetCard6BottomY = viewportBotY - 15;
-          const maxScrollDistance = Math.max(initialCard6BottomY - targetCard6BottomY, 0);
-
-          const scrollOffsetY = - (easeCardsScroll * maxScrollDistance);
-
-          let currentCardY = startY + scrollOffsetY;
-
-          cardsData.forEach((c, idx) => {
-            const cardHeight = cardHeights[idx];
-            const mx = smoothMouse.x;
-            const my = smoothMouse.y;
-
-            // Mouse Bounding Box Check
-            const isMouseOver = (mx >= textX && mx <= textX + cardWidth && my >= currentCardY && my <= currentCardY + cardHeight);
-
-            // Lerp hover factor smoothly (0.0 -> 1.0)
-            const targetHover = isMouseOver ? 1.0 : 0.0;
-            if (cardHoverFactors && cardHoverFactors[idx] !== undefined) {
-              cardHoverFactors[idx] += (targetHover - cardHoverFactors[idx]) * 0.12;
-            }
-            const hFactor = (cardHoverFactors && cardHoverFactors[idx]) || 0;
-
-            // FADE AND HIDE TOP & BOTTOM CONTENT OUTSIDE VIEWPORT WINDOW
-            const cardCenterY = currentCardY + cardHeight * 0.5;
-
-            let topFade = 1.0;
-            if (cardCenterY < viewportTopY) {
-              topFade = Math.max(1.0 - (viewportTopY - cardCenterY) / fadeZoneH, 0.0);
-            }
-
-            let botFade = 1.0;
-            if (cardCenterY > viewportBotY) {
-              botFade = Math.max(1.0 - (cardCenterY - viewportBotY) / fadeZoneH, 0.0);
-            }
-
-            const cardEdgeAlpha = Math.min(topFade, botFade);
-
-            // Render Glassmorphic dark card background on mobile for crystal clear text legibility
-            if (isMobile && cardEdgeAlpha > 0.02 && textOpacity * cardEdgeAlpha > 0.02) {
-              mctx.save();
-              mctx.globalAlpha = textOpacity * cardEdgeAlpha * 0.95;
-              mctx.fillStyle = 'rgba(10, 14, 20, 0.88)';
-              mctx.strokeStyle = 'rgba(56, 189, 248, 0.18)';
-              mctx.lineWidth = 1.0;
-              mctx.beginPath();
-              if (mctx.roundRect) {
-                mctx.roundRect(textX - 10, currentCardY - 4, cardWidth + 20, cardHeight + 8, 14);
-              } else {
-                mctx.rect(textX - 10, currentCardY - 4, cardWidth + 20, cardHeight + 8);
-              }
-              mctx.fill();
-              mctx.stroke();
-              mctx.restore();
-            }
-
-            // Render Card Content & Mild Division Lines ONLY IF within visible middle 3-item window
-            if (cardEdgeAlpha > 0.01) {
-              mctx.save();
-              mctx.globalAlpha = avatarAlpha * textOpacity * cardEdgeAlpha;
-
-              // 1. MILD ELEGANT HORIZONTAL DIVISION LINE BETWEEN ADJACENT CARDS (FOR idx > 0)
-              if (idx > 0) {
-                const dividerY = currentCardY - cardGap / 2;
-                const prevHFactor = (cardHoverFactors && cardHoverFactors[idx - 1]) || 0;
-                const lineHFactor = Math.max(hFactor, prevHFactor);
-
-                mctx.save();
-                mctx.lineWidth = 1.0;
-
-                const lineGrad = mctx.createLinearGradient(textX, dividerY, textX + cardWidth, dividerY);
-                lineGrad.addColorStop(0, 'transparent');
-                lineGrad.addColorStop(0.15, `rgba(255, 255, 255, ${(0.14 + 0.22 * lineHFactor).toFixed(2)})`);
-                lineGrad.addColorStop(0.5, `rgba(255, 255, 255, ${(0.22 + 0.28 * lineHFactor).toFixed(2)})`);
-                lineGrad.addColorStop(0.85, `rgba(255, 255, 255, ${(0.14 + 0.22 * lineHFactor).toFixed(2)})`);
-                lineGrad.addColorStop(1, 'transparent');
-
-                mctx.strokeStyle = lineGrad;
-                mctx.beginPath();
-                mctx.moveTo(textX, dividerY);
-                mctx.lineTo(textX + cardWidth, dividerY);
-                mctx.stroke();
-                mctx.restore();
-              }
-
-              // 2. CENTER ALIGNED CONTENT LAYOUT
-              const centerX = textX + cardWidth / 2;
-              const maxContentWidth = Math.max(cardWidth - (innerPaddingX * 2), 120);
-
-              // Title: Heading Weight 600, Size 20px, CENTER ALIGNED
-              mctx.font = '600 20px Poppins, sans-serif';
-              mctx.fillStyle = '#ffffff';
-              mctx.textAlign = 'center';
-              mctx.textBaseline = 'top';
-              mctx.fillText(c.title, centerX, currentCardY + innerPaddingY);
-
-              // Description Paragraph: Exactly 12px space below title, CENTER ALIGNED
-              mctx.font = '300 12.5px Poppins, sans-serif';
-              mctx.fillStyle = `rgba(255, 255, 255, ${(0.78 + 0.22 * hFactor).toFixed(2)})`;
-              wrapCanvasTextCentered(mctx, c.desc, centerX, currentCardY + innerPaddingY + 34, maxContentWidth, 18);
-
-              // 3. TECH TAG PILLS: MILD BACKGROUND FILL, NO BORDER, REDUCED WEIGHT 500, PERFECT CENTERED TEXT ALIGNMENT
-              if (hFactor > 0.01) {
-                mctx.save();
-                mctx.globalAlpha = cardEdgeAlpha * hFactor;
-
-                mctx.font = '500 13.5px Poppins, sans-serif';
-
-                // Build multi-row wrapped layout for pills
-                const pillRows = [];
-                let currentRow = [];
-                let currentRowWidth = 0;
-
-                c.pills.forEach((p) => {
-                  const pWidth = pillPaddingX + mctx.measureText(p).width + pillPaddingX;
-                  if (currentRow.length > 0 && (currentRowWidth + pillGapX + pWidth) > maxContentWidth) {
-                    pillRows.push({ pills: currentRow, totalWidth: currentRowWidth });
-                    currentRow = [{ name: p, width: pWidth }];
-                    currentRowWidth = pWidth;
-                  } else {
-                    if (currentRow.length > 0) currentRowWidth += pillGapX;
-                    currentRow.push({ name: p, width: pWidth });
-                    currentRowWidth += pWidth;
-                  }
-                });
-                if (currentRow.length > 0) {
-                  pillRows.push({ pills: currentRow, totalWidth: currentRowWidth });
-                }
-
-                const pillRowsCount = pillRows.length;
-                const totalPillsHeight = pillRowsCount * pillHeight + Math.max(pillRowsCount - 1, 0) * pillGapY;
-
-                let startPillY = currentCardY + cardHeight - innerPaddingY - totalPillsHeight;
-
-                pillRows.forEach((rObj) => {
-                  let pillX = centerX - rObj.totalWidth / 2;
-
-                  rObj.pills.forEach((pObj) => {
-                    const pWidth = pObj.width;
-
-                    // MILD TRANSLUCENT BACKGROUND FILL (NO BORDER)
-                    mctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
-
-                    mctx.beginPath();
-                    if (mctx.roundRect) {
-                      mctx.roundRect(pillX, startPillY, pWidth, pillHeight, 14);
-                    } else {
-                      mctx.rect(pillX, startPillY, pWidth, pillHeight);
-                    }
-                    mctx.fill();
-
-                    // PERFECT 100% MATHEMATICAL VERTICAL & HORIZONTAL CENTERED TEXT ALIGNMENT
-                    mctx.fillStyle = '#ffffff';
-                    mctx.textAlign = 'center';
-                    mctx.textBaseline = 'middle';
-                    mctx.fillText(pObj.name, pillX + pWidth / 2, startPillY + pillHeight / 2 + 0.5);
-
-                    pillX += pWidth + pillGapX;
-                  });
-
-                  startPillY += pillHeight + pillGapY;
-                });
-
-                mctx.restore();
-              }
-
-              mctx.restore();
-            }
-
-            currentCardY += cardHeight + cardGap;
-          });
-
-          mctx.restore();
-        }
-
-        mctx.restore();
-      }
-    }
+    // Note: "How I Work" Process Section and "Capabilities & 3D Video" have been relocated to #about-detail-overlay
   }
 
   /**
@@ -1325,7 +660,7 @@ export function initFluidCanvas() {
     const maxDiag = Math.sqrt(cx * cx + cy * cy) * 1.5;
 
     topCtx.save();
-    topCtx.fillStyle = '#ffffff';
+    topCtx.fillStyle = '#E2E0DB';
     topCtx.beginPath();
 
     const totalPoints = 14;
@@ -1357,355 +692,6 @@ export function initFluidCanvas() {
     }
     topCtx.closePath();
     topCtx.fill();
-
-    // RENDER 16:9 WIDESCREEN FULL-FRAME 1-COLUMN IMAGES AFTER PORTAL OPENS TO 30%
-    if (progress >= 0.30) {
-      const portalAlpha = Math.min((progress - 0.30) / 0.15, 1.0);
-
-      topCtx.save();
-      topCtx.clip(); // Clip directly inside the organic expanding portal!
-      topCtx.globalAlpha = portalAlpha;
-
-      // 3-STAGE TIMELINE MATH (01 Catering -> 02 Yes2Food -> 03 Habit Partner)
-      let slideRaw = 0;
-      if (scrollProgress >= 0.76) {
-        slideRaw = Math.min((scrollProgress - 0.76) / 0.12, 2.0);
-      }
-
-      // Mouse Parallax Offset (subtle)
-      const mouseOffsetY = (smoothMouse.y - height * 0.5) * 0.015;
-      let isCursorInsideImage = false;
-      const isNoCursorDevice = (
-        window.matchMedia('(pointer: coarse)').matches ||
-        ('ontouchstart' in window) ||
-        navigator.maxTouchPoints > 0 ||
-        width < 1100
-      );
-
-      // Image 1: Catering Made Easy (Pinned stationary at y = 0)
-      const img1Y = mouseOffsetY;
-      let b1 = drawImageCover(topCtx, showcase1Img, 0, img1Y, width, height);
-      if (isNoCursorDevice) {
-        img1HoverFactor = 1.0;
-      } else if (b1 && smoothMouse.x >= b1.dx && smoothMouse.x <= b1.dx + b1.dw &&
-          smoothMouse.y >= b1.dy && smoothMouse.y <= b1.dy + b1.dh && slideRaw < 0.85) {
-        isCursorInsideImage = true;
-        img1HoverFactor += (1.0 - img1HoverFactor) * 0.12;
-      } else {
-        img1HoverFactor += (0.0 - img1HoverFactor) * 0.12;
-      }
-
-      if (b1 && img1HoverFactor > 0.005) {
-        topCtx.save();
-        const trX = b1.dx + b1.dw;
-        const trY = b1.dy;
-        const blX = b1.dx - b1.dw * (1.0 - img1HoverFactor * 0.8);
-        const blY = b1.dy + b1.dh * (1.0 + img1HoverFactor * 0.8);
-
-        const sweepGrad = topCtx.createLinearGradient(trX, trY, blX, blY);
-        sweepGrad.addColorStop(0.0, `rgba(35, 40, 50, ${0.75 * img1HoverFactor})`);
-        sweepGrad.addColorStop(Math.min(img1HoverFactor * 0.7, 1.0), `rgba(25, 28, 35, ${0.68 * img1HoverFactor})`);
-        sweepGrad.addColorStop(1.0, `rgba(15, 18, 22, ${0.60 * img1HoverFactor})`);
-
-        topCtx.fillStyle = sweepGrad;
-        topCtx.fillRect(b1.dx, b1.dy, b1.dw, b1.dh);
-        topCtx.restore();
-      }
-
-      // Image 2: Yes2Food Business (Slides up from bottom at slideRaw 0.0 -> 1.0)
-      const slide2Stage = Math.min(Math.max(slideRaw, 0.0), 1.0);
-      const easeSlide2 = slide2Stage * slide2Stage * (3 - 2 * slide2Stage);
-      const img2Y = (1.0 - easeSlide2) * height + mouseOffsetY;
-
-      let b2 = null;
-      if (slideRaw > 0.001) {
-        b2 = drawImageCover(topCtx, showcase2Img, 0, img2Y, width, height);
-        if (isNoCursorDevice) {
-          img2HoverFactor = 1.0;
-        } else if (b2 && smoothMouse.x >= b2.dx && smoothMouse.x <= b2.dx + b2.dw &&
-            smoothMouse.y >= b2.dy && smoothMouse.y <= b2.dy + b2.dh && slideRaw >= 0.15 && slideRaw < 1.85) {
-          isCursorInsideImage = true;
-          img2HoverFactor += (1.0 - img2HoverFactor) * 0.12;
-        } else {
-          img2HoverFactor += (0.0 - img2HoverFactor) * 0.12;
-        }
-
-        if (b2 && img2HoverFactor > 0.005) {
-          topCtx.save();
-          const trX = b2.dx + b2.dw;
-          const trY = b2.dy;
-          const blX = b2.dx - b2.dw * (1.0 - img2HoverFactor * 0.8);
-          const blY = b2.dy + b2.dh * (1.0 + img2HoverFactor * 0.8);
-
-          const sweepGrad = topCtx.createLinearGradient(trX, trY, blX, blY);
-          sweepGrad.addColorStop(0.0, `rgba(35, 40, 50, ${0.75 * img2HoverFactor})`);
-          sweepGrad.addColorStop(Math.min(img2HoverFactor * 0.7, 1.0), `rgba(25, 28, 35, ${0.68 * img2HoverFactor})`);
-          sweepGrad.addColorStop(1.0, `rgba(15, 18, 22, ${0.60 * img2HoverFactor})`);
-
-          topCtx.fillStyle = sweepGrad;
-          topCtx.fillRect(b2.dx, b2.dy, b2.dw, b2.dh);
-          topCtx.restore();
-        }
-      } else {
-        img2HoverFactor = isNoCursorDevice ? 1.0 : 0.0;
-      }
-
-      // Image 3: Habit Partner Mobile App (Slides up from bottom at slideRaw 1.0 -> 2.0)
-      const slide3Stage = Math.min(Math.max(slideRaw - 1.0, 0.0), 1.0);
-      const easeSlide3 = slide3Stage * slide3Stage * (3 - 2 * slide3Stage);
-      const img3Y = (1.0 - easeSlide3) * height + mouseOffsetY;
-
-      let b3 = null;
-      if (slideRaw > 1.001) {
-        b3 = drawImageCover(topCtx, showcase3Img, 0, img3Y, width, height);
-        if (isNoCursorDevice) {
-          img3HoverFactor = 1.0;
-        } else if (b3 && smoothMouse.x >= b3.dx && smoothMouse.x <= b3.dx + b3.dw &&
-            smoothMouse.y >= b3.dy && smoothMouse.y <= b3.dy + b3.dh && slideRaw >= 1.15) {
-          isCursorInsideImage = true;
-          img3HoverFactor += (1.0 - img3HoverFactor) * 0.12;
-        } else {
-          img3HoverFactor += (0.0 - img3HoverFactor) * 0.12;
-        }
-
-        if (b3 && img3HoverFactor > 0.005) {
-          topCtx.save();
-          const trX = b3.dx + b3.dw;
-          const trY = b3.dy;
-          const blX = b3.dx - b3.dw * (1.0 - img3HoverFactor * 0.8);
-          const blY = b3.dy + b3.dh * (1.0 + img3HoverFactor * 0.8);
-
-          const sweepGrad = topCtx.createLinearGradient(trX, trY, blX, blY);
-          sweepGrad.addColorStop(0.0, `rgba(35, 40, 50, ${0.75 * img3HoverFactor})`);
-          sweepGrad.addColorStop(Math.min(img3HoverFactor * 0.7, 1.0), `rgba(25, 28, 35, ${0.68 * img3HoverFactor})`);
-          sweepGrad.addColorStop(1.0, `rgba(15, 18, 22, ${0.60 * img3HoverFactor})`);
-
-          topCtx.fillStyle = sweepGrad;
-          topCtx.fillRect(b3.dx, b3.dy, b3.dw, b3.dh);
-          topCtx.restore();
-        }
-      } else {
-        img3HoverFactor = isNoCursorDevice ? 1.0 : 0.0;
-      }
-
-      // RENDER REFERENCE DESIGN OVERLAY (VERTICALLY CENTERED ON SCREEN WITH SCROLL PROGRESS BAR LINE)
-      topCtx.save();
-      topCtx.globalAlpha = portalAlpha;
-
-      let activeIndex = 0;
-      if (slideRaw >= 1.45 || (b3 && img3Y <= height * 0.50)) {
-        activeIndex = 2;
-      } else if (slideRaw >= 0.45 || (b2 && img2Y <= height * 0.50)) {
-        activeIndex = 1;
-      }
-
-      const isImage2Past50 = activeIndex > 0;
-      isImage2Past50Global = isImage2Past50;
-      isCursorInsideImageGlobal = isCursorInsideImage;
-      activeIndexGlobal = activeIndex;
-
-      const activeNum = activeIndex === 2 ? '03' : (activeIndex === 1 ? '02' : '01');
-      const activePill = activeIndex === 2 ? '🎯 Habit Partner' : (activeIndex === 1 ? '⚡ Yes2Food' : '🍽 Catering');
-      const activeSub = activeIndex === 2 ? '— Social Habit Tracker' : (activeIndex === 1 ? '— Enterprise Dashboard' : '— Mobile Experience');
-      const activeHeadline = activeIndex === 2
-        ? 'Habit Partner — Social Habit Tracker & Accountability Mobile App'
-        : (activeIndex === 1
-          ? 'Yes2Food Business — Enterprise Merchant & Orders Dashboard'
-          : 'Catering Made Easy — Mobile Order & Bulk Catering Experience');
-
-      const marginX = Math.max(width * 0.08, 40);
-      const availableW = width - (marginX * 2);
-
-      // VERTICAL CENTERED LAYOUT MATH:
-      const titleFontSize = width < 768 ? 22 : (width < 1200 ? 32 : 40);
-      const lineY = (height * 0.50) - 50;
-
-      // 1. SCROLL-DRIVEN HORIZONTAL PROGRESS BAR DIVIDER LINE (100% END-TO-END SCREEN FILL, WHITE COLOR, NO CIRCLE)
-      let showcaseProgress = 0.0;
-      if (scrollProgress >= 0.68) {
-        showcaseProgress = Math.min(Math.max((scrollProgress - 0.68) / 0.30, 0), 1.0);
-      }
-      const currentLineEndX = showcaseProgress * width;
-
-      // Background subtle guide line (100% end-to-end from 0 to width)
-      topCtx.strokeStyle = 'rgba(255, 255, 255, 0.20)';
-      topCtx.lineWidth = 1.0;
-      topCtx.beginPath();
-      topCtx.moveTo(0, lineY);
-      topCtx.lineTo(width, lineY);
-      topCtx.stroke();
-
-      // Active expanding pure white progress bar line based on scroll (no circle dot!)
-      if (showcaseProgress > 0.001) {
-        const lineGrad = topCtx.createLinearGradient(0, lineY, currentLineEndX, lineY);
-        lineGrad.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
-        lineGrad.addColorStop(1, '#ffffff');
-        topCtx.strokeStyle = lineGrad;
-        topCtx.lineWidth = 2.0;
-        topCtx.beginPath();
-        topCtx.moveTo(0, lineY);
-        topCtx.lineTo(currentLineEndX, lineY);
-        topCtx.stroke();
-      }
-
-      // 2. Top-Left Number Counter (01 / 02) Above Line
-      topCtx.font = '700 15px Poppins, sans-serif';
-      topCtx.fillStyle = '#ffffff';
-      topCtx.textAlign = 'left';
-      topCtx.textBaseline = 'alphabetic';
-      topCtx.fillText(activeNum, marginX, lineY - 14);
-
-      // 3. Top-Center Brand Pill Badge (Overlapping line)
-      const pillText = activePill;
-      topCtx.font = '600 12px Poppins, sans-serif';
-      const pillW = topCtx.measureText(pillText).width + 32;
-      const pillX = (width * 0.40) - (pillW / 2);
-      const pillY = lineY - 14;
-
-      topCtx.fillStyle = 'rgba(20, 30, 45, 0.80)';
-      topCtx.strokeStyle = 'rgba(147, 197, 253, 0.35)';
-      topCtx.lineWidth = 1.0;
-      topCtx.beginPath();
-      if (topCtx.roundRect) {
-        topCtx.roundRect(pillX, pillY, pillW, 28, 14);
-      } else {
-        topCtx.rect(pillX, pillY, pillW, 28);
-      }
-      topCtx.fill();
-      topCtx.stroke();
-
-      topCtx.fillStyle = '#ffffff';
-      topCtx.textAlign = 'center';
-      topCtx.textBaseline = 'middle';
-      topCtx.fillText(pillText, pillX + pillW / 2, pillY + 14);
-
-      // 4. Left Sub-Label Below Line
-      topCtx.textAlign = 'left';
-      topCtx.textBaseline = 'top';
-      topCtx.font = '500 13px Poppins, sans-serif';
-      topCtx.fillStyle = 'rgba(255, 255, 255, 0.78)';
-      const subLabelY = lineY + 20;
-      topCtx.fillText(activeSub, marginX, subLabelY);
-
-      // 5. Main Center Editorial Headline (positioned with exact 12px gap below activeSub)
-      const headlineX = width < 900 ? marginX : Math.max(width * 0.32, 340);
-      const headlineMaxW = width < 900 ? width - marginX * 2 : Math.min(width * 0.58, 720);
-      const headlineY = width < 900 ? subLabelY + 13 + 12 : lineY + 52; // 12px gap below sub-label!
-
-      topCtx.font = `700 ${titleFontSize}px Poppins, sans-serif`;
-      topCtx.fillStyle = '#ffffff';
-
-      wrapCanvasText(topCtx, activeHeadline, headlineX, headlineY, headlineMaxW, titleFontSize * 1.28);
-      topCtx.restore();
-
-      // RENDER INTERACTIVE NEGATIVE-COLOR BLEND HOVER CURSOR CIRCLE ("EXPLORE") ONLY ON DEVICES WITH CURSOR
-      if (!isNoCursorDevice) {
-        const targetScale = isCursorInsideImage ? 1.0 : 0.0;
-        exploreCursor.scale += (targetScale - exploreCursor.scale) * 0.18;
-        exploreCursor.x += (smoothMouse.x - exploreCursor.x) * 0.18;
-        exploreCursor.y += (smoothMouse.y - exploreCursor.y) * 0.18;
-
-        const circleRadius = 56 * exploreCursor.scale;
-
-        if (circleRadius > 0.8) {
-          topCtx.save();
-
-          // 1. Draw Solid White Circle with 'difference' composite mode to produce negative color inversion of image underneath!
-          topCtx.globalCompositeOperation = 'difference';
-          topCtx.fillStyle = '#ffffff';
-          topCtx.beginPath();
-          topCtx.arc(exploreCursor.x, exploreCursor.y, circleRadius, 0, Math.PI * 2);
-          topCtx.fill();
-
-          // 2. Draw Centered Text "Explore" in 'difference' mode for dynamic inverse text contrast!
-          topCtx.font = '600 13px Poppins, sans-serif';
-          topCtx.letterSpacing = '1.5px';
-          topCtx.textAlign = 'center';
-          topCtx.textBaseline = 'middle';
-          topCtx.fillStyle = '#ffffff';
-          topCtx.fillText('Explore', exploreCursor.x, exploreCursor.y + 0.5);
-
-          topCtx.restore();
-        }
-      }
-
-      topCtx.restore();
-    }
-
-    if (progress > 0.35) {
-      const gridAlpha = Math.min((progress - 0.35) / 0.35, 1.0);
-
-      const mouseOffsetX = (smoothMouse.x - width * 0.5);
-      const mouseOffsetY = (smoothMouse.y - height * 0.5);
-
-      topCtx.save();
-      topCtx.globalAlpha = gridAlpha * 0.65;
-      topCtx.strokeStyle = 'rgba(0, 0, 0, 0.22)';
-      topCtx.lineWidth = 1.2;
-      topCtx.setLineDash([8, 8]);
-
-      const computedVertLines = verticalGridLines.map((line) => {
-        const shiftY = mouseOffsetY * line.speed;
-        const x = width * line.baseRatio;
-        return { x, shiftY, speed: line.speed };
-      });
-
-      const computedHorizLines = horizontalGridLines.map((line) => {
-        const shiftX = mouseOffsetX * line.speed;
-        const y = height * line.baseRatio;
-        return { y, shiftX, speed: line.speed };
-      });
-
-      computedVertLines.forEach((vLine) => {
-        topCtx.beginPath();
-        topCtx.moveTo(vLine.x, 0);
-        topCtx.lineTo(vLine.x, height);
-        topCtx.stroke();
-      });
-
-      computedHorizLines.forEach((hLine) => {
-        topCtx.beginPath();
-        topCtx.moveTo(0, hLine.y);
-        topCtx.lineTo(width, hLine.y);
-        topCtx.stroke();
-      });
-
-      topCtx.setLineDash([]);
-      topCtx.strokeStyle = 'rgba(0, 0, 0, 0.45)';
-      topCtx.lineWidth = 1.4;
-
-      computedVertLines.forEach((vLine, colIdx) => {
-        computedHorizLines.forEach((hLine, rowIdx) => {
-          const ix = vLine.x + hLine.shiftX * 0.5;
-          const iy = hLine.y + vLine.shiftY * 0.5;
-
-          topCtx.beginPath();
-          topCtx.moveTo(ix - 7, iy);
-          topCtx.lineTo(ix + 7, iy);
-          topCtx.moveTo(ix, iy - 7);
-          topCtx.lineTo(ix, iy + 7);
-          topCtx.stroke();
-
-          if ((colIdx + rowIdx) % 2 === 1) {
-            const boxSize = 14;
-            const offsetX = ((colIdx % 3) - 1) * 22;
-            const offsetY = ((rowIdx % 2) - 0.5) * 28;
-
-            const bx = ix + offsetX;
-            const by = iy + offsetY;
-
-            topCtx.save();
-            topCtx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
-            topCtx.lineWidth = 1.0;
-            topCtx.setLineDash([3, 3]);
-            topCtx.strokeRect(bx - boxSize / 2, by - boxSize / 2, boxSize, boxSize);
-            topCtx.restore();
-          }
-        });
-      });
-
-      topCtx.restore();
-    }
 
     if (progress > 0.05 && progress < 0.95 && Math.random() < 0.85) {
       const randomPt = pts[Math.floor(Math.random() * pts.length)];
@@ -1777,54 +763,64 @@ export function initFluidCanvas() {
       }
     }
 
-    // White Organic Portal Expansion Progress (smoothScrollProgress 0.68 -> 0.80)
+    // White Organic Portal Expansion Progress (smoothScrollProgress 0.30 -> 0.92)
     let whitePortalProgress = 0;
-    if (smoothScrollProgress > 0.68) {
-      whitePortalProgress = Math.min((smoothScrollProgress - 0.68) / 0.12, 1.0);
+    if (smoothScrollProgress > 0.30) {
+      whitePortalProgress = Math.min((smoothScrollProgress - 0.30) / 0.62, 1.0);
+    }
+
+    const projectsSection = document.getElementById('projects-section');
+    if (projectsSection) {
+      if (whitePortalProgress > 0.02 || smoothScrollProgress > 0.30) {
+        const pAlpha = Math.min(Math.max((smoothScrollProgress - 0.30) / 0.50, 0), 1.0);
+        projectsSection.style.opacity = pAlpha;
+        projectsSection.style.pointerEvents = 'auto';
+        projectsSection.style.visibility = 'visible';
+      } else {
+        projectsSection.style.opacity = '0';
+        projectsSection.style.pointerEvents = 'none';
+        projectsSection.style.visibility = 'hidden';
+      }
     }
 
     if (siteHeader) {
       if (whitePortalProgress > 0.35) {
         siteHeader.classList.remove('dark-header');
-      } else if (smoothScrollProgress > 0.04) {
+      } else if (smoothScrollProgress > 0.08) {
         siteHeader.classList.add('dark-header');
       } else {
         siteHeader.classList.remove('dark-header');
       }
     }
 
-    // ABOUT ME STAGE: smoothScrollProgress 0.04 -> 0.20
-    let aboutOpacity = 0.0;
+    // ABOUT ME STAGE: smoothScrollProgress 0.00 -> 0.55
+    let aboutOpacity = 1.0;
     let aboutScale = 1.0;
 
-    if (smoothScrollProgress > 0.04 && smoothScrollProgress < 0.20) {
-      if (smoothScrollProgress < 0.10) {
-        aboutOpacity = Math.min((smoothScrollProgress - 0.04) / 0.06, 1.0);
-        aboutScale = 1.0;
-      } else if (smoothScrollProgress > 0.16) {
-        const fadeProgress = Math.min((smoothScrollProgress - 0.16) / 0.04, 1.0);
+    if (smoothScrollProgress > 0.30) {
+      if (smoothScrollProgress < 0.55) {
+        const fadeProgress = Math.min((smoothScrollProgress - 0.30) / 0.25, 1.0);
         aboutOpacity = 1.0 - fadeProgress;
         aboutScale = 1.0 - fadeProgress * 0.12;
       } else {
-        aboutOpacity = 1.0;
-        aboutScale = 1.0;
+        aboutOpacity = 0.0;
       }
+    } else {
+      aboutOpacity = 1.0;
+      aboutScale = 1.0;
     }
 
     renderMediaTexture(time, smoothScrollProgress, aboutOpacity, aboutScale, whitePortalProgress);
 
     ctx.clearRect(0, 0, width, height);
 
-    const bgOpacity = Math.max(1 - smoothScrollProgress * 2.8, 0);
-    ctx.fillStyle = `rgba(255, 255, 255, ${bgOpacity})`;
-    ctx.fillRect(0, 0, width, height);
-
-    if (bgOpacity < 1) {
-      ctx.fillStyle = `rgba(10, 10, 10, ${1 - bgOpacity})`;
+    if (smoothScrollProgress > 0.005) {
+      const darkAlpha = Math.min(smoothScrollProgress * 2.8, 1);
+      ctx.fillStyle = `rgba(10, 10, 10, ${darkAlpha})`;
       ctx.fillRect(0, 0, width, height);
     }
 
-    const zoomProgress = Math.min(smoothScrollProgress / 0.18, 1);
+    const zoomProgress = Math.min(smoothScrollProgress / 0.10, 1);
     const easeScroll = Math.pow(zoomProgress, 2.2);
     const zoomScale = 1.0 + easeScroll * 18.0;
 
@@ -1914,7 +910,7 @@ export function initFluidCanvas() {
     if (zoomProgress < 0.55) {
       const spinningTextAlpha = (1.0 - Math.min(zoomProgress / 0.40, 1.0));
       const spinningTextRadius = baseRadius + 18;
-      const spinAngle = time * 0.14; // Reduced rotation speed as requested!
+      const spinAngle = time * 0.14; // Reduced rotation speed
       const circularTextCopy = "AKILESH  •  UI/UX DESIGNER  •  PRODUCT ARCHITECT  •  AKILESH  •  UI/UX DESIGNER  •  PRODUCT ARCHITECT  •  ";
 
       drawSpinningCircularText(ctx, circularTextCopy, centerX, centerY, spinningTextRadius, spinAngle, spinningTextAlpha);
@@ -1943,7 +939,7 @@ export function initFluidCanvas() {
 
     renderTopTransition(time, whitePortalProgress, smoothScrollProgress);
 
-    requestAnimationFrame(animate);
+    animFrameId = requestAnimationFrame(animate);
   }
 
   animate();

@@ -6,15 +6,15 @@
     <title>AKILESH — Creative Director & Full-Stack Architect</title>
     <meta name="description" content="Portfolio of Akilesh — Creative Director, Product Architect & Developer working across content experiences, AI products, and design systems." />
     
-    <!-- Google Fonts: Universal Poppins & Material Symbols Outlined -->
+    <!-- Google Fonts: Universal Poppins, Luckiest Guy, Moirai One, Mohave, Archivo Black & Material Symbols -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Moirai+One&family=Archivo+Black&family=Mohave:ital,wght@0,300..700;1,300..700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     
-    <script type="module" crossorigin src="/assets/main-C0CrXlDV.js"></script>
+    <script type="module" crossorigin src="/assets/main-tztPD4PH.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-    <link rel="stylesheet" crossorigin href="/assets/style-CG72K_a7.css">
+    <link rel="stylesheet" crossorigin href="/assets/style-CDOKbpQT.css">
   </head>
   <body>
     <!-- Preloader Screen -->
@@ -23,89 +23,465 @@
       <div id="preloader-counter" class="preloader-counter">0</div>
     </div>
 
+    <!-- Font Preload Warmup (Ensures Google Fonts are ready for Canvas 2D) -->
+    <div style="position: absolute; left: -9999px; top: -9999px; visibility: hidden; pointer-events: none;" aria-hidden="true">
+      <span style="font-family: 'Luckiest Guy', cursive;">I DESIGN COMPLEX SYSTEMS TO FEEL SIMPLE I LIKE MAKING THINGS MAKE SENSE</span>
+      <span style="font-family: 'Moirai One', cursive;">AKILESH</span>
+      <span style="font-family: 'Mohave', sans-serif; font-weight: 700;">AKILESH UI/UX DESIGNER - PRODUCT THINKER VIEW MORE ABOUT</span>
+      <span style="font-family: 'Archivo Black', sans-serif;">I LIKE MAKING THINGS MAKE SENSE</span>
+      <span style="font-family: 'Syne', sans-serif; font-weight: 900;">I LIKE MAKING THINGS MAKE SENSE</span>
+    </div>
+
     <!-- Header Navigation -->
-    <header id="site-header" class="site-header">
-      <a href="#" class="header-logo">
+    <header id="site-header" class="site-header landing-header">
+      <a href="#" class="header-logo" aria-label="Akilesh Home">
         <span class="logo-text">AKILESH</span>
       </a>
 
-      <nav class="nav-links">
-        <ul>
-          <li><button type="button" class="nav-link" id="nav-work">projects</button></li>
-          <li><button type="button" class="nav-link" id="nav-about">about me</button></li>
-          <li><button type="button" class="nav-link" id="nav-contact">contact</button></li>
-        </ul>
+      <!-- Desktop Floating Capsule Navigation (Matching Design Mockup) -->
+      <nav class="nav-pill-wrapper" aria-label="Main Navigation">
+        <div class="nav-pill-inner">
+          <ul class="nav-pill-list">
+            <li><button type="button" class="nav-pill-link" id="nav-work">PROJECTS</button></li>
+            <li><button type="button" class="nav-pill-link" id="nav-about">ABOUT ME</button></li>
+            <li><button type="button" class="nav-pill-link" id="nav-contact">LET'S CONNECT</button></li>
+          </ul>
+          <button type="button" class="nav-pill-menu-btn" id="hamburger-btn" aria-label="Toggle Navigation Menu">
+            <span class="menu-label">MENU</span>
+            <span class="menu-hamburger-icon" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+        </div>
       </nav>
-
-      <!-- Mobile Hamburger Button with Google Material Icons -->
-      <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Toggle Navigation Menu">
-        <span class="material-symbols-outlined menu-icon-open">menu</span>
-        <span class="material-symbols-outlined menu-icon-close">close</span>
-      </button>
     </header>
 
     <!-- Mobile Fullscreen Drawer Navigation Menu -->
     <div id="mobile-nav-overlay" class="mobile-nav-overlay">
       <ul class="mobile-nav-links">
-        <li><button type="button" class="mobile-nav-link" id="mob-nav-work">projects</button></li>
-        <li><button type="button" class="mobile-nav-link" id="mob-nav-about">about me</button></li>
-        <li><button type="button" class="mobile-nav-link" id="mob-nav-contact">contact</button></li>
+        <li><button type="button" class="mobile-nav-link" id="mob-nav-work">PROJECTS</button></li>
+        <li><button type="button" class="mobile-nav-link" id="mob-nav-about">ABOUT ME</button></li>
+        <li><button type="button" class="mobile-nav-link" id="mob-nav-contact">LET'S CONNECT</button></li>
       </ul>
     </div>
 
     <!-- Multi-Stage Scroll Portal Zoom Track (Pinned Hero Section) -->
     <div id="hero-scroll-wrapper" class="hero-scroll-wrapper">
       <section id="hero-section" class="hero-section sticky-hero">
-        <!-- Interactive WebGL/Canvas Layer -->
-        <div id="canvas-container" class="canvas-container">
-          <canvas id="hero-canvas"></canvas>
-        </div>
-
-        <!-- ABOUT ME Hero Landing Overlay (Main Home Screen Text) -->
-        <div id="hero-content" class="hero-content about-hero-overlay">
-          <div class="about-hero-center">
-            <span class="hero-tag-label">UI/UX DESIGNER · PRODUCT THINKER</span>
-            <h1 class="about-main-title">
-              I TURN PRODUCT CHAOS<br />INTO SOMETHING PEOPLE GET.
-            </h1>
-            <p class="about-lead-text">
-              I research, structure, and design digital experiences that make complicated products simpler, smarter, and more enjoyable to use.
-            </p>
+        <!-- Golden Frame Inner Viewport with 40px Rounded Corners -->
+        <div class="hero-inner-frame">
+          <!-- Left Decorative Organic Pastel-Yellow Starburst SVG -->
+          <div class="hero-starburst-bg" aria-hidden="true">
+            <svg viewBox="0 0 1000 700" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+              <path d="M 150 0 C 190 190, 360 330, 600 370 C 360 410, 230 550, 210 700 C 120 700, 30 630, 0 530 L 0 200 C 30 90, 100 10, 150 0 Z" fill="#F7F2CE" />
+            </svg>
           </div>
 
-          <div class="about-hero-bottom">
-            <div class="hero-stats">
-              <div><strong>2+</strong> YEARS EXP</div>
-              <div><strong>2</strong> PRODUCTS</div>
-              <div><strong>3</strong> MOBILE APPS</div>
-              <div><strong>3</strong> WEBSITES</div>
+          <!-- Interactive WebGL/Canvas Layer (Hosts 3D Fluid Portal) -->
+          <div id="canvas-container" class="canvas-container">
+            <canvas id="hero-canvas"></canvas>
+          </div>
+
+          <!-- Hero Landing Overlay (Main Screen Text & Bottom-Right Stats) -->
+          <div id="hero-content" class="hero-content about-hero-overlay">
+            <div class="about-hero-center">
+              <span class="hero-tag-label">UI/UX DESIGNER - PRODUCT THINKER</span>
+              <h1 class="about-main-title">
+                <span class="title-line">I DESIGN</span>
+                <span class="title-line">COMPLEX SYSTEMS</span>
+                <span class="title-line">TO FEEL SIMPLE</span>
+              </h1>
+              <p class="about-lead-text">
+                I simplify complex workflows, shape product experiences, and build scalable interfaces that work for both people and businesses
+              </p>
             </div>
 
-            <div class="scroll-down-indicator">
-              <span>Scroll to Explore</span>
-              <div class="scroll-line"></div>
+            <div class="about-hero-bottom">
+              <div class="hero-stats">
+                <div class="stat-item"><strong>2+</strong><span>YEARS EXP</span></div>
+                <div class="stat-item"><strong>2</strong><span>PRODUCTS</span></div>
+                <div class="stat-item"><strong>3</strong><span>MOBILE APPS</span></div>
+                <div class="stat-item"><strong>3</strong><span>WEBSITES</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Left Side Portrait Card (Revealed inside Portal) -->
+          <div id="about-portrait-wrapper" class="about-portrait-wrapper hidden">
+            <div class="portrait-card">
+              <div class="portrait-bg-name" aria-hidden="true">AKILESH</div>
+              <img src="/Akilesh_img.png" alt="AKILESH — Creative Director &amp; Full-Stack Architect" class="portrait-img" />
+              <div class="portrait-badge">
+                <span class="portrait-name">AKILESH</span>
+                <span class="portrait-role">Creative Director</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Transition Canvas (Renders OVER Cards, Z-Index 40) -->
+          <canvas id="transition-canvas" class="top-transition-canvas"></canvas>
+
+          <!-- Interactive Accordion Projects Section (Matching Reference Design) -->
+          <section id="projects-section" class="projects-section" aria-label="Projects Showcase">
+            <div class="projects-container">
+              <!-- Top Projects Header Bar -->
+              <div class="projects-header">
+                <h2 class="projects-heading">PROJECTS</h2>
+                <div class="projects-sub-wrapper">
+                  <span class="portfolio-pill">PORTFOLIO</span>
+                  <p class="portfolio-desc">
+                    I've already helped clients from various<br />industries move their businesses forward.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Interactive Accordion List -->
+              <div class="projects-accordion" role="list">
+                <!-- Row 1 -->
+                <div class="project-row" role="listitem" tabindex="0" data-project="flyer-eats" data-url="./flyer-eats.html">
+                  <div class="row-meta">2026, FOOD DELIVERY</div>
+                  <div class="row-center">
+                    <div class="browser-mockup" aria-hidden="true">
+                      <div class="browser-bar">
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-url-pill"></span>
+                      </div>
+                      <img src="/candiac_mockup.jpg" alt="Flyer Eats Food Delivery Platform" class="mockup-img" />
+                    </div>
+                    <h3 class="row-title">FLYER EATS</h3>
+                  </div>
+                  <div class="row-action">
+                    <a href="./flyer-eats.html" class="btn-live-website" aria-label="View Flyer Eats Live Website">
+                      <svg class="btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      <span>LIVE WEBSITE</span>
+                    </a>
+                    <span class="row-link-arrow" aria-hidden="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="project-row" role="listitem" tabindex="0" data-project="habit-partner" data-url="./habit-partner/home/index.html">
+                  <div class="row-meta">2026, HABIT TRACKER</div>
+                  <div class="row-center">
+                    <div class="browser-mockup" aria-hidden="true">
+                      <div class="browser-bar">
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-url-pill"></span>
+                      </div>
+                      <img src="/showcase_3.jpg" alt="Habit Partner App" class="mockup-img" />
+                    </div>
+                    <h3 class="row-title">HABIT PARTNER</h3>
+                  </div>
+                  <div class="row-action">
+                    <a href="./habit-partner/home/index.html" class="btn-live-website" aria-label="View Habit Partner Live Website">
+                      <svg class="btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      <span>LIVE WEBSITE</span>
+                    </a>
+                    <span class="row-link-arrow" aria-hidden="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="project-row" role="listitem" tabindex="0" data-project="loftloom" data-url="#contact-modal">
+                  <div class="row-meta">2026, INTERIOR ARCHITECTURE</div>
+                  <div class="row-center">
+                    <div class="browser-mockup" aria-hidden="true">
+                      <div class="browser-bar">
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-url-pill"></span>
+                      </div>
+                      <img src="/loftloom_mockup.jpg" alt="LoftLoom Interior Architecture" class="mockup-img" />
+                    </div>
+                    <h3 class="row-title">LOFTLOOM</h3>
+                  </div>
+                  <div class="row-action">
+                    <a href="#contact-modal" class="btn-live-website" aria-label="View LoftLoom Live Website">
+                      <svg class="btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      <span>LIVE WEBSITE</span>
+                    </a>
+                    <span class="row-link-arrow" aria-hidden="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="project-row" role="listitem" tabindex="0" data-project="myworker-ai" data-url="#contact-modal">
+                  <div class="row-meta">2025, AI WORKFORCE</div>
+                  <div class="row-center">
+                    <div class="browser-mockup" aria-hidden="true">
+                      <div class="browser-bar">
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-url-pill"></span>
+                      </div>
+                      <img src="/myworker_ai_mockup.jpg" alt="MyWorker AI Platform" class="mockup-img" />
+                    </div>
+                    <h3 class="row-title">MYWORKER AI</h3>
+                  </div>
+                  <div class="row-action">
+                    <a href="#contact-modal" class="btn-live-website" aria-label="View MyWorker AI Live Website">
+                      <svg class="btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      <span>LIVE WEBSITE</span>
+                    </a>
+                    <span class="row-link-arrow" aria-hidden="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Row 5 -->
+                <div class="project-row" role="listitem" tabindex="0" data-project="pulse-studio" data-url="#contact-modal">
+                  <div class="row-meta">2025, MOTION &amp; DESIGN</div>
+                  <div class="row-center">
+                    <div class="browser-mockup" aria-hidden="true">
+                      <div class="browser-bar">
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-dot"></span>
+                        <span class="browser-url-pill"></span>
+                      </div>
+                      <img src="/pulse_studio_mockup.jpg" alt="Pulse Studio Motion &amp; Design" class="mockup-img" />
+                    </div>
+                    <h3 class="row-title">PULSE STUDIO</h3>
+                  </div>
+                  <div class="row-action">
+                    <a href="#contact-modal" class="btn-live-website" aria-label="View Pulse Studio Live Website">
+                      <svg class="btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      <span>LIVE WEBSITE</span>
+                    </a>
+                    <span class="row-link-arrow" aria-hidden="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Expanding Circle "View More About Akilesh" Detail Overlay (How I Work & Capabilities) -->
+          <div id="about-detail-overlay" class="about-detail-overlay" role="dialog" aria-modal="true" aria-label="About Akilesh - Process & Capabilities">
+            <!-- Sticky Detail Top Navigation Bar -->
+            <div class="about-detail-header">
+              <button type="button" id="about-detail-back-btn" class="about-detail-back-btn" aria-label="Back to About Me" onclick="if(typeof window.closeAboutDetail === 'function') window.closeAboutDetail();">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>BACK TO ABOUT</span>
+              </button>
+            </div>
+
+            <!-- Scrollable Content Body -->
+            <div class="about-detail-scroll-body">
+              <!-- Part 1: How I Work (Process) Section -->
+              <div class="about-process-section">
+                <div class="about-section-header">
+                  <span class="about-kicker">PROCESS</span>
+                  <h2 class="about-section-title">How I Work</h2>
+                  <p class="about-section-subtitle">
+                    A systematic approach to shaping experiences and scaling business value.
+                  </p>
+                </div>
+
+                <!-- Process 3-Step Grid -->
+                <div class="about-process-grid">
+                  <div class="process-card">
+                    <div class="process-card-badge">STEP — 01</div>
+                    <h3 class="process-card-title">Understand</h3>
+                    <p class="process-card-desc">
+                      I start with the business and the people — understanding goals, users, context, and the problem worth solving.
+                    </p>
+                    <div class="process-card-flow">Business &rarr; Users &rarr; Insights</div>
+                  </div>
+
+                  <div class="process-card">
+                    <div class="process-card-badge">STEP — 02</div>
+                    <h3 class="process-card-title">Shape</h3>
+                    <p class="process-card-desc">
+                      I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.
+                    </p>
+                    <div class="process-card-flow">Gaps &rarr; Structure &rarr; Design</div>
+                  </div>
+
+                  <div class="process-card">
+                    <div class="process-card-badge">STEP — 03</div>
+                    <h3 class="process-card-title">Evolve</h3>
+                    <p class="process-card-desc">
+                      I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.
+                    </p>
+                    <div class="process-card-flow">Validate &rarr; Improve &rarr; Grow</div>
+                  </div>
+                </div>
+
+                <!-- Animated Axis Line with Rotating Plus Nodes -->
+                <div class="process-axis-wrapper" aria-hidden="true">
+                  <div class="process-axis-line"></div>
+                  <div class="axis-node node-1"><span>+</span></div>
+                  <div class="axis-node node-2"><span>+</span></div>
+                  <div class="axis-node node-3"><span>+</span></div>
+                  <div class="axis-node node-4"><span>+</span></div>
+                </div>
+              </div>
+
+              <!-- Part 2: 3D Character Video & Architectural Capabilities Section -->
+              <div class="about-capabilities-section">
+                <div class="capabilities-grid">
+                  <!-- Left: 3D Character Animation Video -->
+                  <div class="capabilities-video-col">
+                    <div class="video-container-card">
+                      <video id="about-character-video" class="character-video-player" src="/Char_Anim.mp4" autoplay loop muted playsinline></video>
+                      <div class="video-ambient-glow" aria-hidden="true"></div>
+                    </div>
+                  </div>
+
+                  <!-- Right: Architectural Cards -->
+                  <div class="capabilities-cards-col">
+                    <div class="capabilities-header">
+                      <span class="about-kicker">CAPABILITIES</span>
+                      <h2 class="about-section-title">What I Bring to the Table</h2>
+                    </div>
+
+                    <div class="cards-deck">
+                      <!-- Card 1 -->
+                      <div class="arch-card">
+                        <div class="arch-card-top">
+                          <h4 class="arch-card-title">UNTANGLE</h4>
+                        </div>
+                        <p class="arch-card-desc">I enjoy taking complicated products and figuring out how they should actually work.</p>
+                        <div class="arch-card-pills">
+                          <span class="pill-tag">Complex Products</span>
+                          <span class="pill-tag">Enterprise UX</span>
+                          <span class="pill-tag">Workflow Logic</span>
+                          <span class="pill-tag">Problem Solving</span>
+                        </div>
+                      </div>
+
+                      <!-- Card 2 -->
+                      <div class="arch-card">
+                        <div class="arch-card-top">
+                          <h4 class="arch-card-title">STRUCTURE</h4>
+                        </div>
+                        <p class="arch-card-desc">I turn scattered requirements and messy processes into clear product experiences.</p>
+                        <div class="arch-card-pills">
+                          <span class="pill-tag">Information Architecture</span>
+                          <span class="pill-tag">Product Structure</span>
+                          <span class="pill-tag">User Flows</span>
+                          <span class="pill-tag">Simplification</span>
+                        </div>
+                      </div>
+
+                      <!-- Card 3 -->
+                      <div class="arch-card">
+                        <div class="arch-card-top">
+                          <h4 class="arch-card-title">THINK BUSINESS</h4>
+                        </div>
+                        <p class="arch-card-desc">I design with an eye on users, business goals, product value, and what is actually feasible.</p>
+                        <div class="arch-card-pills">
+                          <span class="pill-tag">Product Thinking</span>
+                          <span class="pill-tag">Business Goals</span>
+                          <span class="pill-tag">Prioritization</span>
+                          <span class="pill-tag">Trade-offs</span>
+                        </div>
+                      </div>
+
+                      <!-- Card 4 -->
+                      <div class="arch-card">
+                        <div class="arch-card-top">
+                          <h4 class="arch-card-title">BUILD</h4>
+                        </div>
+                        <p class="arch-card-desc">I understand the space between design and development, helping ideas move from Figma into real products.</p>
+                        <div class="arch-card-pills">
+                          <span class="pill-tag">Developer Collaboration</span>
+                          <span class="pill-tag">Design Handoff</span>
+                          <span class="pill-tag">Frontend Awareness</span>
+                          <span class="pill-tag">Feasibility</span>
+                        </div>
+                      </div>
+
+                      <!-- Card 5 -->
+                      <div class="arch-card">
+                        <div class="arch-card-top">
+                          <h4 class="arch-card-title">MAKE IT BETTER</h4>
+                        </div>
+                        <p class="arch-card-desc">I bring strong visual thinking to functional products, turning usable experiences into polished ones.</p>
+                        <div class="arch-card-pills">
+                          <span class="pill-tag">Visual Design</span>
+                          <span class="pill-tag">Interaction</span>
+                          <span class="pill-tag">UI Craft</span>
+                          <span class="pill-tag">Design Systems</span>
+                        </div>
+                      </div>
+
+                      <!-- Card 6 -->
+                      <div class="arch-card">
+                        <div class="arch-card-top">
+                          <h4 class="arch-card-title">OWN IT</h4>
+                        </div>
+                        <p class="arch-card-desc">I’m comfortable jumping between problems, learning fast, and taking an idea from ambiguity to execution.</p>
+                        <div class="arch-card-pills">
+                          <span class="pill-tag">Ownership</span>
+                          <span class="pill-tag">Curiosity</span>
+                          <span class="pill-tag">Adaptability</span>
+                          <span class="pill-tag">Fast Learner</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-      <!-- Left Side Portrait Card (Revealed inside Portal) -->
-      <div id="about-portrait-wrapper" class="about-portrait-wrapper hidden">
-        <div class="portrait-card">
-          <img src="/akilesh_portrait.jpg" alt="AKILESH — Creative Director &amp; Full-Stack Architect" class="portrait-img" />
-          <div class="portrait-badge">
-            <span class="portrait-name">AKILESH</span>
-            <span class="portrait-role">Creative Director</span>
-          </div>
-        </div>
-      </div>
-
-
-
-      <!-- Top Transition Canvas (Renders OVER Cards, Z-Index 40) -->
-      <canvas id="transition-canvas" class="top-transition-canvas"></canvas>
-
-
-    </section>
+      </section>
     </div>
 
 

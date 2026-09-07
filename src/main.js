@@ -1,7 +1,7 @@
 import './../style.css';
 import { initFluidCanvas } from './fluid-canvas.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
   // Preloader Logic
   const preloader = document.getElementById('preloader');
   const counter = document.getElementById('preloader-counter');
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navAbout.addEventListener('click', (e) => {
       e.preventDefault();
       const maxScroll = getHeroScrollMax();
-      const targetY = maxScroll * 0.10; // Smooth scroll directly to About Me section
+      const targetY = maxScroll * 0.25; // Smooth scroll directly to About Me section
       window.scrollTo({ top: targetY, behavior: 'smooth' });
     });
   }
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navWork.addEventListener('click', (e) => {
       e.preventDefault();
       const maxScroll = getHeroScrollMax();
-      const targetY = maxScroll * 0.78; // Smooth scroll directly to Work Showcase section
+      const targetY = maxScroll; // Smooth scroll directly to Projects section
       window.scrollTo({ top: targetY, behavior: 'smooth' });
     });
   }
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       closeMobileMenu();
       const maxScroll = getHeroScrollMax();
-      const targetY = maxScroll * 0.10;
+      const targetY = maxScroll * 0.25;
       window.scrollTo({ top: targetY, behavior: 'smooth' });
     });
   }
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       closeMobileMenu();
       const maxScroll = getHeroScrollMax();
-      const targetY = maxScroll * 0.78;
+      const targetY = maxScroll;
       window.scrollTo({ top: targetY, behavior: 'smooth' });
     });
   }
@@ -119,6 +119,25 @@ document.addEventListener('DOMContentLoaded', () => {
       openContactModal();
     });
   }
+
+  // About Detail Overlay Back Button & Escape Key
+  const aboutBackBtn = document.getElementById('about-detail-back-btn');
+  if (aboutBackBtn) {
+    aboutBackBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (typeof window.closeAboutDetail === 'function') {
+        window.closeAboutDetail();
+      }
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (typeof window.closeAboutDetail === 'function') {
+        window.closeAboutDetail();
+      }
+    }
+  });
 
   // Force manual scroll restoration so reloads always land on top of Home Screen
   if ('scrollRestoration' in history) {
@@ -134,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hash === '#projects' || hash === '#work') {
       setTimeout(() => {
         const maxScroll = getHeroScrollMax();
-        const targetY = maxScroll * 0.78; // Scroll to Projects Showcase
+        const targetY = maxScroll; // Scroll to Projects Showcase
         window.scrollTo({ top: targetY, behavior: 'smooth' });
       }, 250);
     }
@@ -224,6 +243,75 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Interactive Accordion Project Rows (Matching Reference Design)
+  const projectsAccordion = document.querySelector('.projects-accordion');
+  const projectRows = document.querySelectorAll('.project-row');
+
+  projectRows.forEach((row) => {
+    const activateRow = () => {
+      if (!row.classList.contains('active')) {
+        projectRows.forEach((r) => r.classList.remove('active'));
+        row.classList.add('active');
+      }
+    };
+
+    // Hover & pointer events
+    row.addEventListener('mouseenter', activateRow);
+    row.addEventListener('mousemove', activateRow);
+    row.addEventListener('pointerenter', activateRow);
+
+    // When leaving a row, only collapse if cursor leaves the accordion entirely
+    row.addEventListener('mouseleave', (e) => {
+      const toEl = e.relatedTarget;
+      if (!toEl || (projectsAccordion && !projectsAccordion.contains(toEl))) {
+        row.classList.remove('active');
+      }
+    });
+
+    // Click / Touch interaction
+    row.addEventListener('click', (e) => {
+      // Allow live website button to handle its own navigation
+      if (e.target.closest('.btn-live-website')) {
+        return;
+      }
+
+      const isAlreadyActive = row.classList.contains('active');
+      projectRows.forEach((r) => r.classList.remove('active'));
+
+      if (!isAlreadyActive) {
+        row.classList.add('active');
+      } else {
+        // If clicked while active, follow the row URL if present
+        const url = row.getAttribute('data-url');
+        if (url && url !== '#') {
+          if (url.startsWith('#')) {
+            const targetEl = document.querySelector(url);
+            if (targetEl) targetEl.classList.remove('hidden');
+          } else {
+            window.location.href = url;
+          }
+        }
+      }
+    });
+
+    // Keyboard Accessibility (Enter / Space to toggle)
+    row.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const isAlreadyActive = row.classList.contains('active');
+        projectRows.forEach((r) => r.classList.remove('active'));
+        if (!isAlreadyActive) row.classList.add('active');
+      }
+    });
+  });
+
+  // When mouse leaves the entire accordion container, collapse all rows back to default
+  if (projectsAccordion) {
+    projectsAccordion.addEventListener('mouseleave', () => {
+      projectRows.forEach((r) => r.classList.remove('active'));
+    });
+  }
+
   // Handle Horizontal Projects Track Scroll (Right-to-Left Motion)
   const projectsWrapper = document.getElementById('projects-scroll-wrapper');
   const horizontalTrack = document.getElementById('horizontal-projects-track');
@@ -253,4 +341,10 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', updateHorizontalProjectsScroll, { passive: true });
   window.addEventListener('resize', updateHorizontalProjectsScroll);
   updateHorizontalProjectsScroll();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
