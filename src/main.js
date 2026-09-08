@@ -297,6 +297,146 @@ function initApp() {
     }
   };
 
+  // Tools Section Scroll-Driven Scrubbing (Category Rows wipe in & Icon pop directly on scroll)
+  window.updateToolsScrollScrubbing = function() {
+    if (!overlayContainer) return;
+    const toolsPanel = document.getElementById('tools-section');
+    if (!toolsPanel || !toolsPanel.classList.contains('active')) return;
+
+    const totalScrollable = overlayContainer.scrollHeight - overlayContainer.clientHeight;
+    const currentScroll = overlayContainer.scrollTop;
+    const progress = totalScrollable > 0 ? Math.min(Math.max(currentScroll / totalScrollable, 0), 1) : 0;
+
+    const categoryRows = toolsPanel.querySelectorAll('.tool-category-row');
+    if (!categoryRows || categoryRows.length === 0) return;
+
+    const ranges = [
+      { start: 0.00, end: 0.22 },
+      { start: 0.15, end: 0.42 },
+      { start: 0.35, end: 0.58 },
+      { start: 0.52, end: 0.72 }
+    ];
+
+    categoryRows.forEach((row, idx) => {
+      const range = ranges[idx] || { start: 0, end: 1 };
+      let rowP = 0;
+
+      if (totalScrollable > 0) {
+        if (progress <= range.start) {
+          rowP = 0;
+        } else if (progress >= range.end) {
+          rowP = 1;
+        } else {
+          rowP = (progress - range.start) / (range.end - range.start);
+        }
+      } else {
+        rowP = 1;
+      }
+
+      const opacity = (0.0 + rowP * 1.0).toFixed(2);
+      const translateY = ((1 - rowP) * 24).toFixed(1);
+
+      if (rowP >= 0.98) {
+        row.style.clipPath = 'none';
+      } else {
+        const clipInset = (100 - rowP * 100).toFixed(1);
+        row.style.clipPath = `inset(-120px ${clipInset}% -350px -100px)`;
+      }
+
+      row.style.opacity = opacity;
+      row.style.transform = `translateY(${translateY}px)`;
+
+      const pills = row.querySelectorAll('.tool-pill-badge');
+      pills.forEach((pill, pIdx) => {
+        const pillOffset = pIdx * 0.08;
+        const pillP = Math.min(Math.max((rowP - pillOffset) / (1 - pillOffset || 1), 0), 1);
+        const scale = (0.6 + pillP * 0.4).toFixed(3);
+        pill.style.opacity = pillP.toFixed(2);
+        pill.style.transform = `scale(${scale})`;
+      });
+    });
+  };
+
+  // What I Build / Capabilities Section Scroll-Driven Outer Corner Fly-In Engine
+  window.updateBuildScrollScrubbing = function() {
+    if (!overlayContainer) return;
+    const buildPanel = document.getElementById('what-i-build-section');
+    if (!buildPanel || !buildPanel.classList.contains('active')) return;
+
+    const totalScrollable = overlayContainer.scrollHeight - overlayContainer.clientHeight;
+    const currentScroll = overlayContainer.scrollTop;
+    const progress = totalScrollable > 0 ? Math.min(Math.max(currentScroll / totalScrollable, 0), 1) : 0;
+
+    const cards = buildPanel.querySelectorAll('.arch-card');
+    if (!cards || cards.length === 0) return;
+
+    const isMobile = window.innerWidth <= 768;
+
+    // Responsive corner origin vectors: bounded to prevent clipping out of screen
+    const cornerOffsets = isMobile ? [
+      { x: 0,   y: 0,  z: 0,   rx: 0,  ry: 0,   rz: 0  }, // Card 01: In place at top
+      { x: -25, y: 30, z: -20, rx: 8,  ry: 8,   rz: -3 }, // Card 02: Gentle bottom-left offset
+      { x: 25,  y: 30, z: -20, rx: 8,  ry: -8,  rz: 3  }, // Card 03: Gentle bottom-right offset
+      { x: -25, y: 30, z: -20, rx: 8,  ry: 8,   rz: -3 }, // Card 04: Gentle bottom-left offset
+      { x: 25,  y: 30, z: -20, rx: 8,  ry: -8,  rz: 3  }, // Card 05: Gentle bottom-right offset
+      { x: 0,   y: 30, z: -20, rx: 8,  ry: 0,   rz: 0  }  // Card 06: Gentle bottom-center offset
+    ] : [
+      { x: -280, y: -120, z: -150, rx: 20, ry: 20,  rz: -8 }, // Card 01: Top-Left Corner
+      { x: 0,    y: -150, z: -150, rx: 25, ry: 0,   rz: 0  }, // Card 02: Top-Center
+      { x: 280,  y: -120, z: -150, rx: 20, ry: -20, rz: 8  }, // Card 03: Top-Right Corner
+      { x: -280, y: 150,  z: -150, rx: -20, ry: 20, rz: -8 }, // Card 04: Bottom-Left Corner
+      { x: 0,    y: 180,  z: -150, rx: -25, ry: 0,  rz: 0  }, // Card 05: Bottom-Center
+      { x: 280,  y: 150,  z: -150, rx: -20, ry: -20, rz: 8 }  // Card 06: Bottom-Right Corner
+    ];
+
+    cards.forEach((card, idx) => {
+      const offset = cornerOffsets[idx] || cornerOffsets[0];
+
+      let cardP = 0;
+      if (isMobile) {
+        if (idx === 0) {
+          cardP = 1; // Card 01 is always fully positioned in place on mobile
+        } else {
+          // Sequential scrub for Cards 02..06 on mobile from below
+          const stepStart = 0.05 + (idx - 1) * 0.15;
+          const stepEnd   = stepStart + 0.20;
+          if (progress <= stepStart) cardP = 0;
+          else if (progress >= stepEnd) cardP = 1;
+          else cardP = (progress - stepStart) / (stepEnd - stepStart);
+        }
+      } else {
+        // Desktop timing: Top row (0,1,2) 0.00 -> 0.35; Bottom row (3,4,5) 0.18 -> 0.58
+        let start = (idx < 3) ? 0.00 : 0.18;
+        let end   = (idx < 3) ? 0.35 : 0.58;
+
+        if (totalScrollable > 0) {
+          if (progress <= start) {
+            cardP = 0;
+          } else if (progress >= end) {
+            cardP = 1;
+          } else {
+            cardP = (progress - start) / (end - start);
+          }
+        } else {
+          cardP = 1;
+        }
+      }
+
+      const invP = 1 - cardP;
+      const opacity = (0.0 + cardP * 1.0).toFixed(2);
+      const x = (offset.x * invP).toFixed(1);
+      const y = (offset.y * invP).toFixed(1);
+      const z = (offset.z * invP).toFixed(1);
+      const rx = (offset.rx * invP).toFixed(1);
+      const ry = (offset.ry * invP).toFixed(1);
+      const rz = (offset.rz * invP).toFixed(1);
+      const scale = (0.60 + cardP * 0.40).toFixed(3);
+
+      card.style.opacity = opacity;
+      card.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg) scale(${scale})`;
+    });
+  };
+
   let isTabTransitioning = false;
   let transitionCooldownTimer = null;
 
@@ -327,7 +467,6 @@ function initApp() {
 
     tabPanels.forEach((panel) => {
       panel.classList.remove('active');
-      panel.classList.remove('animate-tools');
     });
     targetEl.classList.add('active');
 
@@ -339,22 +478,21 @@ function initApp() {
       }
     }
 
-    if (targetSel === '#tools-section') {
-      void targetEl.offsetWidth; // Force reflow to restart CSS animation cleanly
-      targetEl.classList.add('animate-tools');
-    }
-
     if (overlayContainer) {
       if (scrollPos === 'top') {
         overlayContainer.scrollTop = 0;
       } else if (scrollPos === 'bottom') {
-        const totalScrollable = scrollTrack ? (scrollTrack.offsetHeight - overlayContainer.clientHeight) : 0;
-        overlayContainer.scrollTop = totalScrollable > 0 ? totalScrollable : (overlayContainer.scrollHeight - overlayContainer.clientHeight);
+        const totalScrollable = overlayContainer.scrollHeight - overlayContainer.clientHeight;
+        overlayContainer.scrollTop = totalScrollable > 0 ? totalScrollable : 0;
       }
     }
 
-    if (typeof window.updateWorkStyleScrollytelling === 'function') {
+    if (targetSel === '#work-style-section' && typeof window.updateWorkStyleScrollytelling === 'function') {
       window.updateWorkStyleScrollytelling();
+    } else if (targetSel === '#tools-section' && typeof window.updateToolsScrollScrubbing === 'function') {
+      window.updateToolsScrollScrubbing();
+    } else if (targetSel === '#what-i-build-section' && typeof window.updateBuildScrollScrubbing === 'function') {
+      window.updateBuildScrollScrubbing();
     }
   }
 
@@ -364,50 +502,38 @@ function initApp() {
 
     if (direction === 'forward') {
       if (toolsSection) {
-        toolsSection.classList.add('zoom-out-fade');
+        toolsSection.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+        toolsSection.style.opacity = '0';
+        toolsSection.style.transform = 'translateY(-20px)';
       }
 
       setTimeout(() => {
         if (typeof switchTabFn === 'function') switchTabFn();
-        if (buildSection) {
-          buildSection.classList.remove('animate-capabilities-out');
-          void buildSection.offsetWidth;
-          buildSection.classList.add('animate-capabilities');
-        }
-      }, 350);
-
-      setTimeout(() => {
         if (toolsSection) {
-          toolsSection.classList.remove('zoom-out-fade');
+          toolsSection.style.opacity = '';
+          toolsSection.style.transform = '';
+          toolsSection.style.transition = '';
         }
         if (typeof onComplete === 'function') onComplete();
-      }, 1100);
+      }, 350);
 
     } else {
       // REVERSE: What I Build -> Tools
       if (buildSection) {
-        buildSection.classList.remove('animate-capabilities');
-        void buildSection.offsetWidth;
-        buildSection.classList.add('animate-capabilities-out');
+        buildSection.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+        buildSection.style.opacity = '0';
+        buildSection.style.transform = 'translateY(20px)';
       }
 
       setTimeout(() => {
         if (typeof switchTabFn === 'function') switchTabFn();
-        if (toolsSection) {
-          toolsSection.classList.remove('zoom-out-fade');
-          toolsSection.classList.add('zoom-in-restore');
-          setTimeout(() => {
-            toolsSection.classList.remove('zoom-in-restore');
-          }, 800);
-        }
-      }, 350);
-
-      setTimeout(() => {
         if (buildSection) {
-          buildSection.classList.remove('animate-capabilities-out');
+          buildSection.style.opacity = '';
+          buildSection.style.transform = '';
+          buildSection.style.transition = '';
         }
         if (typeof onComplete === 'function') onComplete();
-      }, 1100);
+      }, 350);
     }
   }
 
@@ -431,11 +557,17 @@ function initApp() {
             unlockTabTransition();
           });
         }
+      } else if (deltaY < -25) {
+        if (overlayContainer.scrollTop <= 10) {
+          if (typeof window.closeAboutDetail === 'function') {
+            window.closeAboutDetail();
+          }
+        }
       }
     } else if (panelId === 'tools-section') {
       if (deltaY > 0) {
         const maxScroll = overlayContainer.scrollHeight - overlayContainer.clientHeight;
-        if (overlayContainer.scrollTop >= maxScroll - 20 || maxScroll <= 0) {
+        if (overlayContainer.scrollTop >= maxScroll - 5 || maxScroll <= 0) {
           lockTabTransition();
           triggerToolsToBuildTransition('forward', () => {
             switchTabByTarget('#what-i-build-section', 'top');
@@ -513,7 +645,20 @@ function initApp() {
   });
 
   if (overlayContainer) {
-    overlayContainer.addEventListener('scroll', window.updateWorkStyleScrollytelling, { passive: true });
+    const handleOverlayScrollScrub = () => {
+      const activePanel = document.querySelector('.about-tab-panel.active');
+      const currentId = activePanel ? activePanel.id : '';
+
+      if (currentId === 'work-style-section' && typeof window.updateWorkStyleScrollytelling === 'function') {
+        window.updateWorkStyleScrollytelling();
+      } else if (currentId === 'tools-section' && typeof window.updateToolsScrollScrubbing === 'function') {
+        window.updateToolsScrollScrubbing();
+      } else if (currentId === 'what-i-build-section' && typeof window.updateBuildScrollScrubbing === 'function') {
+        window.updateBuildScrollScrubbing();
+      }
+    };
+
+    overlayContainer.addEventListener('scroll', handleOverlayScrollScrub, { passive: true });
 
     overlayContainer.addEventListener('wheel', (e) => {
       if (isTabTransitioning) {
@@ -867,6 +1012,50 @@ function initApp() {
   }
 
   initAboutTabsMouseFloat();
+  initToolCardToggles();
+}
+
+function initToolCardToggles() {
+  document.addEventListener('click', (e) => {
+    const clickedWrapper = e.target.closest('.tool-item-wrapper');
+    const allWrappers = document.querySelectorAll('.tool-item-wrapper');
+
+    if (clickedWrapper) {
+      const isAlreadyActive = clickedWrapper.classList.contains('active');
+
+      // Close all other active wrappers first
+      allWrappers.forEach((wrapper) => {
+        if (wrapper !== clickedWrapper) {
+          wrapper.classList.remove('active');
+          const badge = wrapper.querySelector('.tool-pill-badge');
+          if (badge) badge.blur();
+        }
+      });
+
+      if (isAlreadyActive) {
+        // Toggle OFF if clicked a second time, and blur element to release :focus-within
+        clickedWrapper.classList.remove('active');
+        const badge = clickedWrapper.querySelector('.tool-pill-badge');
+        if (badge) badge.blur();
+        if (document.activeElement && clickedWrapper.contains(document.activeElement)) {
+          document.activeElement.blur();
+        }
+      } else {
+        // Toggle ON
+        clickedWrapper.classList.add('active');
+      }
+    } else {
+      // Clicked outside any tool item wrapper -> close all active tool cards
+      allWrappers.forEach((wrapper) => {
+        wrapper.classList.remove('active');
+        const badge = wrapper.querySelector('.tool-pill-badge');
+        if (badge) badge.blur();
+      });
+      if (document.activeElement && document.activeElement.closest('.tool-item-wrapper')) {
+        document.activeElement.blur();
+      }
+    }
+  });
 }
 
 if (document.readyState === 'loading') {

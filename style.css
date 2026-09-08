@@ -17,7 +17,7 @@
   --frame-radius: 40px;
 
   --font-heading: 'Luckiest Guy', cursive, sans-serif;
-  --font-menu: 'League Gothic', sans-serif;
+  --font-menu: 'Luckiest Guy', cursive, sans-serif;
   --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
   
   --header-height: 80px;
@@ -72,16 +72,19 @@ a, button, [role="button"], input, select, textarea, .project-row, .nav-pill-lin
 /* --------------------------------------------------------------------------
    Dynamic Inverted Cursor for Dark / Black Backgrounds
    -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   Dynamic High-Contrast Cursor for Light and Dark Backgrounds
+   -------------------------------------------------------------------------- */
 body.dark-bg-active,
 body.dark-bg-active *,
-.about-detail-overlay,
-.about-detail-overlay *,
+.about-detail-overlay:not(.light-theme-tools),
+.about-detail-overlay:not(.light-theme-tools) *:not(.light-theme-tools *),
 .mobile-nav-overlay,
 .mobile-nav-overlay *,
 .dark-section,
 .dark-section *,
 .contact-modal-backdrop,
-.contact-modal-backdrop *,
+.contact-modal-backdrop *:not(.contact-card *),
 [data-theme="dark"],
 [data-theme="dark"] * {
   cursor: url('/cursor-white.svg') 0 0, auto !important;
@@ -95,12 +98,12 @@ body.dark-bg-active select,
 body.dark-bg-active textarea,
 body.dark-bg-active .clickable,
 body.dark-bg-active .project-row,
-.about-detail-overlay a,
-.about-detail-overlay button,
-.about-detail-overlay [role="button"],
-.about-detail-overlay .clickable,
-.about-detail-overlay .about-detail-back-btn,
-.about-detail-overlay .process-step-card,
+.about-detail-overlay:not(.light-theme-tools) a,
+.about-detail-overlay:not(.light-theme-tools) button,
+.about-detail-overlay:not(.light-theme-tools) [role="button"],
+.about-detail-overlay:not(.light-theme-tools) .clickable,
+.about-detail-overlay:not(.light-theme-tools) .about-detail-back-btn,
+.about-detail-overlay:not(.light-theme-tools) .process-step-card,
 .mobile-nav-overlay a,
 .mobile-nav-overlay button,
 .mobile-nav-overlay .mobile-nav-link,
@@ -109,7 +112,13 @@ body.dark-bg-active .project-row,
   cursor: url('/cursor-white.svg') 0 0, pointer !important;
 }
 
-/* Maintain black cursor on specific light elements within dark sections */
+/* Maintain dark high-contrast cursor on all light / white screens and light elements */
+.light-theme-tools,
+.light-theme-tools *,
+.about-tools-section,
+.about-tools-section *,
+.about-capabilities-section,
+.about-capabilities-section *,
 body.dark-bg-active .nav-pill-inner,
 body.dark-bg-active .nav-pill-inner *,
 body.dark-bg-active .header-logo,
@@ -118,6 +127,20 @@ body.dark-bg-active .header-logo,
   cursor: url('/cursor-svgrepo-com.svg') 0 0, auto !important;
 }
 
+.light-theme-tools a,
+.light-theme-tools button,
+.light-theme-tools [role="button"],
+.light-theme-tools .subnav-item,
+.light-theme-tools .tool-pill-badge,
+.light-theme-tools .arch-card,
+.about-tools-section a,
+.about-tools-section button,
+.about-tools-section [role="button"],
+.about-tools-section .tool-pill-badge,
+.about-capabilities-section a,
+.about-capabilities-section button,
+.about-capabilities-section [role="button"],
+.about-capabilities-section .arch-card,
 body.dark-bg-active .nav-pill-link,
 body.dark-bg-active .nav-pill-menu-btn,
 body.dark-bg-active .nav-pill-inner button,
@@ -433,8 +456,8 @@ body.dark-bg-active .nav-pill-inner button,
 .mobile-nav-link {
   background: transparent;
   border: none;
-  font-family: var(--font-menu);
-  font-size: clamp(2.8rem, 11vw, 4.2rem);
+  font-family: 'Luckiest Guy', cursive, sans-serif !important;
+  font-size: clamp(2.2rem, 8vw, 3.4rem);
   font-weight: 400;
   color: #ffffff;
   text-transform: uppercase;
@@ -539,7 +562,7 @@ body.dark-bg-active .nav-pill-inner button,
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: calc(clamp(3.5rem, 6.5vh, 5.5rem) + 70px) clamp(1.5rem, 3.5vw, 3.5rem) clamp(1.8rem, 3.5vh, 2.5rem);
+  padding: calc(clamp(2.5rem, 5.5vh, 4.5rem) + 54px) clamp(1.5rem, 3.5vw, 3.5rem) clamp(1.8rem, 3.5vh, 2.5rem);
   box-sizing: border-box;
   opacity: 0;
   pointer-events: none;
@@ -573,7 +596,7 @@ body.dark-bg-active .nav-pill-inner button,
   justify-content: space-between;
   gap: 1.5rem;
   width: 100%;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 .projects-heading {
@@ -660,7 +683,7 @@ body.dark-bg-active .nav-pill-inner button,
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: clamp(12px, 1.6vw, 20px);
+  gap: 0;
   width: 100%;
 }
 
@@ -670,7 +693,7 @@ body.dark-bg-active .nav-pill-inner button,
 
 .project-row .row-title {
   font-family: 'Luckiest Guy', cursive, sans-serif !important;
-  font-size: 56px;
+  font-size: 54px;
   font-weight: 400 !important;
   -webkit-text-stroke: 0px transparent;
   text-transform: uppercase;
@@ -685,11 +708,13 @@ body.dark-bg-active .nav-pill-inner button,
 /* Browser Mockup Card */
 .project-row .browser-mockup {
   width: 0;
+  margin-right: 0;
   height: clamp(54px, 6.8vh, 66px);
   opacity: 0;
   overflow: hidden;
   transform: scale(0.88);
   transition: width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              margin-right 0.32s cubic-bezier(0.16, 1, 0.3, 1),
               opacity 0.26s ease,
               transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
@@ -833,6 +858,7 @@ body.dark-bg-active .nav-pill-inner button,
 .project-row.active .browser-mockup,
 .project-row:hover .browser-mockup {
   width: clamp(96px, 9.8vw, 126px);
+  margin-right: clamp(12px, 1.6vw, 20px);
   height: clamp(54px, 6.8vh, 66px);
   opacity: 1;
   transform: scale(1);
@@ -862,7 +888,7 @@ body.dark-bg-active .nav-pill-inner button,
 /* Mobile Responsive */
 @media (max-width: 850px) {
   .projects-section {
-    padding: calc(clamp(4.5rem, 9vh, 6rem) + 70px) clamp(1.2rem, 3vw, 2rem) 2rem;
+    padding: calc(clamp(3.5rem, 7vh, 5rem) + 54px) clamp(1.2rem, 3vw, 2rem) 2rem;
   }
 
   .projects-heading {
@@ -902,12 +928,12 @@ body.dark-bg-active .nav-pill-inner button,
     grid-area: center;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 0;
     width: 100%;
   }
 
   .project-row .row-title {
-    font-size: clamp(1.45rem, 5.5vw, 1.85rem);
+    font-size: clamp(1.32rem, 5vw, 1.72rem);
     line-height: 1.05;
     letter-spacing: 0.01em;
     margin: 0;
@@ -933,6 +959,7 @@ body.dark-bg-active .nav-pill-inner button,
   .project-row:hover .browser-mockup {
     width: 60px;
     height: 40px;
+    margin-right: 12px;
   }
 
   .project-row.active .row-title,
@@ -1928,15 +1955,16 @@ span.title-line {
 .about-detail-header {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.1rem clamp(1.2rem, 3.5vw, 3rem);
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border-bottom: none;
+  background: rgba(2, 32, 46, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .about-detail-back-btn {
@@ -2045,7 +2073,18 @@ span.title-line {
   transform: scale(1.02);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
+  .about-detail-back-btn span {
+    display: none !important;
+  }
+  .about-detail-back-btn {
+    width: 38px;
+    height: 38px;
+    padding: 0 !important;
+    justify-content: center;
+    border-radius: 50% !important;
+    flex-shrink: 0;
+  }
   .about-subnav-pill {
     position: relative;
     left: auto;
@@ -2137,7 +2176,7 @@ span.title-line {
   background: transparent;
   border: none;
   border-radius: 0;
-  padding: 12px 8px;
+  padding: 12px 12px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -2246,10 +2285,10 @@ span.title-line {
 }
 
 .light-theme-tools .about-detail-header {
-  background: transparent !important;
-  border-bottom: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
 
 .light-theme-tools .about-detail-back-btn {
@@ -2285,15 +2324,15 @@ span.title-line {
 .about-capabilities-section {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 75px);
-  padding: 3.5rem clamp(1.5rem, 4vw, 4.5rem) 5rem;
+  min-height: calc(115vh - 75px);
+  padding: 7.5rem clamp(1.5rem, 4vw, 4.5rem) 4rem;
   box-sizing: border-box;
   perspective: 1400px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: #FFFFFF;
 }
 
@@ -2326,6 +2365,7 @@ span.title-line {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
 }
 
 .capabilities-header {
@@ -2334,7 +2374,8 @@ span.title-line {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 2.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2.5rem;
   transform-style: preserve-3d;
 }
 
@@ -2461,8 +2502,8 @@ span.title-line {
 .about-tools-section {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 75px);
-  padding: 3.5rem clamp(1.5rem, 4vw, 4.5rem) 5rem;
+  min-height: calc(135vh - 75px);
+  padding: 3.5rem clamp(1.5rem, 4vw, 4.5rem) 14rem;
   background: transparent;
   box-shadow: none;
   box-sizing: border-box;
@@ -2534,6 +2575,7 @@ span.title-line {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  overflow: visible;
   transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
 }
 
@@ -2656,7 +2698,8 @@ span.title-line {
 }
 
 .tool-item-wrapper:hover,
-.tool-item-wrapper:focus-within {
+.tool-item-wrapper:focus-within,
+.tool-item-wrapper.active {
   z-index: 50;
 }
 
@@ -2687,13 +2730,6 @@ span.title-line {
   justify-content: center;
   flex-shrink: 0;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.tool-item-wrapper:hover .tool-icon-box,
-.tool-item-wrapper:focus-within .tool-icon-box {
-  background: #FFFFFF;
-  padding: 8px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
 }
 
 .tool-icon-img {
@@ -2730,25 +2766,7 @@ span.title-line {
               padding 0.35s ease;
 }
 
-/* Hover Highlight State: Expanded Tool Pill Badge with Brand Color */
-.tool-item-wrapper:hover .tool-pill-badge,
-.tool-item-wrapper:focus-within .tool-pill-badge {
-  background: var(--tool-bg);
-  border-radius: 20px;
-  padding-right: 24px;
-  box-shadow: 0 10px 28px var(--tool-shadow);
-  transform: translateY(-2px);
-}
-
-.tool-item-wrapper:hover .tool-name,
-.tool-item-wrapper:focus-within .tool-name {
-  max-width: 260px;
-  opacity: 1;
-  padding-left: 14px;
-  color: var(--tool-color);
-}
-
-/* Usage Card Popup */
+/* Usage Card Popup Base */
 .tool-usage-card {
   position: absolute;
   top: calc(100% + 10px);
@@ -2758,9 +2776,10 @@ span.title-line {
   color: var(--tool-color);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 14px;
-  padding: 16px 20px;
+  padding: 14px 18px;
   min-width: 220px;
-  white-space: nowrap;
+  max-width: 280px;
+  white-space: normal;
   z-index: 100;
   box-shadow: 0 16px 40px var(--tool-shadow), 0 8px 16px rgba(0, 0, 0, 0.15);
   opacity: 0;
@@ -2771,8 +2790,63 @@ span.title-line {
               visibility 0.25s ease;
 }
 
-.tool-item-wrapper:hover .tool-usage-card,
-.tool-item-wrapper:focus-within .tool-usage-card {
+@media (hover: hover) and (pointer: fine) {
+  .tool-item-wrapper:hover .tool-icon-box,
+  .tool-item-wrapper:focus-within .tool-icon-box {
+    background: #FFFFFF;
+    padding: 8px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  }
+
+  .tool-item-wrapper:hover .tool-pill-badge,
+  .tool-item-wrapper:focus-within .tool-pill-badge {
+    background: var(--tool-bg);
+    border-radius: 20px;
+    padding-right: 24px;
+    box-shadow: 0 10px 28px var(--tool-shadow);
+    transform: translateY(-2px);
+  }
+
+  .tool-item-wrapper:hover .tool-name,
+  .tool-item-wrapper:focus-within .tool-name {
+    max-width: 260px;
+    opacity: 1;
+    padding-left: 14px;
+    color: var(--tool-color);
+  }
+
+  .tool-item-wrapper:hover .tool-usage-card,
+  .tool-item-wrapper:focus-within .tool-usage-card {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Explicit Active Class (Toggled via JS Tap/Click for Mobile & Mouse Click) */
+.tool-item-wrapper.active .tool-icon-box {
+  background: #FFFFFF;
+  padding: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+}
+
+.tool-item-wrapper.active .tool-pill-badge {
+  background: var(--tool-bg);
+  border-radius: 20px;
+  padding-right: 24px;
+  box-shadow: 0 10px 28px var(--tool-shadow);
+  transform: translateY(-2px);
+}
+
+.tool-item-wrapper.active .tool-name {
+  max-width: 260px;
+  opacity: 1;
+  padding-left: 14px;
+  color: var(--tool-color);
+}
+
+.tool-item-wrapper.active .tool-usage-card {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -2781,40 +2855,36 @@ span.title-line {
 
 .usage-card-title {
   font-family: 'Luckiest Guy', 'Mohave', sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--tool-color);
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   text-transform: uppercase;
 }
 
-.usage-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.usage-body {
   display: flex;
-  flex-direction: column;
+  align-items: flex-start;
   gap: 10px;
-}
-
-.usage-list li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--tool-color);
-  letter-spacing: 0.03em;
-  background: transparent;
-  padding: 0;
 }
 
 .usage-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--tool-color);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.usage-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.45;
   color: var(--tool-color);
 }
 
@@ -2832,90 +2902,45 @@ span.title-line {
     flex-wrap: wrap;
     width: 100%;
   }
+  .tool-pill-badge {
+    height: 86px;
+  }
+  .tool-icon-box {
+    width: 78px;
+    height: 78px;
+  }
+  .tool-icon-img {
+    max-width: 72px;
+    max-height: 72px;
+  }
+  .tool-icon-box svg {
+    max-width: 60px;
+    max-height: 60px;
+  }
+  .usage-icon {
+    font-size: 14px;
+  }
   .tool-usage-card {
     left: 0;
     right: auto;
     transform: translateY(8px);
   }
   .tool-item-wrapper:hover .tool-usage-card,
-  .tool-item-wrapper:focus-within .tool-usage-card {
+  .tool-item-wrapper:focus-within .tool-usage-card,
+  .tool-item-wrapper.active .tool-usage-card {
     transform: translateY(0);
   }
 }
 
 /* Tools Section Sequential Wipe-In & Icon Pop-Up Animations */
 .about-tools-section.active .tool-category-row,
-.about-tools-section.animate-tools .tool-category-row {
-  animation: cardWipeBounce 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  opacity: 0;
-  clip-path: inset(0 100% 0 0);
+.about-tools-section .tool-category-row {
   will-change: transform, opacity, clip-path;
 }
 
-.about-tools-section.active .tool-category-row:nth-child(1),
-.about-tools-section.animate-tools .tool-category-row:nth-child(1) {
-  animation-delay: 0.04s;
-}
-
-.about-tools-section.active .tool-category-row:nth-child(2),
-.about-tools-section.animate-tools .tool-category-row:nth-child(2) {
-  animation-delay: 0.10s;
-}
-
-.about-tools-section.active .tool-category-row:nth-child(3),
-.about-tools-section.animate-tools .tool-category-row:nth-child(3) {
-  animation-delay: 0.16s;
-}
-
-.about-tools-section.active .tool-category-row:nth-child(4),
-.about-tools-section.animate-tools .tool-category-row:nth-child(4) {
-  animation-delay: 0.22s;
-}
-
-/* Tool Icon Pop-Up Animations */
-.about-tools-section.active .tool-pill-badge,
-.about-tools-section.animate-tools .tool-pill-badge {
-  animation: iconPopBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s forwards;
-  opacity: 0;
-  transform: scale(0);
+.about-tools-section .tool-pill-badge {
   will-change: transform, opacity;
 }
-
-/* Category 1 Pop Delays */
-.about-tools-section.active .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(1) .tool-pill-badge { animation-delay: 0.12s; }
-.about-tools-section.active .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(2) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(2) .tool-pill-badge { animation-delay: 0.16s; }
-.about-tools-section.active .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(3) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(3) .tool-pill-badge { animation-delay: 0.20s; }
-.about-tools-section.active .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(4) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(4) .tool-pill-badge { animation-delay: 0.24s; }
-
-/* Category 2 Pop Delays */
-.about-tools-section.active .tool-category-row:nth-child(2) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(2) .tool-item-wrapper:nth-child(1) .tool-pill-badge { animation-delay: 0.20s; }
-
-/* Category 3 Pop Delays */
-.about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(1) .tool-pill-badge { animation-delay: 0.24s; }
-.about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(2) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(2) .tool-pill-badge { animation-delay: 0.28s; }
-.about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(3) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(3) .tool-pill-badge { animation-delay: 0.32s; }
-.about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(4) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(4) .tool-pill-badge { animation-delay: 0.36s; }
-.about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(5) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(5) .tool-pill-badge { animation-delay: 0.40s; }
-
-/* Category 4 Pop Delays */
-.about-tools-section.active .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(1) .tool-pill-badge { animation-delay: 0.30s; }
-.about-tools-section.active .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(2) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(2) .tool-pill-badge { animation-delay: 0.34s; }
-.about-tools-section.active .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(3) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(3) .tool-pill-badge { animation-delay: 0.38s; }
-.about-tools-section.active .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(4) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(4) .tool-pill-badge { animation-delay: 0.42s; }
 
 /* Card Wipe-In with Acceleration & End Bounce Keyframe */
 @keyframes cardWipeBounce {
@@ -3080,42 +3105,8 @@ span.title-line {
   transform-style: preserve-3d;
 }
 
-.about-capabilities-section.animate-capabilities .arch-card {
+.about-capabilities-section .arch-card {
   will-change: transform, opacity;
-  animation-duration: 0.95s;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  animation-fill-mode: forwards;
-  animation-delay: 0s;
-}
-
-/* Card 1: Top-Left Corner Entry */
-.about-capabilities-section.animate-capabilities .arch-card:nth-child(1) {
-  animation-name: flyInCardTopLeft;
-}
-
-/* Card 2: Top-Center Entry */
-.about-capabilities-section.animate-capabilities .arch-card:nth-child(2) {
-  animation-name: flyInCardTopCenter;
-}
-
-/* Card 3: Top-Right Corner Entry */
-.about-capabilities-section.animate-capabilities .arch-card:nth-child(3) {
-  animation-name: flyInCardTopRight;
-}
-
-/* Card 4: Bottom-Left Corner Entry */
-.about-capabilities-section.animate-capabilities .arch-card:nth-child(4) {
-  animation-name: flyInCardBottomLeft;
-}
-
-/* Card 5: Bottom-Center Entry */
-.about-capabilities-section.animate-capabilities .arch-card:nth-child(5) {
-  animation-name: flyInCardBottomCenter;
-}
-
-/* Card 6: Bottom-Right Corner Entry */
-.about-capabilities-section.animate-capabilities .arch-card:nth-child(6) {
-  animation-name: flyInCardBottomRight;
 }
 
 /* REVERSE: Fly Out to 6 Outer Locations simultaneously */
@@ -3346,6 +3337,7 @@ span.title-line {
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 1120px;
+  padding: 0 12px;
   z-index: 1;
   opacity: 0;
   visibility: hidden;
@@ -3378,6 +3370,7 @@ span.title-line {
 }
 
 .work-style-content-layer .about-section-header {
+  margin-top: 28px;
   margin-bottom: 1.8rem;
 }
 
@@ -3411,6 +3404,12 @@ span.title-line {
 
 /* Responsive Overrides */
 @media (max-width: 900px) {
+  .work-style-content-layer,
+  .work-style-floating-wrap,
+  .about-process-grid {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
   .about-process-grid {
     grid-template-columns: 1fr;
   }
@@ -3420,5 +3419,8 @@ span.title-line {
   .video-container-card {
     position: relative;
     top: 0;
+  }
+  .work-style-content-layer .about-section-header {
+    margin-top: 10vh;
   }
 }

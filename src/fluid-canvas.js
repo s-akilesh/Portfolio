@@ -550,6 +550,7 @@ export function initFluidCanvas() {
         );
         
         const nameCenterY = isMobile ? height * 0.26 : height * 0.24;
+        const nameCenterX = isMobile ? (width * 0.5 + 14) : (width * 0.5);
 
         mctx.font = `400 ${nameFontSize}px "Moirai One", cursive, sans-serif`;
         mctx.textAlign = 'center';
@@ -561,7 +562,7 @@ export function initFluidCanvas() {
         if ('letterSpacing' in mctx) {
           mctx.letterSpacing = '0.04em';
         }
-        mctx.strokeText('AKILESH', width * 0.5, nameCenterY);
+        mctx.strokeText('AKILESH', nameCenterX, nameCenterY);
         mctx.restore();
       }
 
@@ -600,31 +601,71 @@ export function initFluidCanvas() {
         mctx.save();
         mctx.globalAlpha = aboutOpacity * easeContent;
 
-        const contentCenterX = isMobile ? width * 0.68 : (isTablet ? width * 0.69 : width * 0.70);
+        const contentCenterX = isMobile ? width * 0.50 : (isTablet ? width * 0.69 : width * 0.70);
         const contentFloatY = (1.0 - easeContent) * 25; // Floats smoothly up into position
 
-        // 5. Headline ("I LIKE MAKING THINGS MAKE SENSE") in Luckiest Guy 82px
+        // 5. Headline ("I LIKE MAKING THINGS MAKE SENSE") in Luckiest Guy with Card Background
         const titleFontSize = Math.round(
           isMobile 
-            ? Math.min(width * 0.065, 40) 
+            ? Math.min(width * 0.052, 26) 
             : (isTablet ? Math.min(width * 0.055, 64) : Math.min(width * 0.048, 82))
         );
-        const titleLineSpacing = titleFontSize * 1.14;
-        const headlineCenterY = (isMobile ? height * 0.48 : height * 0.50) - contentFloatY;
+        const titleLineSpacing = titleFontSize * 1.16;
+        const headlineCenterY = (isMobile ? height * 0.78 : (isTablet ? height * 0.50 : height * 0.50)) - contentFloatY;
 
+        const line1 = 'I LIKE MAKING';
+        const line2 = 'THINGS MAKE SENSE';
 
-
-        // Draw Headline Lines ("I LIKE MAKING THINGS MAKE SENSE") in Luckiest Guy
         mctx.save();
         mctx.font = `400 ${titleFontSize}px "Luckiest Guy", cursive, sans-serif`;
+
+        // Measure text bounds to fit inside unshaped card
+        const w1 = mctx.measureText(line1).width;
+        const w2 = mctx.measureText(line2).width;
+        const textWidth = Math.max(w1, w2);
+
+        const padX = isMobile ? 22 : 36;
+        const padY = isMobile ? 14 : 22;
+        const cardW = textWidth + padX * 2;
+        const cardH = titleLineSpacing * 1.8 + padY * 2;
+        const cardX = contentCenterX - cardW * 0.5;
+        const cardY = headlineCenterY - cardH * 0.5;
+
+        // Draw Unshaped Rounded Rectangle Card Background (Mobile only)
+        if (isMobile) {
+          const cornerRadius = 16;
+          mctx.beginPath();
+          if ('roundRect' in mctx) {
+            mctx.roundRect(cardX, cardY, cardW, cardH, cornerRadius);
+          } else {
+            mctx.rect(cardX, cardY, cardW, cardH);
+          }
+
+          mctx.fillStyle = '#FFFFFF';
+          mctx.shadowColor = 'rgba(2, 32, 46, 0.16)';
+          mctx.shadowBlur = 16;
+          mctx.shadowOffsetY = 4;
+          mctx.fill();
+
+          mctx.lineWidth = 2;
+          mctx.strokeStyle = '#02202E';
+          mctx.stroke();
+        }
+
+        // Reset shadow for crisp text rendering
+        mctx.shadowColor = 'transparent';
+        mctx.shadowBlur = 0;
+        mctx.shadowOffsetY = 0;
+
+        // Draw Headline Lines inside the Card
         mctx.fillStyle = '#02202E';
         mctx.textAlign = 'center';
         mctx.textBaseline = 'middle';
         if ('letterSpacing' in mctx) {
           mctx.letterSpacing = '0.01em';
         }
-        mctx.fillText('I LIKE MAKING', contentCenterX, headlineCenterY - titleLineSpacing * 0.5);
-        mctx.fillText('THINGS MAKE SENSE', contentCenterX, headlineCenterY + titleLineSpacing * 0.5);
+        mctx.fillText(line1, contentCenterX, headlineCenterY - titleLineSpacing * 0.44);
+        mctx.fillText(line2, contentCenterX, headlineCenterY + titleLineSpacing * 0.44);
         mctx.restore();
 
         // 7. Bottom Dome Badge ("VIEW MORE ABOUT AKILESH")
