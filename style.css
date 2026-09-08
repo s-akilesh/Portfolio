@@ -2558,6 +2558,7 @@ span.title-line {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 /* Tool Item Wrapper */
@@ -2652,7 +2653,8 @@ span.title-line {
 .tool-usage-card {
   position: absolute;
   top: calc(100% + 10px);
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
   background: #ECC714;
   color: #000000;
   border: 1px solid rgba(0, 0, 0, 0.12);
@@ -2665,7 +2667,6 @@ span.title-line {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(8px);
   transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
               visibility 0.25s ease;
@@ -2676,7 +2677,7 @@ span.title-line {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
 
 .usage-card-title {
@@ -2733,15 +2734,20 @@ span.title-line {
     width: 100%;
   }
   .tool-usage-card {
-    right: auto;
     left: 0;
+    right: auto;
+    transform: translateY(8px);
+  }
+  .tool-item-wrapper:hover .tool-usage-card,
+  .tool-item-wrapper:focus-within .tool-usage-card {
+    transform: translateY(0);
   }
 }
 
 /* Tools Section Sequential Wipe-In & Icon Pop-Up Animations */
 .about-tools-section.active .tool-category-row,
 .about-tools-section.animate-tools .tool-category-row {
-  animation: cardWipeBounce 0.72s cubic-bezier(0.5, 0, 0.7, 1) forwards;
+  animation: cardWipeBounce 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
   clip-path: inset(0 100% 0 0);
   will-change: transform, opacity, clip-path;
@@ -2749,51 +2755,68 @@ span.title-line {
 
 .about-tools-section.active .tool-category-row:nth-child(1),
 .about-tools-section.animate-tools .tool-category-row:nth-child(1) {
-  animation-delay: 0.08s;
+  animation-delay: 0.04s;
 }
 
 .about-tools-section.active .tool-category-row:nth-child(2),
 .about-tools-section.animate-tools .tool-category-row:nth-child(2) {
-  animation-delay: 0.35s;
+  animation-delay: 0.10s;
 }
 
 .about-tools-section.active .tool-category-row:nth-child(3),
 .about-tools-section.animate-tools .tool-category-row:nth-child(3) {
-  animation-delay: 0.62s;
+  animation-delay: 0.16s;
+}
+
+.about-tools-section.active .tool-category-row:nth-child(4),
+.about-tools-section.animate-tools .tool-category-row:nth-child(4) {
+  animation-delay: 0.22s;
 }
 
 /* Tool Icon Pop-Up Animations */
+.about-tools-section.active .tool-pill-badge,
+.about-tools-section.animate-tools .tool-pill-badge {
+  animation: iconPopBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s forwards;
+  opacity: 0;
+  transform: scale(0);
+  will-change: transform, opacity;
+}
+
+/* Category 1 Pop Delays */
 .about-tools-section.active .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(1) .tool-pill-badge {
-  animation: iconPopBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.32s forwards;
-  opacity: 0;
-  transform: scale(0);
-  will-change: transform, opacity;
-}
-
+.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(1) .tool-pill-badge { animation-delay: 0.12s; }
 .about-tools-section.active .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(2) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(2) .tool-pill-badge {
-  animation: iconPopBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.44s forwards;
-  opacity: 0;
-  transform: scale(0);
-  will-change: transform, opacity;
-}
+.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(2) .tool-pill-badge { animation-delay: 0.16s; }
+.about-tools-section.active .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(3) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(3) .tool-pill-badge { animation-delay: 0.20s; }
+.about-tools-section.active .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(4) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(4) .tool-pill-badge { animation-delay: 0.24s; }
 
+/* Category 2 Pop Delays */
 .about-tools-section.active .tool-category-row:nth-child(2) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(2) .tool-item-wrapper:nth-child(1) .tool-pill-badge {
-  animation: iconPopBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.58s forwards;
-  opacity: 0;
-  transform: scale(0);
-  will-change: transform, opacity;
-}
+.about-tools-section.animate-tools .tool-category-row:nth-child(2) .tool-item-wrapper:nth-child(1) .tool-pill-badge { animation-delay: 0.20s; }
 
+/* Category 3 Pop Delays */
 .about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
-.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(1) .tool-pill-badge {
-  animation: iconPopBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.85s forwards;
-  opacity: 0;
-  transform: scale(0);
-  will-change: transform, opacity;
-}
+.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(1) .tool-pill-badge { animation-delay: 0.24s; }
+.about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(2) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(2) .tool-pill-badge { animation-delay: 0.28s; }
+.about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(3) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(3) .tool-pill-badge { animation-delay: 0.32s; }
+.about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(4) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(4) .tool-pill-badge { animation-delay: 0.36s; }
+.about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(5) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(5) .tool-pill-badge { animation-delay: 0.40s; }
+
+/* Category 4 Pop Delays */
+.about-tools-section.active .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(1) .tool-pill-badge { animation-delay: 0.30s; }
+.about-tools-section.active .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(2) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(2) .tool-pill-badge { animation-delay: 0.34s; }
+.about-tools-section.active .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(3) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(3) .tool-pill-badge { animation-delay: 0.38s; }
+.about-tools-section.active .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(4) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(4) .tool-item-wrapper:nth-child(4) .tool-pill-badge { animation-delay: 0.42s; }
 
 /* Card Wipe-In with Acceleration & End Bounce Keyframe */
 @keyframes cardWipeBounce {
