@@ -57,7 +57,13 @@
     </header>
 
     <!-- Mobile Fullscreen Drawer Navigation Menu -->
-    <div id="mobile-nav-overlay" class="mobile-nav-overlay">
+    <div id="mobile-nav-overlay" class="mobile-nav-overlay" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+      <button type="button" class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close navigation menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
       <ul class="mobile-nav-links">
         <li><button type="button" class="mobile-nav-link" id="mob-nav-work">PROJECTS</button></li>
         <li><button type="button" class="mobile-nav-link" id="mob-nav-about">ABOUT ME</button></li>
@@ -153,14 +159,6 @@
                     <h3 class="row-title">FLYER EATS</h3>
                   </div>
                   <div class="row-action">
-                    <a href="./flyer-eats.html" class="btn-live-website" aria-label="View Flyer Eats Live Website">
-                      <svg class="btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                      </svg>
-                      <span>LIVE WEBSITE</span>
-                    </a>
                     <span class="row-link-arrow" aria-hidden="true">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="7" y1="17" x2="17" y2="7"></line>
@@ -186,14 +184,6 @@
                     <h3 class="row-title">HABIT PARTNER</h3>
                   </div>
                   <div class="row-action">
-                    <a href="./habit-partner/home/index.html" class="btn-live-website" aria-label="View Habit Partner Live Website">
-                      <svg class="btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                      </svg>
-                      <span>LIVE WEBSITE</span>
-                    </a>
                     <span class="row-link-arrow" aria-hidden="true">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="7" y1="17" x2="17" y2="7"></line>
@@ -204,7 +194,7 @@
                 </div>
 
                 <!-- Row 3 -->
-                <div class="project-row" role="listitem" tabindex="0" data-project="loftloom" data-url="#contact-modal">
+                <div class="project-row" role="listitem" tabindex="0" data-project="netkmpuss" data-url="#contact-modal">
                   <div class="row-meta">2026, INTERIOR ARCHITECTURE</div>
                   <div class="row-center">
                     <div class="browser-mockup" aria-hidden="true">
@@ -214,85 +204,11 @@
                         <span class="browser-dot"></span>
                         <span class="browser-url-pill"></span>
                       </div>
-                      <img src="/loftloom_mockup.jpg" alt="LoftLoom Interior Architecture" class="mockup-img" />
+                      <img src="/loftloom_mockup.jpg" alt="NetKmpuss" class="mockup-img" />
                     </div>
-                    <h3 class="row-title">LOFTLOOM</h3>
+                    <h3 class="row-title">NETKMPUSS</h3>
                   </div>
                   <div class="row-action">
-                    <a href="#contact-modal" class="btn-live-website" aria-label="View LoftLoom Live Website">
-                      <svg class="btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                      </svg>
-                      <span>LIVE WEBSITE</span>
-                    </a>
-                    <span class="row-link-arrow" aria-hidden="true">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-
-                <!-- Row 4 -->
-                <div class="project-row" role="listitem" tabindex="0" data-project="myworker-ai" data-url="#contact-modal">
-                  <div class="row-meta">2025, AI WORKFORCE</div>
-                  <div class="row-center">
-                    <div class="browser-mockup" aria-hidden="true">
-                      <div class="browser-bar">
-                        <span class="browser-dot"></span>
-                        <span class="browser-dot"></span>
-                        <span class="browser-dot"></span>
-                        <span class="browser-url-pill"></span>
-                      </div>
-                      <img src="/myworker_ai_mockup.jpg" alt="MyWorker AI Platform" class="mockup-img" />
-                    </div>
-                    <h3 class="row-title">MYWORKER AI</h3>
-                  </div>
-                  <div class="row-action">
-                    <a href="#contact-modal" class="btn-live-website" aria-label="View MyWorker AI Live Website">
-                      <svg class="btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                      </svg>
-                      <span>LIVE WEBSITE</span>
-                    </a>
-                    <span class="row-link-arrow" aria-hidden="true">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-
-                <!-- Row 5 -->
-                <div class="project-row" role="listitem" tabindex="0" data-project="pulse-studio" data-url="#contact-modal">
-                  <div class="row-meta">2025, MOTION &amp; DESIGN</div>
-                  <div class="row-center">
-                    <div class="browser-mockup" aria-hidden="true">
-                      <div class="browser-bar">
-                        <span class="browser-dot"></span>
-                        <span class="browser-dot"></span>
-                        <span class="browser-dot"></span>
-                        <span class="browser-url-pill"></span>
-                      </div>
-                      <img src="/pulse_studio_mockup.jpg" alt="Pulse Studio Motion &amp; Design" class="mockup-img" />
-                    </div>
-                    <h3 class="row-title">PULSE STUDIO</h3>
-                  </div>
-                  <div class="row-action">
-                    <a href="#contact-modal" class="btn-live-website" aria-label="View Pulse Studio Live Website">
-                      <svg class="btn-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                      </svg>
-                      <span>LIVE WEBSITE</span>
-                    </a>
                     <span class="row-link-arrow" aria-hidden="true">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="7" y1="17" x2="17" y2="7"></line>
@@ -346,49 +262,51 @@
 
                     <!-- Layer 2: How I Work Content (Reveals in Center after 80% Video Fade) -->
                     <div id="work-style-content-layer" class="work-style-content-layer">
-                      <div class="about-section-header">
-                        <h2 class="about-section-title">How I Work</h2>
-                        <p class="about-section-subtitle">
-                          A systematic approach to shaping experiences and scaling business value.
-                        </p>
-                      </div>
-
-                      <!-- Process 3-Step Grid -->
-                      <div class="about-process-grid">
-                        <div id="process-step-1" class="process-card">
-                          <h3 class="process-card-title">Understand</h3>
-                          <p class="process-card-desc">
-                            I start with the business and the people — understanding goals, users, context, and the problem worth solving.
+                      <div class="work-style-floating-wrap">
+                        <div class="about-section-header">
+                          <h2 class="about-section-title">How I Work</h2>
+                          <p class="about-section-subtitle">
+                            A systematic approach to shaping experiences and scaling business value.
                           </p>
-                          <div class="process-card-flow">Business &rarr; Users &rarr; Insights</div>
                         </div>
 
-                        <div id="process-step-2" class="process-card">
-                          <h3 class="process-card-title">Shape</h3>
-                          <p class="process-card-desc">
-                            I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.
-                          </p>
-                          <div class="process-card-flow">Gaps &rarr; Structure &rarr; Design</div>
+                        <!-- Process 3-Step Grid -->
+                        <div class="about-process-grid">
+                          <div id="process-step-1" class="process-card">
+                            <h3 class="process-card-title">Understand</h3>
+                            <p class="process-card-desc">
+                              I start with the business and the people — understanding goals, users, context, and the problem worth solving.
+                            </p>
+                            <div class="process-card-flow">Business &rarr; Users &rarr; Insights</div>
+                          </div>
+
+                          <div id="process-step-2" class="process-card">
+                            <h3 class="process-card-title">Shape</h3>
+                            <p class="process-card-desc">
+                              I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.
+                            </p>
+                            <div class="process-card-flow">Gaps &rarr; Structure &rarr; Design</div>
+                          </div>
+
+                          <div id="process-step-3" class="process-card">
+                            <h3 class="process-card-title">Evolve</h3>
+                            <p class="process-card-desc">
+                              I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.
+                            </p>
+                            <div class="process-card-flow">Validate &rarr; Improve &rarr; Grow</div>
+                          </div>
                         </div>
 
-                        <div id="process-step-3" class="process-card">
-                          <h3 class="process-card-title">Evolve</h3>
-                          <p class="process-card-desc">
-                            I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.
-                          </p>
-                          <div class="process-card-flow">Validate &rarr; Improve &rarr; Grow</div>
+                        <!-- Animated Axis Line with Rotating Plus Nodes (Draws on Scroll) -->
+                        <div class="process-axis-wrapper" aria-hidden="true">
+                          <div class="process-axis-line">
+                            <div id="process-axis-fill" class="process-axis-line-fill"></div>
+                          </div>
+                          <div id="axis-node-1" class="axis-node node-1"><span>+</span></div>
+                          <div id="axis-node-2" class="axis-node node-2"><span>+</span></div>
+                          <div id="axis-node-3" class="axis-node node-3"><span>+</span></div>
+                          <div id="axis-node-4" class="axis-node node-4"><span>+</span></div>
                         </div>
-                      </div>
-
-                      <!-- Animated Axis Line with Rotating Plus Nodes (Draws on Scroll) -->
-                      <div class="process-axis-wrapper" aria-hidden="true">
-                        <div class="process-axis-line">
-                          <div id="process-axis-fill" class="process-axis-line-fill"></div>
-                        </div>
-                        <div id="axis-node-1" class="axis-node node-1"><span>+</span></div>
-                        <div id="axis-node-2" class="axis-node node-2"><span>+</span></div>
-                        <div id="axis-node-3" class="axis-node node-3"><span>+</span></div>
-                        <div id="axis-node-4" class="axis-node node-4"><span>+</span></div>
                       </div>
                     </div>
                   </div>
@@ -397,7 +315,7 @@
 
               <!-- Part 2: Tools & Ecosystem (Category-Wise Interactive Tools) Section -->
               <div id="tools-section" class="about-tools-section about-tab-panel">
-                <div class="tools-container">
+                <div class="tools-container tools-floating-wrap">
                   <div class="about-section-header">
                     <h2 class="about-section-title">Tools &amp; Ecosystem</h2>
                     <p class="about-section-subtitle">
@@ -575,16 +493,21 @@
 
               <!-- Part 3: Architectural Capabilities (What I Build) Section -->
               <div id="what-i-build-section" class="about-capabilities-section about-tab-panel">
+                <!-- Architectural Full-Width Grid Pattern Background -->
+                <div class="capabilities-grid-bg" aria-hidden="true"></div>
+
                 <div class="capabilities-container">
                   <div class="capabilities-header">
                     <h2 class="about-section-title">What I Bring to the Table</h2>
                   </div>
 
+                  <div class="capabilities-floating-wrap">
                     <div class="cards-deck">
                       <!-- Card 1 -->
-                      <div class="arch-card">
+                      <div class="arch-card" data-index="01">
                         <div class="arch-card-top">
                           <h4 class="arch-card-title">UNTANGLE</h4>
+                          <span class="arch-card-num">01</span>
                         </div>
                         <p class="arch-card-desc">I enjoy taking complicated products and figuring out how they should actually work.</p>
                         <div class="arch-card-pills">
@@ -596,9 +519,10 @@
                       </div>
 
                       <!-- Card 2 -->
-                      <div class="arch-card">
+                      <div class="arch-card" data-index="02">
                         <div class="arch-card-top">
                           <h4 class="arch-card-title">STRUCTURE</h4>
+                          <span class="arch-card-num">02</span>
                         </div>
                         <p class="arch-card-desc">I turn scattered requirements and messy processes into clear product experiences.</p>
                         <div class="arch-card-pills">
@@ -610,9 +534,10 @@
                       </div>
 
                       <!-- Card 3 -->
-                      <div class="arch-card">
+                      <div class="arch-card" data-index="03">
                         <div class="arch-card-top">
                           <h4 class="arch-card-title">THINK BUSINESS</h4>
+                          <span class="arch-card-num">03</span>
                         </div>
                         <p class="arch-card-desc">I design with an eye on users, business goals, product value, and what is actually feasible.</p>
                         <div class="arch-card-pills">
@@ -624,9 +549,10 @@
                       </div>
 
                       <!-- Card 4 -->
-                      <div class="arch-card">
+                      <div class="arch-card" data-index="04">
                         <div class="arch-card-top">
                           <h4 class="arch-card-title">BUILD</h4>
+                          <span class="arch-card-num">04</span>
                         </div>
                         <p class="arch-card-desc">I understand the space between design and development, helping ideas move from Figma into real products.</p>
                         <div class="arch-card-pills">
@@ -638,9 +564,10 @@
                       </div>
 
                       <!-- Card 5 -->
-                      <div class="arch-card">
+                      <div class="arch-card" data-index="05">
                         <div class="arch-card-top">
                           <h4 class="arch-card-title">MAKE IT BETTER</h4>
+                          <span class="arch-card-num">05</span>
                         </div>
                         <p class="arch-card-desc">I bring strong visual thinking to functional products, turning usable experiences into polished ones.</p>
                         <div class="arch-card-pills">
@@ -652,9 +579,10 @@
                       </div>
 
                       <!-- Card 6 -->
-                      <div class="arch-card">
+                      <div class="arch-card" data-index="06">
                         <div class="arch-card-top">
                           <h4 class="arch-card-title">OWN IT</h4>
+                          <span class="arch-card-num">06</span>
                         </div>
                         <p class="arch-card-desc">I’m comfortable jumping between problems, learning fast, and taking an idea from ambiguity to execution.</p>
                         <div class="arch-card-pills">

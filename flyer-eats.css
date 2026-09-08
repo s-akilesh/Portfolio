@@ -31,9 +31,9 @@ a, button, [role="button"], input, select, textarea {
   align-items: center;
   z-index: 100;
   box-sizing: border-box;
-  background: rgba(5, 7, 11, 0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom: none;
 }
 
 .cs-back-btn {

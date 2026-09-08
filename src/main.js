@@ -70,12 +70,49 @@ function initApp() {
 
   // Mobile Drawer Navigation Handlers
   const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+  const mobileNavCloseBtn = document.getElementById('mobile-nav-close-btn');
   const mobNavWork = document.getElementById('mob-nav-work');
   const mobNavAbout = document.getElementById('mob-nav-about');
   const mobNavContact = document.getElementById('mob-nav-contact');
+  const navPillInner = document.querySelector('.nav-pill-inner');
+
+  function openMobileMenu() {
+    if (window.innerWidth <= 850 && mobileNavOverlay) {
+      mobileNavOverlay.classList.add('active');
+    }
+  }
 
   function closeMobileMenu() {
-    if (mobileNavOverlay) mobileNavOverlay.classList.remove('active');
+    if (mobileNavOverlay) {
+      mobileNavOverlay.classList.remove('active');
+    }
+  }
+
+  // Open large menu when clicking the menu button on mobile only
+  if (navPillInner) {
+    navPillInner.addEventListener('click', (e) => {
+      if (window.innerWidth <= 850) {
+        if (!e.target.closest('.nav-pill-link')) {
+          e.preventDefault();
+          openMobileMenu();
+        }
+      }
+    });
+  }
+
+  if (mobileNavCloseBtn) {
+    mobileNavCloseBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileMenu();
+    });
+  }
+
+  if (mobileNavOverlay) {
+    mobileNavOverlay.addEventListener('click', (e) => {
+      if (e.target === mobileNavOverlay) {
+        closeMobileMenu();
+      }
+    });
   }
 
   if (mobNavAbout) {
@@ -720,6 +757,116 @@ function initApp() {
   window.addEventListener('scroll', updateHorizontalProjectsScroll, { passive: true });
   window.addEventListener('resize', updateHorizontalProjectsScroll);
   updateHorizontalProjectsScroll();
+
+  // --------------------------------------------------------------------------
+  // Interactive Smooth Mouse Floating Parallax Engine for All About Tabs
+  // (Work Style, Tool, and What I Bring to the Table)
+  // --------------------------------------------------------------------------
+  function initAboutTabsMouseFloat() {
+    const overlay = document.getElementById('about-detail-overlay');
+    if (!overlay) return;
+
+    // Elements for "What I Build" Tab
+    const buildSection = document.getElementById('what-i-build-section');
+    const buildWrap = buildSection ? buildSection.querySelector('.capabilities-floating-wrap') : null;
+    const buildGridBg = buildSection ? buildSection.querySelector('.capabilities-grid-bg') : null;
+    const buildHeader = buildSection ? buildSection.querySelector('.capabilities-header') : null;
+
+    // Elements for "Work Style" Tab
+    const workStyleSection = document.getElementById('work-style-section');
+    const workStyleVideoCard = workStyleSection ? workStyleSection.querySelector('.video-container-card') : null;
+    const workStyleWrap = workStyleSection ? workStyleSection.querySelector('.work-style-floating-wrap') : null;
+    const workStyleHeader = workStyleSection ? workStyleSection.querySelector('.about-section-header') : null;
+
+    // Elements for "Tools" Tab
+    const toolsSection = document.getElementById('tools-section');
+    const toolsWrap = toolsSection ? toolsSection.querySelector('.tools-floating-wrap') : null;
+    const toolsHeader = toolsSection ? toolsSection.querySelector('.about-section-header') : null;
+
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+    let floatTime = 0;
+
+    function onMouseMove(e) {
+      const cx = window.innerWidth * 0.5;
+      const cy = window.innerHeight * 0.5;
+
+      const relX = (e.clientX - cx) / cx;
+      const relY = (e.clientY - cy) / cy;
+
+      targetX = Math.max(-1, Math.min(1, relX));
+      targetY = Math.max(-1, Math.min(1, relY));
+    }
+
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+
+    function renderFloat() {
+      floatTime += 0.02;
+
+      // Smooth Inertial Lerp Damping (0.065 for organic, viscous feel)
+      currentX += (targetX - currentX) * 0.065;
+      currentY += (targetY - currentY) * 0.065;
+
+      // Subtle ambient breathing float oscillation
+      const ambientFloatY = Math.sin(floatTime * 1.5) * 3;
+      const ambientFloatX = Math.cos(floatTime * 1.2) * 2;
+
+      const moveX = currentX * 22 + ambientFloatX;
+      const moveY = currentY * 16 + ambientFloatY;
+      const rotX = -currentY * 5.5; // subtle tilt X
+      const rotY = currentX * 6.8;   // subtle tilt Y
+      const hX = currentX * 9;
+      const hY = currentY * 7;
+
+      // 1. What I Build Screen Parallax Float
+      if (buildSection && buildSection.classList.contains('active')) {
+        if (buildWrap) {
+          buildWrap.style.transform = `translate3d(${moveX.toFixed(2)}px, ${moveY.toFixed(2)}px, 0) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+        }
+        if (buildGridBg) {
+          const bgX = -currentX * 14 - ambientFloatX * 0.5;
+          const bgY = -currentY * 11 - ambientFloatY * 0.5;
+          buildGridBg.style.transform = `translate3d(${bgX.toFixed(2)}px, ${bgY.toFixed(2)}px, 0)`;
+        }
+        if (buildHeader) {
+          buildHeader.style.transform = `translate3d(${hX.toFixed(2)}px, ${hY.toFixed(2)}px, 16px)`;
+        }
+      }
+
+      // 2. Work Style Screen Parallax Float
+      if (workStyleSection && workStyleSection.classList.contains('active')) {
+        if (workStyleVideoCard) {
+          const vMoveX = moveX * 0.75;
+          const vMoveY = moveY * 0.75;
+          const vRotX = rotX * 0.7;
+          const vRotY = rotY * 0.7;
+          workStyleVideoCard.style.transform = `translate3d(${vMoveX.toFixed(2)}px, ${vMoveY.toFixed(2)}px, 0) rotateX(${vRotX.toFixed(2)}deg) rotateY(${vRotY.toFixed(2)}deg)`;
+        }
+        if (workStyleWrap) {
+          workStyleWrap.style.transform = `translate3d(${moveX.toFixed(2)}px, ${moveY.toFixed(2)}px, 0) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+        }
+        if (workStyleHeader) {
+          workStyleHeader.style.transform = `translate3d(${hX.toFixed(2)}px, ${hY.toFixed(2)}px, 14px)`;
+        }
+      }
+
+      // 3. Tools Screen Parallax Float
+      if (toolsSection && toolsSection.classList.contains('active')) {
+        if (toolsWrap) {
+          toolsWrap.style.transform = `translate3d(${moveX.toFixed(2)}px, ${moveY.toFixed(2)}px, 0) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+        }
+        if (toolsHeader) {
+          toolsHeader.style.transform = `translate3d(${hX.toFixed(2)}px, ${hY.toFixed(2)}px, 16px)`;
+        }
+      }
+
+      requestAnimationFrame(renderFloat);
+    }
+
+    requestAnimationFrame(renderFloat);
+  }
+
+  initAboutTabsMouseFloat();
 }
 
 if (document.readyState === 'loading') {
