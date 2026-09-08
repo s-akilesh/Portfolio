@@ -118,6 +118,15 @@ export function initFluidCanvas() {
   let wavePhaseCounter = 0;
   let whiteDustParticles = [];
 
+  // Dynamic Aerodynamic Crescent Front Wave (Matching User Reference Curve)
+  let frontWave = {
+    angle: 0,
+    targetAngle: 0,
+    speed: 0,
+    smoothSpeed: 0,
+    intensity: 0,
+  };
+
   // Kinetic Architectural Grid Setup
   const verticalGridLines = [
     { baseRatio: 0.12, speed: 0.08 },
@@ -292,7 +301,12 @@ export function initFluidCanvas() {
 
     const dx = nx - mouse.x;
     const dy = ny - mouse.y;
-    mouse.speed = Math.sqrt(dx * dx + dy * dy);
+    mouse.speed = Math.hypot(dx, dy);
+
+    if (mouse.speed > 1.2) {
+      frontWave.targetAngle = Math.atan2(dy, dx);
+      frontWave.speed = mouse.speed;
+    }
 
     mouse.x = nx;
     mouse.y = ny;
@@ -973,9 +987,22 @@ export function initFluidCanvas() {
 
     renderTopTransition(time, whitePortalProgress, smoothScrollProgress);
 
-    // Base1 Dynamic Iridescent Comet Trail (Renders ABOVE Hero Text & Foreground Layer)
+    // Base1 Dynamic Iridescent Comet Trail & Aerodynamic Front Wave (Renders ABOVE Hero Text & Foreground Layer)
     const trailCtx = topCtx || ctx;
-    if (colorTrailPoints.length > 0 && whitePortalProgress < 0.95 && trailCtx) {
+
+    // Update front wave angle and velocity dynamics
+    let angleDiff = frontWave.targetAngle - frontWave.angle;
+    while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+    while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+    frontWave.angle += angleDiff * 0.26;
+
+    frontWave.smoothSpeed += (frontWave.speed - frontWave.smoothSpeed) * 0.18;
+    frontWave.speed *= 0.88;
+
+    const targetWaveIntensity = Math.min(Math.max((frontWave.smoothSpeed - 0.3) / 4.5, 0), 1.0);
+    frontWave.intensity += (targetWaveIntensity - frontWave.intensity) * (targetWaveIntensity > frontWave.intensity ? 0.35 : 0.08);
+
+    if ((colorTrailPoints.length > 0 || (mouse.x > 0 && mouse.x < width && mouse.y > 0 && mouse.y < height && frontWave.intensity > 0.005)) && whitePortalProgress < 0.95 && trailCtx) {
       trailCtx.save();
       trailCtx.globalCompositeOperation = 'source-over';
 
@@ -1024,21 +1051,61 @@ export function initFluidCanvas() {
         trailCtx.fill();
       }
 
-      // 5. Soft Glowing Spherical Comet Head (Directly at Cursor Tip)
-      if (mouse.x > 0 && mouse.x < width && mouse.y > 0 && mouse.y < height) {
-        const headAlpha = 0.32 * fadeOverall;
-        const headRad = Math.min(45 + mouse.speed * 0.32, 75);
+      // 5. Aerodynamic Crescent Bow-Shock Front Wave (Matching User Reference Curve)
+      if (mouse.x > 0 && mouse.x < width && mouse.y > 0 && mouse.y < height && frontWave.intensity > 0.008) {
+        const waveAlpha = frontWave.intensity * 0.95 * fadeOverall;
+        const waveRadius = 30 + Math.min(frontWave.smoothSpeed * 0.95, 34);
+        const waveOffset = 6 + Math.min(frontWave.smoothSpeed * 0.20, 10);
 
-        // Multi-layer glowing orb with softer, lighter transparency
-        const headGrad = trailCtx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, headRad);
-        headGrad.addColorStop(0.0, `hsla(${currentHeadHue}, 100%, 95%, ${headAlpha * 0.95})`);               // White-hot nucleus
-        headGrad.addColorStop(0.25, `hsla(${currentHeadHue}, 100%, 65%, ${headAlpha * 0.70})`);             // Vibrant neon orb
-        headGrad.addColorStop(0.60, `hsla(${(currentHeadHue + 30) % 360}, 95%, 52%, ${headAlpha * 0.25})`); // Chromatic bloom
-        headGrad.addColorStop(1.0, `hsla(${(currentHeadHue + 45) % 360}, 85%, 40%, 0)`);                    // Outer halo
+        // Position wave apex slightly ahead along the movement vector
+        const waveCx = mouse.x + Math.cos(frontWave.angle) * waveOffset;
+        const waveCy = mouse.y + Math.sin(frontWave.angle) * waveOffset;
 
-        trailCtx.fillStyle = headGrad;
+        trailCtx.save();
+        trailCtx.translate(waveCx, waveCy);
+        trailCtx.rotate(frontWave.angle);
+
+        const thetaDeg = 126;
+        const thetaOut = (thetaDeg * Math.PI) / 180;
+        const xtip = waveRadius * Math.cos(thetaOut);
+        const ytip = waveRadius * Math.sin(thetaOut);
+        const d = waveRadius * 0.28; // Center offset for inner crescent arc
+        const Rin = Math.hypot(xtip + d, ytip);
+        const phi = Math.atan2(ytip, xtip + d);
+
+        // Build exact crescent path (outer convex arc clockwise, inner concave arc counter-clockwise)
         trailCtx.beginPath();
-        trailCtx.arc(mouse.x, mouse.y, headRad, 0, Math.PI * 2);
+        trailCtx.arc(0, 0, waveRadius, -thetaOut, thetaOut, false);
+        trailCtx.arc(-d, 0, Rin, phi, -phi, true);
+        trailCtx.closePath();
+
+        // Directional gradient along the wave body: white-hot luminous apex to chromatic feathered inner edge
+        const waveGrad = trailCtx.createLinearGradient(waveRadius, 0, -waveRadius * 0.6, 0);
+        waveGrad.addColorStop(0.0, `hsla(${currentHeadHue}, 100%, 97%, ${waveAlpha * 0.98})`);
+        waveGrad.addColorStop(0.30, `hsla(${currentHeadHue}, 95%, 72%, ${waveAlpha * 0.88})`);
+        waveGrad.addColorStop(0.70, `hsla(${(currentHeadHue + 28) % 360}, 90%, 55%, ${waveAlpha * 0.45})`);
+        waveGrad.addColorStop(1.0, `hsla(${(currentHeadHue + 42) % 360}, 85%, 45%, 0.0)`);
+
+        trailCtx.fillStyle = waveGrad;
+        trailCtx.fill();
+
+        // Crisp leading edge shockwave highlight stroke
+        trailCtx.strokeStyle = `hsla(${currentHeadHue}, 100%, 98%, ${waveAlpha * 0.85})`;
+        trailCtx.lineWidth = 1.4;
+        trailCtx.stroke();
+
+        trailCtx.restore();
+
+        // Soft compact luminous nucleus anchor at cursor tip
+        const coreRad = Math.min(10 + frontWave.smoothSpeed * 0.12, 18);
+        const coreGrad = trailCtx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, coreRad);
+        coreGrad.addColorStop(0.0, `hsla(${currentHeadHue}, 100%, 96%, ${waveAlpha * 0.85})`);
+        coreGrad.addColorStop(0.40, `hsla(${currentHeadHue}, 100%, 65%, ${waveAlpha * 0.45})`);
+        coreGrad.addColorStop(1.0, `hsla(${(currentHeadHue + 30) % 360}, 90%, 50%, 0.0)`);
+
+        trailCtx.fillStyle = coreGrad;
+        trailCtx.beginPath();
+        trailCtx.arc(mouse.x, mouse.y, coreRad, 0, Math.PI * 2);
         trailCtx.fill();
       }
 
