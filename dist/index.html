@@ -12,9 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=League+Gothic:wdth,wght@100,400..900&family=Luckiest+Guy&family=Moirai+One&family=Archivo+Black&family=Mohave:ital,wght@0,300..700;1,300..700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     
-    <script type="module" crossorigin src="/assets/main-QZDPyzin.js"></script>
+    <script type="module" crossorigin src="/assets/main-C1Z6ckjg.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-    <link rel="stylesheet" crossorigin href="/assets/style-CwukPGUM.css">
+    <link rel="stylesheet" crossorigin href="/assets/style-B7VBrTXx.css">
   </head>
   <body>
     <!-- Preloader Screen -->
@@ -309,6 +309,9 @@
 
           <!-- Expanding Circle "View More About Akilesh" Detail Overlay (How I Work & Capabilities) -->
           <div id="about-detail-overlay" class="about-detail-overlay" role="dialog" aria-modal="true" aria-label="About Akilesh - Process & Capabilities">
+            <!-- Dust Particle Disintegration & Assembly Canvas Overlay -->
+            <canvas id="dust-particle-canvas" class="dust-particle-canvas" aria-hidden="true"></canvas>
+
             <!-- Sticky Detail Top Navigation Bar -->
             <div class="about-detail-header">
               <button type="button" id="about-detail-back-btn" class="about-detail-back-btn" aria-label="Back to About Me" onclick="if(typeof window.closeAboutDetail === 'function') window.closeAboutDetail();">
@@ -318,77 +321,266 @@
                 </svg>
                 <span>BACK TO ABOUT</span>
               </button>
+
+              <!-- Top Center Submenu Capsule Navigation -->
+              <nav class="about-subnav-pill" aria-label="About Sections Navigation">
+                <div class="subnav-pill-inner">
+                  <button type="button" class="subnav-item active" data-target="#work-style-section">WORK STYLE</button>
+                  <button type="button" class="subnav-item" data-target="#tools-section">TOOL</button>
+                  <button type="button" class="subnav-item" data-target="#what-i-build-section">WHAT I BUILD</button>
+                </div>
+              </nav>
             </div>
 
             <!-- Scrollable Content Body -->
             <div class="about-detail-scroll-body">
-              <!-- Part 1: How I Work (Process) Section -->
-              <div class="about-process-section">
-                <div class="about-section-header">
-                  <span class="about-kicker">PROCESS</span>
-                  <h2 class="about-section-title">How I Work</h2>
-                  <p class="about-section-subtitle">
-                    A systematic approach to shaping experiences and scaling business value.
-                  </p>
-                </div>
+              <!-- Part 1: How I Work (Process / Work Style) Scrollytelling Section -->
+              <div id="work-style-section" class="about-process-section about-tab-panel active">
+                <div class="work-style-scroll-track">
+                  <div class="work-style-sticky-stage">
+                    <!-- Layer 1: 3D Character Video (Zooms out to 20% & Fades on Scroll) -->
+                    <div id="work-style-hero-video" class="work-style-video-layer">
+                      <div class="video-container-card">
+                        <video id="work-style-character-video" class="character-video-player" src="/Char_Anim.mp4" autoplay loop muted playsinline></video>
+                        <div class="video-ambient-glow" aria-hidden="true"></div>
+                      </div>
+                    </div>
 
-                <!-- Process 3-Step Grid -->
-                <div class="about-process-grid">
-                  <div class="process-card">
-                    <div class="process-card-badge">STEP — 01</div>
-                    <h3 class="process-card-title">Understand</h3>
-                    <p class="process-card-desc">
-                      I start with the business and the people — understanding goals, users, context, and the problem worth solving.
-                    </p>
-                    <div class="process-card-flow">Business &rarr; Users &rarr; Insights</div>
+                    <!-- Layer 2: How I Work Content (Reveals in Center after 80% Video Fade) -->
+                    <div id="work-style-content-layer" class="work-style-content-layer">
+                      <div class="about-section-header">
+                        <h2 class="about-section-title">How I Work</h2>
+                        <p class="about-section-subtitle">
+                          A systematic approach to shaping experiences and scaling business value.
+                        </p>
+                      </div>
+
+                      <!-- Process 3-Step Grid -->
+                      <div class="about-process-grid">
+                        <div id="process-step-1" class="process-card">
+                          <h3 class="process-card-title">Understand</h3>
+                          <p class="process-card-desc">
+                            I start with the business and the people — understanding goals, users, context, and the problem worth solving.
+                          </p>
+                          <div class="process-card-flow">Business &rarr; Users &rarr; Insights</div>
+                        </div>
+
+                        <div id="process-step-2" class="process-card">
+                          <h3 class="process-card-title">Shape</h3>
+                          <p class="process-card-desc">
+                            I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.
+                          </p>
+                          <div class="process-card-flow">Gaps &rarr; Structure &rarr; Design</div>
+                        </div>
+
+                        <div id="process-step-3" class="process-card">
+                          <h3 class="process-card-title">Evolve</h3>
+                          <p class="process-card-desc">
+                            I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.
+                          </p>
+                          <div class="process-card-flow">Validate &rarr; Improve &rarr; Grow</div>
+                        </div>
+                      </div>
+
+                      <!-- Animated Axis Line with Rotating Plus Nodes (Draws on Scroll) -->
+                      <div class="process-axis-wrapper" aria-hidden="true">
+                        <div class="process-axis-line">
+                          <div id="process-axis-fill" class="process-axis-line-fill"></div>
+                        </div>
+                        <div id="axis-node-1" class="axis-node node-1"><span>+</span></div>
+                        <div id="axis-node-2" class="axis-node node-2"><span>+</span></div>
+                        <div id="axis-node-3" class="axis-node node-3"><span>+</span></div>
+                        <div id="axis-node-4" class="axis-node node-4"><span>+</span></div>
+                      </div>
+                    </div>
                   </div>
-
-                  <div class="process-card">
-                    <div class="process-card-badge">STEP — 02</div>
-                    <h3 class="process-card-title">Shape</h3>
-                    <p class="process-card-desc">
-                      I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.
-                    </p>
-                    <div class="process-card-flow">Gaps &rarr; Structure &rarr; Design</div>
-                  </div>
-
-                  <div class="process-card">
-                    <div class="process-card-badge">STEP — 03</div>
-                    <h3 class="process-card-title">Evolve</h3>
-                    <p class="process-card-desc">
-                      I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.
-                    </p>
-                    <div class="process-card-flow">Validate &rarr; Improve &rarr; Grow</div>
-                  </div>
-                </div>
-
-                <!-- Animated Axis Line with Rotating Plus Nodes -->
-                <div class="process-axis-wrapper" aria-hidden="true">
-                  <div class="process-axis-line"></div>
-                  <div class="axis-node node-1"><span>+</span></div>
-                  <div class="axis-node node-2"><span>+</span></div>
-                  <div class="axis-node node-3"><span>+</span></div>
-                  <div class="axis-node node-4"><span>+</span></div>
                 </div>
               </div>
 
-              <!-- Part 2: 3D Character Video & Architectural Capabilities Section -->
-              <div class="about-capabilities-section">
-                <div class="capabilities-grid">
-                  <!-- Left: 3D Character Animation Video -->
-                  <div class="capabilities-video-col">
-                    <div class="video-container-card">
-                      <video id="about-character-video" class="character-video-player" src="/Char_Anim.mp4" autoplay loop muted playsinline></video>
-                      <div class="video-ambient-glow" aria-hidden="true"></div>
-                    </div>
+              <!-- Part 2: Tools & Ecosystem (Category-Wise Interactive Tools) Section -->
+              <div id="tools-section" class="about-tools-section about-tab-panel">
+                <div class="tools-container">
+                  <div class="about-section-header">
+                    <h2 class="about-section-title">Tools &amp; Ecosystem</h2>
+                    <p class="about-section-subtitle">
+                      Industry-standard tools and platforms I use to design, prototype, code, and ship products.
+                    </p>
                   </div>
 
-                  <!-- Right: Architectural Cards -->
-                  <div class="capabilities-cards-col">
-                    <div class="capabilities-header">
-                      <span class="about-kicker">CAPABILITIES</span>
-                      <h2 class="about-section-title">What I Bring to the Table</h2>
+                  <div class="tools-categories-list">
+                    <!-- Category Row 1: DESIGN -->
+                    <div class="tool-category-row">
+                      <h3 class="category-row-title">DESIGN</h3>
+                      <div class="category-row-tools">
+                        
+                        <!-- Tool 1: Figma -->
+                        <div class="tool-item-wrapper">
+                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Figma Tool Usage">
+                            <div class="tool-icon-box">
+                              <img src="/Tools/vecteezy_figma-logo-icon-figma-app-editable-transparent-background_65386871.png" alt="Figma" class="tool-icon-img" />
+                            </div>
+                            <span class="tool-name">FIGMA</span>
+                          </div>
+
+                          <!-- Usage Card Popup -->
+                          <div class="tool-usage-card">
+                            <h4 class="usage-card-title">USAGE</h4>
+                            <ul class="usage-list">
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR UI/UX DESIGN</span>
+                              </li>
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR INTERACTIVE PROTOTYPING</span>
+                              </li>
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR DESIGN SYSTEMS</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <!-- Tool 2: Framer -->
+                        <div class="tool-item-wrapper">
+                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Framer Tool Usage">
+                            <div class="tool-icon-box">
+                              <img src="/Tools/vecteezy_3d-framer-website-builder-icon-on-a-transparent-background_67672061.png" alt="Framer" class="tool-icon-img" />
+                            </div>
+                            <span class="tool-name">FRAMER</span>
+                          </div>
+
+                          <!-- Usage Card Popup -->
+                          <div class="tool-usage-card">
+                            <h4 class="usage-card-title">USAGE</h4>
+                            <ul class="usage-list">
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR PRODUCTION WEBSITES</span>
+                              </li>
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR ADVANCED ANIMATIONS</span>
+                              </li>
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR NO-CODE PUBLISHING</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+
+                      </div>
                     </div>
+
+                    <!-- Category Row 2: MOTION -->
+                    <div class="tool-category-row">
+                      <h3 class="category-row-title">MOTION</h3>
+                      <div class="category-row-tools">
+                        
+                        <!-- Tool 3: DaVinci Resolve -->
+                        <div class="tool-item-wrapper">
+                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="DaVinci Resolve Tool Usage">
+                            <div class="tool-icon-box">
+                              <img src="/Tools/vecteezy_davinci-resolve-app-icon-on-transparent-background_57355775.png" alt="DaVinci Resolve" class="tool-icon-img" />
+                            </div>
+                            <span class="tool-name">DAVINCI RESOLVE</span>
+                          </div>
+
+                          <!-- Usage Card Popup -->
+                          <div class="tool-usage-card">
+                            <h4 class="usage-card-title">USAGE</h4>
+                            <ul class="usage-list">
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR COLOR GRADING</span>
+                              </li>
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR VIDEO EDITING</span>
+                              </li>
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR MOTION GRAPHICS</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <!-- Category Row 3: CODE -->
+                    <div class="tool-category-row">
+                      <h3 class="category-row-title">CODE</h3>
+                      <div class="category-row-tools">
+                        
+                        <!-- Tool 4: Cursor -->
+                        <div class="tool-item-wrapper">
+                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Cursor Tool Usage">
+                            <div class="tool-icon-box tech-svg-box">
+                              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                            </div>
+                            <span class="tool-name">CURSOR</span>
+                          </div>
+
+                          <div class="tool-usage-card">
+                            <h4 class="usage-card-title">USAGE</h4>
+                            <ul class="usage-list">
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR FRONTEND CODE</span>
+                              </li>
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR AI-ASSISTED DEV</span>
+                              </li>
+                              <li>
+                                <span class="usage-icon">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </span>
+                                <span>FOR AGENT WORKFLOWS</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- Part 3: Architectural Capabilities (What I Build) Section -->
+              <div id="what-i-build-section" class="about-capabilities-section about-tab-panel">
+                <div class="capabilities-container">
+                  <div class="capabilities-header">
+                    <h2 class="about-section-title">What I Bring to the Table</h2>
+                  </div>
 
                     <div class="cards-deck">
                       <!-- Card 1 -->

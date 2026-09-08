@@ -1877,15 +1877,104 @@ span.title-line {
   box-shadow: 0 4px 14px rgba(236, 199, 20, 0.35);
 }
 
-.about-detail-tag {
+/* Top Right Submenu Capsule Navigation inside Detail Overlay */
+.about-subnav-pill {
+  position: relative;
+  left: auto;
+  transform: none;
+  margin-left: auto;
+  z-index: 30;
+  pointer-events: auto;
+}
+
+.subnav-pill-inner {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.72rem;
-  color: #94a3b8;
-  letter-spacing: 0.1em;
+  height: 48px;
+  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  padding: 0;
+  gap: clamp(8px, 1.2vw, 16px);
+  box-shadow: none;
+  white-space: nowrap;
+}
+
+.subnav-item {
+  font-family: 'Luckiest Guy', 'Mohave', var(--font-heading);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
+  color: #ffffff;
+  opacity: 0.7;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  position: relative;
+  border-radius: 999px;
+  transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.subnav-item:hover {
+  opacity: 1;
+  color: #ffffff;
+}
+
+.subnav-item.active {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.subnav-item.subnav-accent-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 0 18px;
+  font-weight: 400;
+  opacity: 1;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.subnav-item.subnav-accent-btn:hover,
+.subnav-item.subnav-accent-btn.active {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.02);
+}
+
+@media (max-width: 1024px) {
+  .about-subnav-pill {
+    position: relative;
+    left: auto;
+    transform: none;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.about-header-accent {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.4), transparent);
+}
+
+.detail-live-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  letter-spacing: 0.08em;
 }
 
 .detail-dot {
@@ -1894,6 +1983,15 @@ span.title-line {
   border-radius: 50%;
   background: #38bdf8;
   box-shadow: 0 0 8px #38bdf8;
+}
+
+/* Tab Panel Switching */
+.about-tab-panel {
+  display: none !important;
+}
+
+.about-tab-panel.active {
+  display: block !important;
 }
 
 /* Scrollable Content Body */
@@ -1934,29 +2032,27 @@ span.title-line {
   line-height: 1.55;
 }
 
-/* Process 3-Step Grid */
+/* Process 3-Column Text Layout */
 .about-process-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: 32px;
 }
 
 .process-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 26px 22px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 12px 8px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+  text-align: center;
+  transition: transform 0.3s ease;
 }
 
 .process-card:hover {
-  border-color: rgba(56, 189, 248, 0.45);
   transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
 }
 
 .process-card-badge {
@@ -1993,7 +2089,7 @@ span.title-line {
   letter-spacing: 0.03em;
 }
 
-/* Axis Line with Rotating Plus Nodes */
+/* Axis Line with Rotating Plus Nodes (Draws on Scroll) */
 .process-axis-wrapper {
   position: relative;
   width: 100%;
@@ -2008,8 +2104,20 @@ span.title-line {
   position: absolute;
   left: 0;
   right: 0;
-  height: 1.6px;
-  background: linear-gradient(90deg, rgba(56, 189, 248, 0.15), #38bdf8, rgba(56, 189, 248, 0.15));
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.process-axis-line-fill {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #ECC714);
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+  transition: transform 0.1s linear;
 }
 
 .axis-node {
@@ -2020,25 +2128,896 @@ span.title-line {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #38bdf8;
+  color: rgba(255, 255, 255, 0.25);
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   background: #070a10;
   border-radius: 50%;
+  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.axis-node.active {
+  color: #38bdf8;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
   animation: spinAxisNode 8s linear infinite;
 }
 
-@keyframes spinAxisNode {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+/* Light Theme Full-Screen Overrides for Tools Section */
+#about-detail-overlay {
+  transition: background-color 0.4s ease;
 }
 
-/* Capabilities & 3D Character Video Section */
-.capabilities-grid {
-  display: grid;
-  grid-template-columns: minmax(300px, 42%) 1fr;
-  gap: clamp(2rem, 4vw, 3.5rem);
-  align-items: start;
+#about-detail-overlay.light-theme-tools {
+  background-color: #FFFFFF !important;
+}
+
+.light-theme-tools .about-detail-header {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+.light-theme-tools .about-detail-back-btn {
+  background: #F1F5F9 !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+}
+
+.light-theme-tools .about-detail-back-btn:hover {
+  background: #E2E8F0 !important;
+  color: #0F172A !important;
+  border-color: #94A3B8 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.light-theme-tools .subnav-item {
+  color: #475569 !important;
+  opacity: 0.85;
+}
+
+.light-theme-tools .subnav-item:hover {
+  color: #0F172A !important;
+  opacity: 1;
+}
+
+.light-theme-tools .subnav-item.active {
+  color: #0F172A !important;
+  background-color: #F1F5F9 !important;
+  opacity: 1;
+}
+
+/* What I Build Section Light Theme Overrides */
+.light-theme-tools .about-capabilities-section .about-section-title {
+  color: #0F172A !important;
+}
+
+.light-theme-tools .about-capabilities-section .arch-card {
+  position: relative;
+  background: transparent;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  z-index: 1;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.light-theme-tools .about-capabilities-section .arch-card:hover {
+  background: #ECC714 !important;
+  border-color: #ECC714 !important;
+  transform: scale(1.045) translateY(-6px);
+  box-shadow: 0 18px 40px rgba(236, 199, 20, 0.35);
+  z-index: 20;
+}
+
+.light-theme-tools .about-capabilities-section .arch-card-title {
+  color: #D97706;
+}
+
+.light-theme-tools .about-capabilities-section .arch-card-desc {
+  color: #334155;
+}
+
+.light-theme-tools .about-capabilities-section .pill-tag {
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+}
+
+.light-theme-tools .about-capabilities-section .arch-card:hover .arch-card-title {
+  color: #000000 !important;
+  transform: scale(1.04);
+}
+
+.light-theme-tools .about-capabilities-section .arch-card:hover .arch-card-desc {
+  color: #111111 !important;
+}
+
+.light-theme-tools .about-capabilities-section .arch-card:hover .pill-tag {
+  background: rgba(0, 0, 0, 0.08) !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Tools Section Category Layout & Interactive Badge/Card */
+.about-tools-section {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1rem 0 2rem;
+  background: transparent;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+/* Center align Heading and Subheading in Tools & What I Build Sections */
+.about-tools-section .about-section-header,
+.capabilities-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.about-tools-section .about-section-title {
+  color: #0F172A !important;
+  text-align: center;
+}
+
+.capabilities-header .about-section-title {
+  text-align: center;
+}
+
+.about-tools-section .about-section-subtitle {
+  color: #475569;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.capabilities-header .about-section-subtitle {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tools-categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 2.5rem;
+}
+
+.tool-category-row {
+  position: relative;
+  z-index: 1;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.tool-category-row:hover,
+.tool-category-row:focus-within {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  z-index: 30;
+}
+
+.category-row-title {
+  font-family: 'Luckiest Guy', 'Mohave', sans-serif;
+  font-size: 1.85rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #0F172A;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.category-row-tools {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Tool Item Wrapper */
+.tool-item-wrapper {
+  position: relative;
+  display: inline-block;
+  z-index: 10;
+}
+
+.tool-item-wrapper:hover,
+.tool-item-wrapper:focus-within {
+  z-index: 50;
+}
+
+/* Default State: Raw Tool Icon (No Frames/Boxes) */
+.tool-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  height: 94px;
+  background: transparent;
+  border: none;
+  border-radius: 18px;
+  padding: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: none;
+  outline: none;
+}
+
+.tool-icon-box {
+  width: 86px;
+  height: 86px;
+  border-radius: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.tool-icon-img {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  display: block;
+}
+
+.tool-icon-box svg {
+  width: 72px;
+  height: 72px;
+}
+
+.tool-name {
+  font-family: 'Luckiest Guy', 'Mohave', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #000000;
+  white-space: nowrap;
+  max-width: 0;
+  opacity: 0;
+  padding-right: 0;
+  padding-left: 0;
+  overflow: hidden;
+  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.25s ease,
+              padding 0.35s ease;
+}
+
+/* Hover Highlight State: Expanded Brand Yellow Pill Badge with Black Text */
+.tool-item-wrapper:hover .tool-pill-badge,
+.tool-item-wrapper:focus-within .tool-pill-badge {
+  background: #ECC714;
+  border-radius: 20px;
+  padding-right: 24px;
+  box-shadow: 0 10px 28px rgba(236, 199, 20, 0.45);
+  transform: translateY(-2px);
+}
+
+.tool-item-wrapper:hover .tool-name,
+.tool-item-wrapper:focus-within .tool-name {
+  max-width: 260px;
+  opacity: 1;
+  padding-left: 14px;
+  color: #000000;
+}
+
+/* Usage Card Popup */
+.tool-usage-card {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #ECC714;
+  color: #000000;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 14px;
+  padding: 16px 20px;
+  min-width: 220px;
+  white-space: nowrap;
+  z-index: 100;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.25s ease;
+}
+
+.tool-item-wrapper:hover .tool-usage-card,
+.tool-item-wrapper:focus-within .tool-usage-card {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.usage-card-title {
+  font-family: 'Luckiest Guy', 'Mohave', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #000000;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+}
+
+.usage-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.usage-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: 0.03em;
+  background: transparent;
+  padding: 0;
+}
+
+.usage-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+}
+
+@media (max-width: 768px) {
+  .tool-category-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+  }
+  .category-row-tools {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .tool-usage-card {
+    right: auto;
+    left: 0;
+  }
+}
+
+/* Tools Section Sequential Wipe-In & Icon Pop-Up Animations */
+.about-tools-section.active .tool-category-row,
+.about-tools-section.animate-tools .tool-category-row {
+  animation: cardWipeBounce 0.72s cubic-bezier(0.5, 0, 0.7, 1) forwards;
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  will-change: transform, opacity, clip-path;
+}
+
+.about-tools-section.active .tool-category-row:nth-child(1),
+.about-tools-section.animate-tools .tool-category-row:nth-child(1) {
+  animation-delay: 0.08s;
+}
+
+.about-tools-section.active .tool-category-row:nth-child(2),
+.about-tools-section.animate-tools .tool-category-row:nth-child(2) {
+  animation-delay: 0.35s;
+}
+
+.about-tools-section.active .tool-category-row:nth-child(3),
+.about-tools-section.animate-tools .tool-category-row:nth-child(3) {
+  animation-delay: 0.62s;
+}
+
+/* Tool Icon Pop-Up Animations */
+.about-tools-section.active .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(1) .tool-pill-badge {
+  animation: iconPopBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.32s forwards;
+  opacity: 0;
+  transform: scale(0);
+  will-change: transform, opacity;
+}
+
+.about-tools-section.active .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(2) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(1) .tool-item-wrapper:nth-child(2) .tool-pill-badge {
+  animation: iconPopBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.44s forwards;
+  opacity: 0;
+  transform: scale(0);
+  will-change: transform, opacity;
+}
+
+.about-tools-section.active .tool-category-row:nth-child(2) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(2) .tool-item-wrapper:nth-child(1) .tool-pill-badge {
+  animation: iconPopBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.58s forwards;
+  opacity: 0;
+  transform: scale(0);
+  will-change: transform, opacity;
+}
+
+.about-tools-section.active .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(1) .tool-pill-badge,
+.about-tools-section.animate-tools .tool-category-row:nth-child(3) .tool-item-wrapper:nth-child(1) .tool-pill-badge {
+  animation: iconPopBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.85s forwards;
+  opacity: 0;
+  transform: scale(0);
+  will-change: transform, opacity;
+}
+
+/* Card Wipe-In with Acceleration & End Bounce Keyframe */
+@keyframes cardWipeBounce {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  68% {
+    clip-path: inset(0 0% 0 0);
+    opacity: 1;
+    transform: translateX(12px);
+  }
+  86% {
+    clip-path: inset(0 0% 0 0);
+    opacity: 1;
+    transform: translateX(-4px);
+  }
+  100% {
+    clip-path: none;
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Tool Icon Pop-Up Keyframe */
+@keyframes iconPopBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(24px);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.22) translateY(-6px);
+  }
+  85% {
+    transform: scale(0.92) translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Dust Particle Transition Canvas Overlay & Content Disintegration */
+.dust-particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.dust-particle-canvas.active {
+  opacity: 1;
+}
+
+.work-style-content-layer.disintegrate-out {
+  animation: disintegrateDustOut 1.2s cubic-bezier(0.4, 0, 0.6, 1) forwards !important;
+}
+
+.work-style-content-layer.assemble-in {
+  animation: assembleDustIn 1.2s cubic-bezier(0.2, 0.8, 0.4, 1) forwards !important;
+}
+
+@keyframes disintegrateDustOut {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0px);
+  }
+  60% {
+    opacity: 0.3;
+    filter: blur(6px);
+    transform: translate(-50%, -52%) scale(0.96);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translate(-50%, -54%) scale(0.92);
+    visibility: hidden;
+  }
+}
+
+@keyframes assembleDustIn {
+  0% {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translate(-50%, -54%) scale(0.92);
+    visibility: visible;
+  }
+  40% {
+    opacity: 0.4;
+    filter: blur(6px);
+    transform: translate(-50%, -52%) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate(-50%, -50%) scale(1);
+    visibility: visible;
+  }
+}
+
+/* Capabilities Section */
+.capabilities-container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+/* Tools Section Zoom Out & Fade Transition */
+#tools-section {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.35s ease;
+  transform-origin: center center;
+}
+
+#tools-section.zoom-out-fade {
+  transform: scale(0.88);
+  opacity: 0;
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+#tools-section.animate-tools .about-section-header {
+  animation: toolsHeaderFadeIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toolsHeaderFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+#tools-section.zoom-in-restore {
+  animation: toolsZoomIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toolsZoomIn {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+    filter: blur(6px);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+/* What I Build Section (Cards Fly In Simultaneously From All 6 Outer Locations with 3D Bending to Flat Center Grid) */
+.about-capabilities-section .cards-deck {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.about-capabilities-section.animate-capabilities .arch-card {
+  will-change: transform, opacity;
+  animation-duration: 0.95s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: forwards;
+  animation-delay: 0s;
+}
+
+/* Card 1: Top-Left Corner Entry */
+.about-capabilities-section.animate-capabilities .arch-card:nth-child(1) {
+  animation-name: flyInCardTopLeft;
+}
+
+/* Card 2: Top-Center Entry */
+.about-capabilities-section.animate-capabilities .arch-card:nth-child(2) {
+  animation-name: flyInCardTopCenter;
+}
+
+/* Card 3: Top-Right Corner Entry */
+.about-capabilities-section.animate-capabilities .arch-card:nth-child(3) {
+  animation-name: flyInCardTopRight;
+}
+
+/* Card 4: Bottom-Left Corner Entry */
+.about-capabilities-section.animate-capabilities .arch-card:nth-child(4) {
+  animation-name: flyInCardBottomLeft;
+}
+
+/* Card 5: Bottom-Center Entry */
+.about-capabilities-section.animate-capabilities .arch-card:nth-child(5) {
+  animation-name: flyInCardBottomCenter;
+}
+
+/* Card 6: Bottom-Right Corner Entry */
+.about-capabilities-section.animate-capabilities .arch-card:nth-child(6) {
+  animation-name: flyInCardBottomRight;
+}
+
+/* REVERSE: Fly Out to 6 Outer Locations simultaneously */
+.about-capabilities-section.animate-capabilities-out .arch-card {
+  will-change: transform, opacity;
+  animation-duration: 0.75s;
+  animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+  animation-fill-mode: forwards;
+  animation-delay: 0s;
+}
+
+.about-capabilities-section.animate-capabilities-out .arch-card:nth-child(1) {
+  animation-name: flyOutCardTopLeft;
+}
+.about-capabilities-section.animate-capabilities-out .arch-card:nth-child(2) {
+  animation-name: flyOutCardTopCenter;
+}
+.about-capabilities-section.animate-capabilities-out .arch-card:nth-child(3) {
+  animation-name: flyOutCardTopRight;
+}
+.about-capabilities-section.animate-capabilities-out .arch-card:nth-child(4) {
+  animation-name: flyOutCardBottomLeft;
+}
+.about-capabilities-section.animate-capabilities-out .arch-card:nth-child(5) {
+  animation-name: flyOutCardBottomCenter;
+}
+.about-capabilities-section.animate-capabilities-out .arch-card:nth-child(6) {
+  animation-name: flyOutCardBottomRight;
+}
+
+/* 3D Bent-to-Flat Keyframes for 6 Position Vectors (Smooth Non-Bouncy Entry) */
+
+/* 1. Top-Left Corner */
+@keyframes flyInCardTopLeft {
+  0% {
+    opacity: 0;
+    transform: translate3d(-700px, -500px, -300px) rotateX(45deg) rotateY(45deg) rotateZ(-20deg) scale(0.55);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+}
+@keyframes flyOutCardTopLeft {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-700px, -500px, -300px) rotateX(45deg) rotateY(45deg) rotateZ(-20deg) scale(0.55);
+  }
+}
+
+/* 2. Top-Center */
+@keyframes flyInCardTopCenter {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -650px, -300px) rotateX(65deg) rotateY(0deg) rotateZ(0deg) scale(0.55);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+}
+@keyframes flyOutCardTopCenter {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -650px, -300px) rotateX(65deg) rotateY(0deg) rotateZ(0deg) scale(0.55);
+  }
+}
+
+/* 3. Top-Right Corner */
+@keyframes flyInCardTopRight {
+  0% {
+    opacity: 0;
+    transform: translate3d(700px, -500px, -300px) rotateX(45deg) rotateY(-45deg) rotateZ(20deg) scale(0.55);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+}
+@keyframes flyOutCardTopRight {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(700px, -500px, -300px) rotateX(45deg) rotateY(-45deg) rotateZ(20deg) scale(0.55);
+  }
+}
+
+/* 4. Bottom-Left Corner */
+@keyframes flyInCardBottomLeft {
+  0% {
+    opacity: 0;
+    transform: translate3d(-700px, 500px, -300px) rotateX(-45deg) rotateY(45deg) rotateZ(-20deg) scale(0.55);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+}
+@keyframes flyOutCardBottomLeft {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-700px, 500px, -300px) rotateX(-45deg) rotateY(45deg) rotateZ(-20deg) scale(0.55);
+  }
+}
+
+/* 5. Bottom-Center */
+@keyframes flyInCardBottomCenter {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 650px, -300px) rotateX(-65deg) rotateY(0deg) rotateZ(0deg) scale(0.55);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+}
+@keyframes flyOutCardBottomCenter {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 650px, -300px) rotateX(-65deg) rotateY(0deg) rotateZ(0deg) scale(0.55);
+  }
+}
+
+/* 6. Bottom-Right Corner */
+@keyframes flyInCardBottomRight {
+  0% {
+    opacity: 0;
+    transform: translate3d(700px, 500px, -300px) rotateX(-45deg) rotateY(-45deg) rotateZ(20deg) scale(0.55);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+}
+@keyframes flyOutCardBottomRight {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(700px, 500px, -300px) rotateX(-45deg) rotateY(-45deg) rotateZ(20deg) scale(0.55);
+  }
+}
+
+#work-style-section {
+  margin-top: -2.5rem;
+  width: 100%;
+}
+
+/* Work Style Scrollytelling Stage */
+.work-style-scroll-track {
+  position: relative;
+  height: 165vh;
+  width: 100%;
+}
+
+.work-style-sticky-stage {
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 80px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Layer 1: Video Animation Layer (Initial full screen focus, zooms out & fades) */
+.work-style-video-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 100%;
+  max-width: 820px;
+  z-index: 2;
+  will-change: transform, opacity;
+  transition: opacity 0.05s linear, transform 0.05s linear;
+}
+
+.work-style-video-layer .video-container-card {
+  position: relative;
+  top: 0;
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.work-style-video-layer .character-video-player {
+  width: 100%;
+  height: auto;
+  max-height: 62vh;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+/* Layer 2: How I Work Content Layer (Reveals Sequential Items in Center) */
+.work-style-content-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 1120px;
+  z-index: 1;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.work-style-content-layer .about-section-header,
+.work-style-content-layer .process-card,
+.work-style-content-layer .process-axis-wrapper {
+  will-change: transform, opacity;
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+}
+
+.work-style-content-layer .about-section-header {
+  margin-bottom: 1.8rem;
+}
+
+.work-style-content-layer .about-process-grid {
+  width: 100%;
+}
+
+.work-style-content-layer .process-axis-wrapper {
+  margin-top: 2rem;
+  width: 100%;
 }
 
 .video-container-card {
@@ -2061,27 +3040,32 @@ span.title-line {
 
 .cards-deck {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
   margin-top: 1.5rem;
 }
 
 .arch-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
   padding: 18px 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+  transform: scale(1) translateY(0);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, background-color, border-color;
 }
 
 .arch-card:hover {
-  border-color: rgba(236, 199, 20, 0.45);
-  transform: translateY(-3px);
   background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: scale(1.03) translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 
 .arch-card-title {
@@ -2091,6 +3075,12 @@ span.title-line {
   color: #ECC714;
   letter-spacing: 0.03em;
   margin: 0;
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.arch-card:hover .arch-card-title {
+  transform: scale(1.04);
 }
 
 .arch-card-desc {
@@ -2099,6 +3089,12 @@ span.title-line {
   color: #cbd5e1;
   line-height: 1.5;
   margin: 0;
+  transition: color 0.35s ease, font-size 0.35s ease;
+}
+
+.arch-card:hover .arch-card-desc {
+  color: #ffffff;
+  font-size: 0.87rem;
 }
 
 .arch-card-pills {

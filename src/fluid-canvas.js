@@ -202,12 +202,29 @@ export function initFluidCanvas() {
       vid.currentTime = 0;
       vid.play().catch(() => {});
     }
+    // Reset overlay to default WORK STYLE tab panel
+    const subnavItems = overlay.querySelectorAll('.subnav-item');
+    const tabPanels = overlay.querySelectorAll('.about-tab-panel');
+    subnavItems.forEach((b) => b.classList.remove('active'));
+    tabPanels.forEach((p) => p.classList.remove('active'));
+
+    const defaultBtn = overlay.querySelector('.subnav-item[data-target="#work-style-section"]');
+    const defaultPanel = overlay.querySelector('#work-style-section');
+    if (defaultBtn) defaultBtn.classList.add('active');
+    if (defaultPanel) defaultPanel.classList.add('active');
+
+    if (overlay) overlay.scrollTop = 0;
+
+    if (typeof window.updateWorkStyleScrollytelling === 'function') {
+      window.updateWorkStyleScrollytelling();
+    }
   };
 
   window.closeAboutDetail = function() {
     const overlay = document.getElementById('about-detail-overlay');
     if (!overlay) return;
     overlay.classList.remove('active');
+    overlay.classList.remove('light-theme-tools');
     overlay.setAttribute('aria-hidden', 'true');
     isDetailOverlayOpen = false;
 
