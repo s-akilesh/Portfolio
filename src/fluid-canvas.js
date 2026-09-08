@@ -25,6 +25,7 @@ export function initFluidCanvas() {
   const heroContent = document.getElementById('hero-content');
   const siteHeader = document.getElementById('site-header');
   const portraitWrapper = document.getElementById('about-portrait-wrapper');
+  const portalClipPath = document.getElementById('projects-portal-path');
 
   if (!canvas) return;
 
@@ -700,7 +701,7 @@ export function initFluidCanvas() {
   }
 
   /**
-   * Render Organic 4-Corner Dust White Portal + 2-STAGE KEYFRAMED IMAGE SLIDE + KINETIC BOTTOM-LEFT PROJECT TITLE OVERLAY + STRICT IMAGE BOUNDING BOX HOVER CURSOR CIRCLE ("EXPLORE")
+   * Render Organic 4-Corner Dust White Portal + SVG ClipPath Synchronization for Live Projects Section
    */
   function renderTopTransition(t, progress, scrollProgress) {
     if (!topCtx) return;
@@ -708,16 +709,13 @@ export function initFluidCanvas() {
 
     if (progress <= 0) {
       whiteDustParticles = [];
+      if (portalClipPath) portalClipPath.setAttribute('d', '');
       return;
     }
 
     const cx = width * 0.5;
     const cy = height * 0.5;
     const maxDiag = Math.sqrt(cx * cx + cy * cy) * 1.5;
-
-    topCtx.save();
-    topCtx.fillStyle = '#E2E0DB';
-    topCtx.beginPath();
 
     const totalPoints = 14;
     const baseRadius = maxDiag * Math.pow(progress, 1.6);
@@ -739,15 +737,20 @@ export function initFluidCanvas() {
       pts.push({ x: px, y: py });
     }
 
-    topCtx.moveTo((pts[0].x + pts[pts.length - 1].x) / 2, (pts[0].y + pts[pts.length - 1].y) / 2);
-    for (let i = 0; i < pts.length; i++) {
-      const nextPt = pts[(i + 1) % pts.length];
-      const midX = (pts[i].x + nextPt.x) / 2;
-      const midY = (pts[i].y + nextPt.y) / 2;
-      topCtx.quadraticCurveTo(pts[i].x, pts[i].y, midX, midY);
+    // Build SVG Path String for clip-path to strictly contain the live projects screen inside the white organic section
+    if (portalClipPath) {
+      const midX0 = ((pts[0].x + pts[pts.length - 1].x) / 2).toFixed(1);
+      const midY0 = ((pts[0].y + pts[pts.length - 1].y) / 2).toFixed(1);
+      let d = `M ${midX0} ${midY0}`;
+      for (let i = 0; i < pts.length; i++) {
+        const nextPt = pts[(i + 1) % pts.length];
+        const midX = ((pts[i].x + nextPt.x) / 2).toFixed(1);
+        const midY = ((pts[i].y + nextPt.y) / 2).toFixed(1);
+        d += ` Q ${pts[i].x.toFixed(1)} ${pts[i].y.toFixed(1)} ${midX} ${midY}`;
+      }
+      d += ' Z';
+      portalClipPath.setAttribute('d', d);
     }
-    topCtx.closePath();
-    topCtx.fill();
 
     if (progress > 0.05 && progress < 0.95 && Math.random() < 0.85) {
       const randomPt = pts[Math.floor(Math.random() * pts.length)];
@@ -762,6 +765,7 @@ export function initFluidCanvas() {
       });
     }
 
+    topCtx.save();
     for (let i = whiteDustParticles.length - 1; i >= 0; i--) {
       const p = whiteDustParticles[i];
       p.x += p.vx;
@@ -778,7 +782,6 @@ export function initFluidCanvas() {
       topCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       topCtx.fill();
     }
-
     topCtx.restore();
   }
 
@@ -827,15 +830,24 @@ export function initFluidCanvas() {
 
     const projectsSection = document.getElementById('projects-section');
     if (projectsSection) {
-      if (whitePortalProgress >= 0.80) {
-        const pAlpha = Math.min((whitePortalProgress - 0.80) / 0.18, 1.0);
-        projectsSection.style.opacity = pAlpha;
-        projectsSection.style.pointerEvents = pAlpha > 0.5 ? 'auto' : 'none';
+      if (whitePortalProgress > 0.001) {
+        projectsSection.style.opacity = '1';
         projectsSection.style.visibility = 'visible';
+        if (whitePortalProgress >= 0.98) {
+          projectsSection.style.clipPath = 'none';
+          projectsSection.style.webkitClipPath = 'none';
+          projectsSection.style.pointerEvents = 'auto';
+        } else {
+          projectsSection.style.clipPath = 'url(#projects-portal-clip)';
+          projectsSection.style.webkitClipPath = 'url(#projects-portal-clip)';
+          projectsSection.style.pointerEvents = whitePortalProgress > 0.85 ? 'auto' : 'none';
+        }
       } else {
         projectsSection.style.opacity = '0';
-        projectsSection.style.pointerEvents = 'none';
         projectsSection.style.visibility = 'hidden';
+        projectsSection.style.pointerEvents = 'none';
+        projectsSection.style.clipPath = 'none';
+        projectsSection.style.webkitClipPath = 'none';
       }
     }
 

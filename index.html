@@ -124,7 +124,16 @@
             </div>
           </div>
 
-          <!-- Top Transition Canvas (Renders OVER Cards, Z-Index 40) -->
+          <!-- SVG ClipPath for Organic Projects Portal Transition -->
+          <svg width="0" height="0" class="clip-svg-defs" aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none;">
+            <defs>
+              <clipPath id="projects-portal-clip" clipPathUnits="userSpaceOnUse">
+                <path id="projects-portal-path" d="" />
+              </clipPath>
+            </defs>
+          </svg>
+
+          <!-- Top Transition Canvas (Renders OVER Cards, Z-Index 48) -->
           <canvas id="transition-canvas" class="top-transition-canvas"></canvas>
 
           <!-- Interactive Accordion Projects Section (Matching Reference Design) -->
