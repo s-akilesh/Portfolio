@@ -297,143 +297,39 @@ function initApp() {
     }
   };
 
-  // Tools Section Scroll-Driven Scrubbing (Category Rows wipe in & Icon pop directly on scroll)
+  // Tools Section Display & Scrubbing
   window.updateToolsScrollScrubbing = function() {
     if (!overlayContainer) return;
     const toolsPanel = document.getElementById('tools-section');
     if (!toolsPanel || !toolsPanel.classList.contains('active')) return;
 
-    const totalScrollable = overlayContainer.scrollHeight - overlayContainer.clientHeight;
-    const currentScroll = overlayContainer.scrollTop;
-    const progress = totalScrollable > 0 ? Math.min(Math.max(currentScroll / totalScrollable, 0), 1) : 0;
-
     const categoryRows = toolsPanel.querySelectorAll('.tool-category-row');
     if (!categoryRows || categoryRows.length === 0) return;
 
-    const ranges = [
-      { start: 0.00, end: 0.22 },
-      { start: 0.15, end: 0.42 },
-      { start: 0.35, end: 0.58 },
-      { start: 0.52, end: 0.72 }
-    ];
-
-    categoryRows.forEach((row, idx) => {
-      const range = ranges[idx] || { start: 0, end: 1 };
-      let rowP = 0;
-
-      if (totalScrollable > 0) {
-        if (progress <= range.start) {
-          rowP = 0;
-        } else if (progress >= range.end) {
-          rowP = 1;
-        } else {
-          rowP = (progress - range.start) / (range.end - range.start);
-        }
-      } else {
-        rowP = 1;
-      }
-
-      const opacity = (0.0 + rowP * 1.0).toFixed(2);
-      const translateY = ((1 - rowP) * 24).toFixed(1);
-
-      if (rowP >= 0.98) {
-        row.style.clipPath = 'none';
-      } else {
-        const clipInset = (100 - rowP * 100).toFixed(1);
-        row.style.clipPath = `inset(-120px ${clipInset}% -350px -100px)`;
-      }
-
-      row.style.opacity = opacity;
-      row.style.transform = `translateY(${translateY}px)`;
-
+    categoryRows.forEach((row) => {
+      row.style.opacity = '1';
+      row.style.transform = 'translateY(0px)';
+      row.style.clipPath = 'none';
       const pills = row.querySelectorAll('.tool-pill-badge');
-      pills.forEach((pill, pIdx) => {
-        const pillOffset = pIdx * 0.08;
-        const pillP = Math.min(Math.max((rowP - pillOffset) / (1 - pillOffset || 1), 0), 1);
-        const scale = (0.6 + pillP * 0.4).toFixed(3);
-        pill.style.opacity = pillP.toFixed(2);
-        pill.style.transform = `scale(${scale})`;
+      pills.forEach((pill) => {
+        pill.style.opacity = '1';
+        pill.style.transform = 'scale(1)';
       });
     });
   };
 
-  // What I Build / Capabilities Section Scroll-Driven Outer Corner Fly-In Engine
+  // What I Build / Capabilities Section Display
   window.updateBuildScrollScrubbing = function() {
     if (!overlayContainer) return;
     const buildPanel = document.getElementById('what-i-build-section');
     if (!buildPanel || !buildPanel.classList.contains('active')) return;
 
-    const totalScrollable = overlayContainer.scrollHeight - overlayContainer.clientHeight;
-    const currentScroll = overlayContainer.scrollTop;
-    const progress = totalScrollable > 0 ? Math.min(Math.max(currentScroll / totalScrollable, 0), 1) : 0;
-
     const cards = buildPanel.querySelectorAll('.arch-card');
     if (!cards || cards.length === 0) return;
 
-    const isMobile = window.innerWidth <= 768;
-
-    // Responsive corner origin vectors: bounded to prevent clipping out of screen
-    const cornerOffsets = isMobile ? [
-      { x: 0,   y: 0,  z: 0,   rx: 0,  ry: 0,   rz: 0  }, // Card 01: In place at top
-      { x: -25, y: 30, z: -20, rx: 8,  ry: 8,   rz: -3 }, // Card 02: Gentle bottom-left offset
-      { x: 25,  y: 30, z: -20, rx: 8,  ry: -8,  rz: 3  }, // Card 03: Gentle bottom-right offset
-      { x: -25, y: 30, z: -20, rx: 8,  ry: 8,   rz: -3 }, // Card 04: Gentle bottom-left offset
-      { x: 25,  y: 30, z: -20, rx: 8,  ry: -8,  rz: 3  }, // Card 05: Gentle bottom-right offset
-      { x: 0,   y: 30, z: -20, rx: 8,  ry: 0,   rz: 0  }  // Card 06: Gentle bottom-center offset
-    ] : [
-      { x: -280, y: -120, z: -150, rx: 20, ry: 20,  rz: -8 }, // Card 01: Top-Left Corner
-      { x: 0,    y: -150, z: -150, rx: 25, ry: 0,   rz: 0  }, // Card 02: Top-Center
-      { x: 280,  y: -120, z: -150, rx: 20, ry: -20, rz: 8  }, // Card 03: Top-Right Corner
-      { x: -280, y: 150,  z: -150, rx: -20, ry: 20, rz: -8 }, // Card 04: Bottom-Left Corner
-      { x: 0,    y: 180,  z: -150, rx: -25, ry: 0,  rz: 0  }, // Card 05: Bottom-Center
-      { x: 280,  y: 150,  z: -150, rx: -20, ry: -20, rz: 8 }  // Card 06: Bottom-Right Corner
-    ];
-
-    cards.forEach((card, idx) => {
-      const offset = cornerOffsets[idx] || cornerOffsets[0];
-
-      let cardP = 0;
-      if (isMobile) {
-        if (idx === 0) {
-          cardP = 1; // Card 01 is always fully positioned in place on mobile
-        } else {
-          // Sequential scrub for Cards 02..06 on mobile from below
-          const stepStart = 0.05 + (idx - 1) * 0.15;
-          const stepEnd   = stepStart + 0.20;
-          if (progress <= stepStart) cardP = 0;
-          else if (progress >= stepEnd) cardP = 1;
-          else cardP = (progress - stepStart) / (stepEnd - stepStart);
-        }
-      } else {
-        // Desktop timing: Top row (0,1,2) 0.00 -> 0.35; Bottom row (3,4,5) 0.18 -> 0.58
-        let start = (idx < 3) ? 0.00 : 0.18;
-        let end   = (idx < 3) ? 0.35 : 0.58;
-
-        if (totalScrollable > 0) {
-          if (progress <= start) {
-            cardP = 0;
-          } else if (progress >= end) {
-            cardP = 1;
-          } else {
-            cardP = (progress - start) / (end - start);
-          }
-        } else {
-          cardP = 1;
-        }
-      }
-
-      const invP = 1 - cardP;
-      const opacity = (0.0 + cardP * 1.0).toFixed(2);
-      const x = (offset.x * invP).toFixed(1);
-      const y = (offset.y * invP).toFixed(1);
-      const z = (offset.z * invP).toFixed(1);
-      const rx = (offset.rx * invP).toFixed(1);
-      const ry = (offset.ry * invP).toFixed(1);
-      const rz = (offset.rz * invP).toFixed(1);
-      const scale = (0.60 + cardP * 0.40).toFixed(3);
-
-      card.style.opacity = opacity;
-      card.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg) scale(${scale})`;
+    cards.forEach((card) => {
+      card.style.opacity = '1';
+      card.style.transform = 'translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)';
     });
   };
 

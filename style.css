@@ -3315,53 +3315,6 @@ span.title-line {
   opacity: 1;
 }
 
-.work-style-content-layer.disintegrate-out {
-  animation: disintegrateDustOut 1.2s cubic-bezier(0.4, 0, 0.6, 1) forwards !important;
-}
-
-.work-style-content-layer.assemble-in {
-  animation: assembleDustIn 1.2s cubic-bezier(0.2, 0.8, 0.4, 1) forwards !important;
-}
-
-@keyframes disintegrateDustOut {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-    filter: blur(0px);
-  }
-  60% {
-    opacity: 0.3;
-    filter: blur(6px);
-    transform: translate(-50%, -52%) scale(0.96);
-  }
-  100% {
-    opacity: 0;
-    filter: blur(12px);
-    transform: translate(-50%, -54%) scale(0.92);
-    visibility: hidden;
-  }
-}
-
-@keyframes assembleDustIn {
-  0% {
-    opacity: 0;
-    filter: blur(12px);
-    transform: translate(-50%, -54%) scale(0.92);
-    visibility: visible;
-  }
-  40% {
-    opacity: 0.4;
-    filter: blur(6px);
-    transform: translate(-50%, -52%) scale(0.96);
-  }
-  100% {
-    opacity: 1;
-    filter: blur(0px);
-    transform: translate(-50%, -50%) scale(1);
-    visibility: visible;
-  }
-}
-
 
 /* Tools Section Zoom Out & Fade Transition */
 #tools-section {
