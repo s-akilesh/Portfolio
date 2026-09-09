@@ -188,13 +188,13 @@ function initApp() {
     const currentScroll = overlayContainer.scrollTop;
     const progress = Math.min(Math.max(currentScroll / totalScrollable, 0), 1);
 
-    // Phase 1: Video Float Up to Top & Fade Out (Progress 0.0 -> 0.45)
-    const videoPhaseMax = 0.45;
+    // Phase 1: Video Float Up to Top & Fade Out (Progress 0.0 -> 0.14 for instant responsiveness)
+    const videoPhaseMax = 0.14;
     const videoProgress = Math.min(progress / videoPhaseMax, 1);
 
     const translateY = -50 - videoProgress * 60; // Moves UP from -50% to -110%
     const videoScale = 1.0 - videoProgress * 0.25;
-    const videoOpacity = Math.max(0, 1.0 - videoProgress * 1.15);
+    const videoOpacity = Math.max(0, 1.0 - videoProgress * 1.5);
 
     heroVideoLayer.style.transform = `translate(-50%, ${translateY.toFixed(2)}%) scale(${videoScale.toFixed(3)})`;
     heroVideoLayer.style.opacity = videoOpacity.toFixed(3);
@@ -207,8 +207,8 @@ function initApp() {
       heroVideoLayer.style.pointerEvents = 'auto';
     }
 
-    // Phase 2: Content Layer Container Visibility
-    const contentStart = 0.15;
+    // Phase 2: Content Layer Container Visibility (Immediate on start of scroll)
+    const contentStart = 0.01;
     if (progress < contentStart) {
       contentLayer.style.opacity = '0';
       contentLayer.style.visibility = 'hidden';
@@ -234,47 +234,47 @@ function initApp() {
       }
     }
 
-    // 1. Header (Title & Subtitle): Reveals from progress 0.15 -> 0.32
+    // 1. Header (Title & Subtitle): Reveals immediately from progress 0.01 -> 0.08
     if (sectionHeader) {
-      const hState = getItemState(0.15, 0.32);
+      const hState = getItemState(0.01, 0.08);
       sectionHeader.style.opacity = hState.opacity;
       sectionHeader.style.transform = hState.transform;
       sectionHeader.style.visibility = hState.visibility;
     }
 
-    // 2. Step 1 (Understand): Reveals one by one from progress 0.28 -> 0.50
+    // 2. Step 1 (Understand): Reveals smoothly from progress 0.03 -> 0.14
     if (step1) {
-      const s1State = getItemState(0.28, 0.50);
+      const s1State = getItemState(0.03, 0.14);
       step1.style.opacity = s1State.opacity;
       step1.style.transform = s1State.transform;
       step1.style.visibility = s1State.visibility;
     }
 
-    // 3. Step 2 (Shape): Reveals one by one from progress 0.48 -> 0.70
+    // 3. Step 2 (Shape): Reveals smoothly from progress 0.08 -> 0.20
     if (step2) {
-      const s2State = getItemState(0.48, 0.70);
+      const s2State = getItemState(0.08, 0.20);
       step2.style.opacity = s2State.opacity;
       step2.style.transform = s2State.transform;
       step2.style.visibility = s2State.visibility;
     }
 
-    // 4. Step 3 (Evolve): Reveals one by one from progress 0.68 -> 0.90
+    // 4. Step 3 (Evolve): Reveals smoothly from progress 0.14 -> 0.26
     if (step3) {
-      const s3State = getItemState(0.68, 0.90);
+      const s3State = getItemState(0.14, 0.26);
       step3.style.opacity = s3State.opacity;
       step3.style.transform = s3State.transform;
       step3.style.visibility = s3State.visibility;
     }
 
-    // 5. Axis Line Draw & Rotating Nodes: Draws from left to right as content loads (progress 0.25 -> 0.90)
+    // 5. Axis Line Draw & Rotating Nodes: Draws from left to right as content loads (progress 0.03 -> 0.28)
     if (axisWrapper) {
-      const aState = getItemState(0.25, 0.90);
+      const aState = getItemState(0.03, 0.28);
       axisWrapper.style.opacity = aState.opacity;
       axisWrapper.style.transform = aState.transform;
       axisWrapper.style.visibility = aState.visibility;
 
-      const lineStart = 0.25;
-      const lineEnd = 0.90;
+      const lineStart = 0.03;
+      const lineEnd = 0.28;
       let lineProgress = 0;
       if (progress >= lineStart) {
         lineProgress = Math.min(Math.max((progress - lineStart) / (lineEnd - lineStart), 0), 1);
