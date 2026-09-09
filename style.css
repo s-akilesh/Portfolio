@@ -3627,8 +3627,8 @@ span.title-line {
   top: 0;
   width: 100%;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+  border: none;
   transform-style: preserve-3d;
   will-change: transform;
   transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1);
@@ -3641,6 +3641,7 @@ span.title-line {
   max-height: 62vh;
   object-fit: cover;
   border-radius: 20px;
+  border: none;
 }
 
 /* Layer 2: How I Work Content Layer (Reveals Sequential Items in Center) */
@@ -3703,9 +3704,9 @@ span.title-line {
   top: 90px;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: none;
   background: #020202;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: none;
 }
 
 .character-video-player {
