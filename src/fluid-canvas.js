@@ -101,6 +101,14 @@ export function initFluidCanvas() {
   // Velocity-Capped Inertial Lerp Smooth Scroll Engine Variables
   let rawScrollProgress = 0;
   let smoothScrollProgress = 0;
+  let cachedMaxScroll = 1;
+
+  function updateScrollMetrics() {
+    if (scrollWrapper) {
+      cachedMaxScroll = Math.max(scrollWrapper.offsetHeight - window.innerHeight, 1);
+      rawScrollProgress = Math.min(Math.max(window.scrollY / cachedMaxScroll, 0), 1);
+    }
+  }
 
   // Smooth lerp position & scale for interactive negative-blend Explore hover cursor circle
   let exploreCursor = { x: -100, y: -100, scale: 0.0 };
@@ -170,6 +178,8 @@ export function initFluidCanvas() {
       topCtx.setTransform(1, 0, 0, 1, 0, 0);
       topCtx.scale(dpr, dpr);
     }
+
+    updateScrollMetrics();
   }
 
   let isImage2Past50Global = false;
@@ -219,6 +229,10 @@ export function initFluidCanvas() {
     if (typeof window.updateWorkStyleScrollytelling === 'function') {
       window.updateWorkStyleScrollytelling();
     }
+
+    if (typeof window.startAboutTabsFloat === 'function') {
+      window.startAboutTabsFloat();
+    }
   };
 
   window.closeAboutDetail = function() {
@@ -228,6 +242,10 @@ export function initFluidCanvas() {
     overlay.classList.remove('light-theme-tools');
     overlay.setAttribute('aria-hidden', 'true');
     isDetailOverlayOpen = false;
+
+    if (typeof window.stopAboutTabsFloat === 'function') {
+      window.stopAboutTabsFloat();
+    }
 
     if (siteHeader) {
       siteHeader.classList.remove('hide-for-overlay');
@@ -279,9 +297,10 @@ export function initFluidCanvas() {
     });
   });
 
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', resize, { passive: true });
+  window.addEventListener('scroll', updateScrollMetrics, { passive: true });
   if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', resize);
+    window.visualViewport.addEventListener('resize', resize, { passive: true });
   }
   resize();
 
@@ -779,7 +798,7 @@ export function initFluidCanvas() {
     }
 
     // Build SVG Path String for clip-path to strictly contain the live projects screen inside the white organic section
-    if (portalClipPath) {
+    if (portalClipPath && progress > 0.001 && progress < 0.98) {
       const midX0 = ((pts[0].x + pts[pts.length - 1].x) / 2).toFixed(1);
       const midY0 = ((pts[0].y + pts[pts.length - 1].y) / 2).toFixed(1);
       let d = `M ${midX0} ${midY0}`;
@@ -791,6 +810,8 @@ export function initFluidCanvas() {
       }
       d += ' Z';
       portalClipPath.setAttribute('d', d);
+    } else if (portalClipPath && progress <= 0.001) {
+      portalClipPath.setAttribute('d', '');
     }
 
     if (progress > 0.05 && progress < 0.95 && Math.random() < 0.85) {
@@ -832,28 +853,19 @@ export function initFluidCanvas() {
   function animate() {
     time += 0.02;
 
-    smoothMouse.x += (mouse.x - smoothMouse.x) * 0.06;
-    smoothMouse.y += (mouse.y - smoothMouse.y) * 0.06;
+    smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
+    smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
 
-    // VELOCITY-CAPPED INERTIAL LERP SMOOTH SCROLL ENGINE
-    if (scrollWrapper) {
-      const maxScroll = scrollWrapper.offsetHeight - window.innerHeight;
-      if (maxScroll > 0) {
-        rawScrollProgress = Math.min(Math.max(window.scrollY / maxScroll, 0), 1);
-      }
+    // HIGH-PERFORMANCE FLUID LERP SCROLL ENGINE (Cached zero-thrash calculation)
+    if (cachedMaxScroll > 0) {
+      rawScrollProgress = Math.min(Math.max(window.scrollY / cachedMaxScroll, 0), 1);
     }
-
-    // Velocity-Capped Inertial Physics Loop:
     const scrollDiff = rawScrollProgress - smoothScrollProgress;
-    const maxScrollSpeedPerFrame = 0.0075; // Controlled constant maximum speed cap
-    const scrollLerpFactor = 0.07;          // Smooth acceleration & deceleration curve
-
-    let scrollStep = scrollDiff * scrollLerpFactor;
-    if (Math.abs(scrollStep) > maxScrollSpeedPerFrame) {
-      scrollStep = Math.sign(scrollStep) * maxScrollSpeedPerFrame;
+    if (Math.abs(scrollDiff) < 0.00005) {
+      smoothScrollProgress = rawScrollProgress;
+    } else {
+      smoothScrollProgress += scrollDiff * 0.12;
     }
-
-    smoothScrollProgress += scrollStep;
 
     if (heroContent) {
       if (smoothScrollProgress > 0.04) {
@@ -934,7 +946,9 @@ export function initFluidCanvas() {
       aboutScale = 1.0;
     }
 
-    renderMediaTexture(time, smoothScrollProgress, aboutOpacity, aboutScale, whitePortalProgress);
+    if (aboutOpacity > 0.005 || whitePortalProgress < 0.98) {
+      renderMediaTexture(time, smoothScrollProgress, aboutOpacity, aboutScale, whitePortalProgress);
+    }
 
     ctx.clearRect(0, 0, width, height);
 
@@ -1008,12 +1022,11 @@ export function initFluidCanvas() {
     ctx.drawImage(mediaCanvas, 0, 0, width, height);
     ctx.restore();
 
-    // 4. SUBTLE OUTER SHADOW STROKE AROUND DEFORMING JELLY PORTAL
+    // 4. SUBTLE OUTER SHADOW STROKE AROUND DEFORMING JELLY PORTAL (High performance native stroke)
     if (zoomProgress < 0.85) {
       ctx.save();
-      ctx.lineWidth = Math.max(10 * (1 - zoomProgress), 1);
-      ctx.strokeStyle = `rgba(0, 0, 0, ${0.12 * (1 - zoomProgress)})`;
-      ctx.filter = 'blur(6px)';
+      ctx.lineWidth = Math.max(6 * (1 - zoomProgress), 1);
+      ctx.strokeStyle = `rgba(0, 0, 0, ${0.10 * (1 - zoomProgress)})`;
       ctx.beginPath();
       ctx.moveTo(
         (jellyPoints[0].x + jellyPoints[jellyPoints.length - 1].x) / 2,

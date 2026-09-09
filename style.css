@@ -528,12 +528,16 @@ body.dark-bg-active .nav-pill-inner button,
   z-index: 10;
   width: 100%;
   height: 100%;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 #hero-canvas {
   width: 100%;
   height: 100%;
   display: block;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 /* Top Transition Canvas (Renders OVER Cards, Z-Index 48) */
@@ -545,6 +549,8 @@ body.dark-bg-active .nav-pill-inner button,
   height: 100%;
   pointer-events: none;
   display: block;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 /* ==========================================================================
@@ -569,6 +575,8 @@ body.dark-bg-active .nav-pill-inner button,
   visibility: hidden;
   overflow-y: auto;
   overflow-x: hidden;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
   will-change: clip-path, opacity;
 }
 
@@ -2225,10 +2233,8 @@ span.title-line {
   z-index: 60;
   width: 100%;
   height: 100%;
-  background-color: #070a10;
-  background-image: 
-    radial-gradient(ellipse 65% 50% at 75% 15%, rgba(56, 189, 248, 0.08), transparent 70%),
-    radial-gradient(ellipse 55% 55% at 20% 85%, rgba(236, 199, 20, 0.05), transparent 70%);
+  background-color: #020202;
+  background-image: none;
   color: #ffffff;
   overflow-y: auto;
   overflow-x: hidden;
@@ -2237,6 +2243,9 @@ span.title-line {
   pointer-events: none;
   visibility: hidden;
   clip-path: circle(0% at var(--dome-x, 70%) var(--dome-y, 98%));
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: clip-path, opacity;
   transition: clip-path 0.65s cubic-bezier(0.16, 1, 0.3, 1),
               opacity 0.4s ease,
               visibility 0.4s ease;
@@ -2264,7 +2273,7 @@ span.title-line {
   justify-content: space-between;
   align-items: center;
   padding: 1.1rem clamp(1.2rem, 3.5vw, 3rem);
-  background: rgba(2, 32, 46, 0.75);
+  background: rgba(2, 2, 2, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -3619,10 +3628,11 @@ span.title-line {
   width: 100%;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   transform-style: preserve-3d;
   will-change: transform;
   transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #020202;
 }
 
 .work-style-video-layer .character-video-player {
@@ -3693,8 +3703,8 @@ span.title-line {
   top: 90px;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #020202;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
 }
 

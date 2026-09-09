@@ -832,9 +832,10 @@ function initApp() {
     });
   }
 
-  // Handle Horizontal Projects Track Scroll (Right-to-Left Motion)
+  // Handle Horizontal Projects Track Scroll (Right-to-Left Motion) with RAF throttling
   const projectsWrapper = document.getElementById('projects-scroll-wrapper');
   const horizontalTrack = document.getElementById('horizontal-projects-track');
+  let horizScrollTicking = false;
 
   function updateHorizontalProjectsScroll() {
     if (!projectsWrapper || !horizontalTrack) return;
@@ -854,12 +855,22 @@ function initApp() {
 
     if (maxHorizontalShift > 0) {
       const translateX = -progress * maxHorizontalShift;
-      horizontalTrack.style.transform = `translate3d(${translateX}px, 0, 0)`;
+      horizontalTrack.style.transform = `translate3d(${translateX.toFixed(2)}px, 0, 0)`;
     }
   }
 
-  window.addEventListener('scroll', updateHorizontalProjectsScroll, { passive: true });
-  window.addEventListener('resize', updateHorizontalProjectsScroll);
+  function requestHorizScrollUpdate() {
+    if (!horizScrollTicking) {
+      horizScrollTicking = true;
+      requestAnimationFrame(() => {
+        updateHorizontalProjectsScroll();
+        horizScrollTicking = false;
+      });
+    }
+  }
+
+  window.addEventListener('scroll', requestHorizScrollUpdate, { passive: true });
+  window.addEventListener('resize', requestHorizScrollUpdate, { passive: true });
   updateHorizontalProjectsScroll();
 
   // --------------------------------------------------------------------------
@@ -890,8 +901,10 @@ function initApp() {
     let targetX = 0, targetY = 0;
     let currentX = 0, currentY = 0;
     let floatTime = 0;
+    let floatAnimId = null;
 
     function onMouseMove(e) {
+      if (!overlay.classList.contains('active')) return;
       const cx = window.innerWidth * 0.5;
       const cy = window.innerHeight * 0.5;
 
@@ -905,6 +918,11 @@ function initApp() {
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     function renderFloat() {
+      if (!overlay.classList.contains('active')) {
+        floatAnimId = null;
+        return;
+      }
+
       floatTime += 0.02;
 
       // Smooth Inertial Lerp Damping (0.065 for organic, viscous feel)
@@ -964,10 +982,21 @@ function initApp() {
         }
       }
 
-      requestAnimationFrame(renderFloat);
+      floatAnimId = requestAnimationFrame(renderFloat);
     }
 
-    requestAnimationFrame(renderFloat);
+    window.startAboutTabsFloat = function() {
+      if (!floatAnimId) {
+        floatAnimId = requestAnimationFrame(renderFloat);
+      }
+    };
+
+    window.stopAboutTabsFloat = function() {
+      if (floatAnimId) {
+        cancelAnimationFrame(floatAnimId);
+        floatAnimId = null;
+      }
+    };
   }
 
   initAboutTabsMouseFloat();
