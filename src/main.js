@@ -972,6 +972,98 @@ function initApp() {
 
   initAboutTabsMouseFloat();
   initToolCardToggles();
+  initContactWatermarkSpotlight();
+}
+
+function initContactWatermarkSpotlight() {
+  const contactSection = document.getElementById('contact-section');
+  const watermarkWrap = document.querySelector('.contact-bg-text-grid, .contact-watermark-wrap');
+
+  if (!contactSection || !watermarkWrap) return;
+
+  let targetX = -1000;
+  let targetY = -1000;
+  let currentX = -1000;
+  let currentY = -1000;
+  let isInside = false;
+  let animId = null;
+
+  function renderSpotlight() {
+    currentX += (targetX - currentX) * 0.22;
+    currentY += (targetY - currentY) * 0.22;
+
+    watermarkWrap.style.setProperty('--spotlight-x', `${currentX.toFixed(1)}px`);
+    watermarkWrap.style.setProperty('--spotlight-y', `${currentY.toFixed(1)}px`);
+
+    if (isInside || Math.hypot(targetX - currentX, targetY - currentY) > 0.5) {
+      animId = requestAnimationFrame(renderSpotlight);
+    } else {
+      animId = null;
+    }
+  }
+
+  function handlePointerMove(clientX, clientY) {
+    const rect = watermarkWrap.getBoundingClientRect();
+    targetX = clientX - rect.left;
+    targetY = clientY - rect.top;
+
+    if (!isInside) {
+      isInside = true;
+      watermarkWrap.style.setProperty('--watermark-opacity', '1');
+      if (!animId) {
+        currentX = targetX;
+        currentY = targetY;
+        animId = requestAnimationFrame(renderSpotlight);
+      }
+    }
+  }
+
+  function handlePointerLeave() {
+    isInside = false;
+    watermarkWrap.style.setProperty('--watermark-opacity', '0');
+  }
+
+  // Pointer & mouse tracking across contact section
+  window.addEventListener('pointermove', (e) => {
+    if (!contactSection.classList.contains('visible')) {
+      if (isInside) handlePointerLeave();
+      return;
+    }
+    const cRect = contactSection.getBoundingClientRect();
+    if (
+      e.clientX >= cRect.left &&
+      e.clientX <= cRect.right &&
+      e.clientY >= cRect.top &&
+      e.clientY <= cRect.bottom
+    ) {
+      handlePointerMove(e.clientX, e.clientY);
+    } else if (isInside) {
+      handlePointerLeave();
+    }
+  }, { passive: true });
+
+  window.addEventListener('pointerleave', handlePointerLeave, { passive: true });
+
+  // Touch support for mobile interaction
+  window.addEventListener('touchmove', (e) => {
+    if (!contactSection.classList.contains('visible')) return;
+    if (e.touches && e.touches.length > 0) {
+      const touch = e.touches[0];
+      const cRect = contactSection.getBoundingClientRect();
+      if (
+        touch.clientX >= cRect.left &&
+        touch.clientX <= cRect.right &&
+        touch.clientY >= cRect.top &&
+        touch.clientY <= cRect.bottom
+      ) {
+        handlePointerMove(touch.clientX, touch.clientY);
+      } else if (isInside) {
+        handlePointerLeave();
+      }
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', handlePointerLeave, { passive: true });
 }
 
 function initToolCardToggles() {

@@ -908,7 +908,7 @@ export function initFluidCanvas() {
       }
     }
 
-    const isDarkBackground = smoothScrollProgress > 0.06 && whitePortalProgress < 0.65;
+    const isDarkBackground = (smoothScrollProgress > 0.06 && whitePortalProgress < 0.65) || contactScreenProgress > 0.05;
     if (isDarkBackground) {
       document.body.classList.add('dark-bg-active');
       if (siteHeader) siteHeader.classList.add('dark-header');

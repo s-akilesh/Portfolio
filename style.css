@@ -254,7 +254,7 @@ body.dark-bg-active .nav-pill-inner button,
   font-family: var(--font-heading);
   font-weight: 900;
   font-size: clamp(1.6rem, 2.5vw, 2.3rem);
-  letter-spacing: -0.04em;
+  letter-spacing: 3px;
   text-transform: uppercase;
   color: currentColor;
   transition: color 0.4s ease;
@@ -1764,19 +1764,19 @@ span.title-line {
   z-index: 46;
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
-  color: #000000;
+  background-color: #000000;
+  color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: calc(clamp(2.5rem, 5.5vh, 4.5rem) + 54px) clamp(2rem, 5vw, 6rem) clamp(2rem, 5vh, 4rem);
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(clamp(2rem, 5vh, 3.5rem) + 40px) clamp(2rem, 5vw, 5.5rem) clamp(1.2rem, 2.8vh, 2.2rem);
   box-sizing: border-box;
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
   transition: opacity 0.4s ease, visibility 0.4s ease;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .contact-section.visible {
@@ -1785,81 +1785,280 @@ span.title-line {
   visibility: visible;
 }
 
-.contact-section .contact-starburst-bg {
+/* 1. Background Typographic Small Text Grid with Spotlight Cursor Reveal */
+.contact-bg-text-grid {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 0;
+  box-sizing: border-box;
+  overflow: hidden;
   z-index: 1;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
+  /* Hidden by default; revealed exclusively within a refined spotlight radius on mouse hover / movement */
+  opacity: var(--watermark-opacity, 0);
+  transition: opacity 0.35s ease;
+  -webkit-mask-image: radial-gradient(
+    circle clamp(115px, 12.5vw, 190px) at var(--spotlight-x, -1000px) var(--spotlight-y, -1000px),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.75) 45%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: radial-gradient(
+    circle clamp(115px, 12.5vw, 190px) at var(--spotlight-x, -1000px) var(--spotlight-y, -1000px),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.75) 45%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
-.contact-section .contact-starburst-bg svg {
+.contact-bg-row {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  gap: clamp(14px, 1.8vw, 28px);
+  font-family: 'Space Mono', 'Poppins', monospace, sans-serif;
+  font-size: clamp(11px, 1.05vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  line-height: 1;
+  opacity: 0.42;
+}
+
+.contact-bg-row:nth-child(2n) {
+  transform: translateX(-35px);
+  opacity: 0.35;
+}
+
+.contact-bg-row:nth-child(3n) {
+  transform: translateX(-75px);
+  opacity: 0.48;
+}
+
+.contact-bg-row:nth-child(4n) {
+  transform: translateX(-120px);
+  opacity: 0.38;
+}
+
+.contact-bg-row:nth-child(5n) {
+  transform: translateX(-160px);
+  opacity: 0.44;
+}
+
+.contact-bg-row .sep {
+  color: var(--brand-yellow, #ffea00);
+  font-size: 0.85em;
+  display: inline-block;
+  opacity: 0.65;
+  transform: translateY(-1px);
+}
+
+/* 2. Main Content Wrapper */
+.contact-main-wrapper {
+  position: relative;
+  z-index: 5;
   width: 100%;
-  height: 100%;
+  max-width: 980px;
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(2rem, 5vh, 3.8rem);
+  text-align: center;
+}
+
+.contact-headline {
+  font-family: 'Luckiest Guy', cursive, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: clamp(2.8rem, 6.2vw, 5.2rem) !important;
+  line-height: 1;
+  letter-spacing: 0.04em !important;
+  color: #FFFFFF !important;
+  margin: 0;
+  text-transform: uppercase;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9);
+}
+
+.contact-columns-grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(3rem, 11vw, 10rem);
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.contact-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.contact-col-title {
+  font-family: 'Luckiest Guy', cursive, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: clamp(1.15rem, 1.5vw, 1.45rem) !important;
+  color: #FFFFFF !important;
+  letter-spacing: 0.06em !important;
+  margin: 0 0 16px 0 !important;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+/* Social Icons Row */
+.social-icons-row {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.contact-social-btn {
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.2s ease,
+              opacity 0.2s ease;
+  text-decoration: none;
+}
+
+.contact-social-btn:hover {
+  color: var(--brand-yellow);
+  transform: translateY(-3px) scale(1.12);
+}
+
+.contact-social-btn svg {
+  width: clamp(26px, 2.2vw, 32px);
+  height: clamp(26px, 2.2vw, 32px);
   display: block;
 }
 
-.contact-section-content {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
+/* Careers & Collabs Email Copy Button */
+.careers-email-wrap {
   display: flex;
-  flex-direction: column;
-  gap: clamp(2rem, 4.5vh, 3.8rem);
+  align-items: center;
 }
 
-.contact-section-title {
-  font-family: 'Luckiest Guy', cursive, sans-serif !important;
-  font-weight: 400 !important;
-  font-size: clamp(3rem, 7.5vw, 5.5rem) !important;
-  line-height: 0.95;
-  letter-spacing: 0.02em !important;
-  color: #000000 !important;
+.contact-section .copy-email-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
   margin: 0;
+  color: #FFFFFF;
+  font-family: 'Space Mono', 'Poppins', monospace, sans-serif;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  transition: color 0.25s ease, opacity 0.25s ease;
+  user-select: text;
 }
 
-.contact-section-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(2.5rem, 5vw, 5rem);
+.contact-section .copy-email-btn:hover {
+  color: var(--brand-yellow);
 }
 
-.contact-section .col-heading,
-.contact-section .dept-name {
-  font-family: 'Luckiest Guy', cursive, sans-serif !important;
-  font-weight: 400 !important;
-  font-size: clamp(1.05rem, 1.4vw, 1.3rem) !important;
-  color: #000000 !important;
-  letter-spacing: 0.05em !important;
-  margin-bottom: 1rem !important;
-}
-
-.contact-section .social-links {
+/* 3. Bottom Footer Credits Bar */
+.contact-footer-bar {
+  position: relative;
+  z-index: 5;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 1.2rem;
+  box-sizing: border-box;
 }
 
-.contact-section .social-links a {
-  font-family: 'Poppins', sans-serif !important;
-  font-size: clamp(0.95rem, 1.2vw, 1.15rem) !important;
-  font-weight: 600 !important;
-  color: #000000 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
-  text-decoration: none;
-  transition: opacity 0.2s ease, transform 0.2s ease !important;
+.footer-credit-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Space Mono', 'Poppins', monospace, sans-serif;
+  font-size: clamp(0.78rem, 0.95vw, 0.92rem);
+  font-weight: 500;
+  color: #FFFFFF;
+  letter-spacing: 0.02em;
 }
 
-.contact-section .social-links a:hover {
-  opacity: 0.65 !important;
-  transform: translateX(4px) !important;
+.footer-credit-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.footer-credit-icon.figma-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 7px;
+}
+
+.footer-antigravity-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  border-radius: 7px;
+  width: 32px;
+  height: 32px;
+  padding: 4.5px;
+  box-sizing: border-box;
+}
+
+.footer-antigravity-badge .antigravity-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: calc(clamp(1.5rem, 4vh, 2.5rem) + 40px) 1.5rem 1.5rem;
+  }
+
+  .contact-watermark-wrap {
+    top: 10%;
+  }
+
+  .contact-columns-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .contact-col {
+    align-items: center;
+    text-align: center;
+  }
+
+  .contact-footer-bar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    text-align: center;
+  }
 }
 
 /* Responsive queries */
