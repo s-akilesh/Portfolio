@@ -139,7 +139,7 @@ function initApp() {
     mobNavContact.addEventListener('click', (e) => {
       e.preventDefault();
       closeMobileMenu();
-      openContactModal();
+      scrollToContact();
     });
   }
 
@@ -734,57 +734,16 @@ function initApp() {
 
   window.addEventListener('hashchange', handleInitialHashScroll);
 
-  // Contact Modal Handlers
-  const contactModal = document.getElementById('contact-modal');
-  const openBtn = document.getElementById('open-contact-btn');
-  const closeBtn = document.getElementById('close-contact-btn') || document.getElementById('modal-close-btn') || document.querySelector('.modal-close-btn');
-
-  function openContactModal() {
-    if (contactModal) {
-      contactModal.classList.remove('hidden');
-    }
-  }
-
-  function closeContactModal() {
-    if (contactModal) {
-      contactModal.classList.add('hidden');
-    }
+  // Contact & Separate Screen Handlers
+  function scrollToContact() {
+    const maxScroll = getHeroScrollMax();
+    window.scrollTo({ top: maxScroll, behavior: 'smooth' });
   }
 
   if (navContact) {
     navContact.addEventListener('click', (e) => {
       e.preventDefault();
-      openContactModal();
-    });
-  }
-
-  if (openBtn) {
-    openBtn.addEventListener('click', openContactModal);
-  }
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      closeContactModal();
-    });
-  }
-
-  const allCloseBtns = document.querySelectorAll('#close-contact-btn, #modal-close-btn, .modal-close-btn');
-  allCloseBtns.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      closeContactModal();
-    });
-  });
-
-  // Close modal when clicking on backdrop
-  if (contactModal) {
-    contactModal.addEventListener('click', (e) => {
-      if (e.target === contactModal) {
-        closeContactModal();
-      }
+      scrollToContact();
     });
   }
 
