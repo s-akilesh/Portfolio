@@ -608,11 +608,11 @@ body.dark-bg-active .nav-pill-inner button,
 }
 
 .projects-intro-title {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Luckiest Guy', cursive, sans-serif;
   font-size: clamp(3.4rem, 8vw, 7.2rem);
-  font-weight: 500;
+  font-weight: 400;
   font-style: normal;
-  letter-spacing: -0.025em;
+  letter-spacing: 0.02em;
   color: #141414;
   line-height: 1;
   text-align: center;
