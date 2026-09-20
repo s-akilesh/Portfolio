@@ -187,6 +187,7 @@ export function initFluidCanvas() {
   let activeIndexGlobal = 0;
   let isOverDomeGlobal = false;
   let isDetailOverlayOpen = false;
+  let checkBtnHit = null;
   let domeHoverTimer = null;
   let domeHoverFactor = 0.0;
   let currentDomeCoords = { x: 0, y: 0 };
@@ -294,7 +295,9 @@ export function initFluidCanvas() {
       }
     }
 
-    if (isOverDomeGlobal || smoothScrollProgress < 0.40) {
+    const isHit = isOverDomeGlobal || (typeof checkBtnHit === 'function' && checkBtnHit(clickX, clickY));
+
+    if (isHit) {
       if (e && e.cancelable) {
         e.preventDefault();
       }
@@ -305,14 +308,15 @@ export function initFluidCanvas() {
   [topCanvas, canvas].forEach((c) => {
     if (!c) return;
     c.addEventListener('click', handleShowcaseClick);
-    c.addEventListener('pointerdown', (e) => {
-      if ((isOverDomeGlobal || smoothScrollProgress < 0.40) && !isDetailOverlayOpen) {
-        handleShowcaseClick(e);
-      }
-    });
     c.addEventListener('touchend', (e) => {
-      if ((isOverDomeGlobal || smoothScrollProgress < 0.40) && !isDetailOverlayOpen) {
-        handleShowcaseClick(e);
+      const rect = c.getBoundingClientRect();
+      const touch = e.changedTouches && e.changedTouches[0];
+      if (touch) {
+        const tx = touch.clientX - rect.left;
+        const ty = touch.clientY - rect.top;
+        if ((isOverDomeGlobal || (typeof checkBtnHit === 'function' && checkBtnHit(tx, ty))) && !isDetailOverlayOpen) {
+          handleShowcaseClick(e);
+        }
       }
     });
   });
@@ -724,7 +728,8 @@ export function initFluidCanvas() {
         const textCenterX = contentCenterX + Math.round((currentBaseY - textCenterY) * 0.45);
 
         // Algebraic hit test for the slanted polygon
-        const isHoverBtn = (function(px, py) {
+        checkBtnHit = function(px, py) {
+          if (easeContent <= 0.7) return false;
           if (py > currentBaseY || py < currentBaseY - (hRight + 8)) return false;
           const leftX = contentCenterX - btnW / 2;
           const rightX = contentCenterX + btnW / 2;
@@ -736,9 +741,10 @@ export function initFluidCanvas() {
           const topProgress = (px - xTL) / Math.max(xTR - xTL, 1);
           const yTopAtX = (currentBaseY - hLeft) - topProgress * (hRight - hLeft);
           return py >= yTopAtX - 5;
-        })(mouse.x, mouse.y);
+        };
 
-        isOverDomeGlobal = isHoverBtn && easeContent > 0.7;
+        const isHoverBtn = checkBtnHit(mouse.x, mouse.y);
+        isOverDomeGlobal = isHoverBtn;
 
         // Coordinates for expanding circle overlay origin
         currentDomeCoords = { x: textCenterX, y: textCenterY };
@@ -844,6 +850,15 @@ export function initFluidCanvas() {
       }
 
       mctx.restore();
+    } else {
+      isOverDomeGlobal = false;
+      checkBtnHit = null;
+      if (canvas && canvas.style.cursor !== "url('/cursor-svgrepo-com.svg') 0 0, auto") {
+        canvas.style.cursor = "url('/cursor-svgrepo-com.svg') 0 0, auto";
+      }
+      if (topCanvas && topCanvas.style.cursor !== "url('/cursor-svgrepo-com.svg') 0 0, auto") {
+        topCanvas.style.cursor = "url('/cursor-svgrepo-com.svg') 0 0, auto";
+      }
     }
 
     // Note: "How I Work" Process Section and "Capabilities & 3D Video" have been relocated to #about-detail-overlay
