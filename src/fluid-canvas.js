@@ -196,8 +196,8 @@ export function initFluidCanvas() {
     if (isDetailOverlayOpen) return;
     const overlay = document.getElementById('about-detail-overlay');
     if (!overlay) return;
-    const targetX = x !== undefined ? x : (currentDomeCoords.x || window.innerWidth * 0.7);
-    const targetY = y !== undefined ? y : (currentDomeCoords.y || window.innerHeight * 0.95);
+    const targetX = (x !== undefined && x > 0) ? x : (currentDomeCoords.x || window.innerWidth * 0.5);
+    const targetY = (y !== undefined && y > 0) ? y : (currentDomeCoords.y || window.innerHeight * 0.5);
     overlay.style.setProperty('--dome-x', `${targetX}px`);
     overlay.style.setProperty('--dome-y', `${targetY}px`);
     overlay.classList.add('active');
