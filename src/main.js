@@ -191,35 +191,6 @@ function initApp() {
     const workStylePanel = document.getElementById('work-style-section');
     if (!workStylePanel || !workStylePanel.classList.contains('active')) return;
 
-    if (window.innerWidth < 768) {
-      // Mobile full screen view: display video & process cards cleanly by default
-      if (heroVideoLayer) {
-        heroVideoLayer.style.opacity = '1';
-        heroVideoLayer.style.visibility = 'visible';
-        heroVideoLayer.style.pointerEvents = 'auto';
-        heroVideoLayer.style.transform = 'none';
-      }
-      if (contentLayer) {
-        contentLayer.style.opacity = '1';
-        contentLayer.style.visibility = 'visible';
-        contentLayer.style.pointerEvents = 'auto';
-        contentLayer.style.transform = 'none';
-      }
-      if (sectionHeader) {
-        sectionHeader.style.opacity = '1';
-        sectionHeader.style.visibility = 'visible';
-        sectionHeader.style.transform = 'none';
-      }
-      [step1, step2, step3].forEach(step => {
-        if (step) {
-          step.style.opacity = '1';
-          step.style.visibility = 'visible';
-          step.style.transform = 'none';
-        }
-      });
-      return;
-    }
-
     const totalScrollable = scrollTrack.offsetHeight - overlayContainer.clientHeight;
     if (totalScrollable <= 0) return;
 
