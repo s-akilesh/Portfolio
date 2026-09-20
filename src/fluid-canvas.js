@@ -203,6 +203,8 @@ export function initFluidCanvas() {
     overlay.setAttribute('aria-hidden', 'false');
     isDetailOverlayOpen = true;
 
+    document.body.style.overflow = 'hidden';
+
     if (siteHeader) {
       siteHeader.classList.add('hide-for-overlay');
     }
@@ -226,9 +228,12 @@ export function initFluidCanvas() {
 
     if (overlay) overlay.scrollTop = 0;
 
-    if (typeof window.updateWorkStyleScrollytelling === 'function') {
-      window.updateWorkStyleScrollytelling();
-    }
+    requestAnimationFrame(() => {
+      if (overlay) overlay.scrollTop = 0;
+      if (typeof window.updateWorkStyleScrollytelling === 'function') {
+        window.updateWorkStyleScrollytelling();
+      }
+    });
 
     if (typeof window.startAboutTabsFloat === 'function') {
       window.startAboutTabsFloat();
@@ -246,6 +251,8 @@ export function initFluidCanvas() {
     if (typeof window.stopAboutTabsFloat === 'function') {
       window.stopAboutTabsFloat();
     }
+
+    document.body.style.overflow = '';
 
     if (siteHeader) {
       siteHeader.classList.remove('hide-for-overlay');
@@ -272,13 +279,26 @@ export function initFluidCanvas() {
   }
 
   const handleShowcaseClick = (e) => {
-    if (isOverDomeGlobal && !isDetailOverlayOpen) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
+    if (isDetailOverlayOpen) return;
+
+    const rect = canvas ? canvas.getBoundingClientRect() : { left: 0, top: 0 };
+    let clickX = width * 0.5;
+    let clickY = height * 0.5;
+
+    if (e) {
+      if (e.clientX !== undefined) clickX = e.clientX - rect.left;
+      if (e.clientY !== undefined) clickY = e.clientY - rect.top;
+      if (e.changedTouches && e.changedTouches[0]) {
+        clickX = e.changedTouches[0].clientX - rect.left;
+        clickY = e.changedTouches[0].clientY - rect.top;
       }
-      window.openAboutDetail(currentDomeCoords.x, currentDomeCoords.y);
-      return;
+    }
+
+    if (isOverDomeGlobal || smoothScrollProgress < 0.40) {
+      if (e && e.cancelable) {
+        e.preventDefault();
+      }
+      window.openAboutDetail(clickX, clickY);
     }
   };
 
@@ -286,12 +306,12 @@ export function initFluidCanvas() {
     if (!c) return;
     c.addEventListener('click', handleShowcaseClick);
     c.addEventListener('pointerdown', (e) => {
-      if (isOverDomeGlobal && !isDetailOverlayOpen) {
+      if ((isOverDomeGlobal || smoothScrollProgress < 0.40) && !isDetailOverlayOpen) {
         handleShowcaseClick(e);
       }
     });
     c.addEventListener('touchend', (e) => {
-      if (isOverDomeGlobal && !isDetailOverlayOpen) {
+      if ((isOverDomeGlobal || smoothScrollProgress < 0.40) && !isDetailOverlayOpen) {
         handleShowcaseClick(e);
       }
     });
@@ -303,6 +323,8 @@ export function initFluidCanvas() {
     window.visualViewport.addEventListener('resize', resize, { passive: true });
   }
   resize();
+
+
 
   // Mouse move event & Base1 Iridescent Comet Trail Generation (Matching Reference Video)
   window.addEventListener('mousemove', (e) => {
@@ -529,18 +551,14 @@ export function initFluidCanvas() {
   function renderMediaTexture(t, scrollProgress, aboutOpacity, aboutScale, whitePortalProgress) {
     mctx.clearRect(0, 0, width, height);
 
-    // Base dark background for Process & 3D Avatar sections
-    mctx.fillStyle = '#050608';
+    // Base background matching About Me sunny yellow
+    mctx.fillStyle = '#FCEA63';
     mctx.fillRect(0, 0, width, height);
 
-
-
-    // 1. RENDER ABOUT ME SECTION (scrollProgress 0.04 -> 0.28)
-    // Entire screen matches user's reference composition: full-bleed sunny yellow background (#FCEA63),
-    // large 'AKILESH' in Mohave font across the background.
-    // Interactive Animation: As user scrolls, the image glides from center to left side,
+    // 1. RENDER ABOUT ME SECTION (Entire screen matches user's reference composition: full-bleed sunny yellow #FCEA63)
+    // As user scrolls, the image glides from center to left side (0.20 -> 0.60),
     // then the right-side content ("UI/UX DESIGNER - PRODUCT THINKER", "I LIKE MAKING THINGS MAKE SENSE",
-    // and bottom dome "VIEW MORE ABOUT AKILESH") smoothly fades & rises into place.
+    // and bottom dome "VIEW MORE ABOUT AKILESH") smoothly fades & rises into place (0.35 -> 0.75).
     if (aboutOpacity > 0.01) {
       mctx.save();
       mctx.globalAlpha = aboutOpacity;
@@ -552,11 +570,8 @@ export function initFluidCanvas() {
       const isMobile = width < 768;
       const isTablet = width >= 768 && width < 1100;
 
-      // Landing Screen (scrollProgress <= 0.04):
-      // The portal circle shows the clean sunny yellow background without the photo.
-      // As the user scrolls (0.04 -> 0.10), the portal expands by 18x to full screen,
-      // and Akilesh's cutout and background text smoothly fade into view in the center!
-      const revealP = Math.min(Math.max((scrollProgress - 0.04) / 0.06, 0.0), 1.0);
+      // Reveal Akilesh portrait and text inside liquid portal from frame 1
+      const revealP = 1.0;
 
       // 2. Large Outlined Name 'AKILESH' in Font Family 'Moirai One' (Centered in Background)
       if (revealP > 0.01) {
@@ -586,12 +601,12 @@ export function initFluidCanvas() {
       }
 
       // 3. Image Horizontal Slide Motion:
-      // Starts centered at width * 0.5 on the full screen, and slides from Center to Left Side (0.10 -> 0.16)
-      const moveRaw = Math.min(Math.max((scrollProgress - 0.10) / 0.06, 0.0), 1.0);
+      // Starts centered at width * 0.5 on the full screen, and slides from Center to Left Side (0.20 -> 0.60)
+      const moveRaw = Math.min(Math.max((scrollProgress - 0.20) / 0.40, 0.0), 1.0);
       const easeMove = moveRaw * moveRaw * (3.0 - 2.0 * moveRaw); // Smooth cubic ease
 
-      // 4. Right-side Content Reveal Animation (0.13 -> 0.19)
-      const contentRaw = Math.min(Math.max((scrollProgress - 0.13) / 0.06, 0.0), 1.0);
+      // 4. Right-side Content Reveal Animation (0.35 -> 0.75)
+      const contentRaw = Math.min(Math.max((scrollProgress - 0.35) / 0.40, 0.0), 1.0);
       const easeContent = contentRaw * contentRaw * (3.0 - 2.0 * contentRaw);
 
       // Draw Cutout Akilesh (Revealed ONLY on scroll as portal expands to full screen; NEVER on landing screen)
@@ -687,68 +702,142 @@ export function initFluidCanvas() {
         mctx.fillText(line2, contentCenterX, headlineCenterY + titleLineSpacing * 0.44);
         mctx.restore();
 
-        // 7. Bottom Dome Badge ("VIEW MORE ABOUT AKILESH")
-        const baseDomeRadius = Math.round(
-          isMobile 
-            ? Math.min(width * 0.22, 95) 
-            : (isTablet ? Math.min(width * 0.15, 125) : Math.min(width * 0.13, 145))
-        );
-        
-        // Dome rises up smoothly from bottom edge
-        const domeSlideOffset = (1.0 - easeContent) * (baseDomeRadius * 1.25);
-        const currentDomeY = height + domeSlideOffset;
+        // 7. Slanted Polygonal Button ("View More About Akilesh" matching user reference)
+        const baseBtnW = isMobile 
+          ? Math.min(Math.round(width * 0.84), 335) 
+          : (isTablet ? Math.min(Math.round(width * 0.45), 375) : Math.min(Math.round(width * 0.28), 410));
 
-        // Check hover over dome (with slightly larger hit target for comfortable interaction)
-        const distToDome = Math.hypot(mouse.x - contentCenterX, mouse.y - currentDomeY);
-        const isHoverDome = distToDome <= (baseDomeRadius * 1.12) && mouse.y <= height;
-        isOverDomeGlobal = isHoverDome && easeContent > 0.7;
-        currentDomeCoords = { x: contentCenterX, y: currentDomeY };
+        // Scale animation on hover (5% scale boost)
+        const btnScale = 1.0 + domeHoverFactor * 0.05;
+        const btnW = baseBtnW * btnScale;
+        const hLeft = Math.round(btnW * 0.20);
+        const hRight = Math.round(btnW * 0.31);
+        const cornerRadius = Math.round(btnW * 0.045);
+
+        // Slide in from bottom edge on scroll
+        const slideOffset = (1.0 - easeContent) * (hRight * 1.35);
+        const currentBaseY = height + slideOffset;
+
+        // True geometric center of the slanted button (equal margins top, bottom, left, and right)
+        const avgHeight = (hLeft + hRight) / 2;
+        const textCenterY = currentBaseY - Math.round(avgHeight * 0.51);
+        const textCenterX = contentCenterX + Math.round((currentBaseY - textCenterY) * 0.45);
+
+        // Algebraic hit test for the slanted polygon
+        const isHoverBtn = (function(px, py) {
+          if (py > currentBaseY || py < currentBaseY - (hRight + 8)) return false;
+          const leftX = contentCenterX - btnW / 2;
+          const rightX = contentCenterX + btnW / 2;
+          const xLeftAtY = leftX + (currentBaseY - py) * 0.45;
+          const xRightAtY = rightX + (currentBaseY - py) * 0.45;
+          if (px < xLeftAtY - 6 || px > xRightAtY + 6) return false;
+          const xTL = leftX + hLeft * 0.45;
+          const xTR = rightX + hRight * 0.45;
+          const topProgress = (px - xTL) / Math.max(xTR - xTL, 1);
+          const yTopAtX = (currentBaseY - hLeft) - topProgress * (hRight - hLeft);
+          return py >= yTopAtX - 5;
+        })(mouse.x, mouse.y);
+
+        isOverDomeGlobal = isHoverBtn && easeContent > 0.7;
+
+        // Coordinates for expanding circle overlay origin
+        currentDomeCoords = { x: textCenterX, y: textCenterY };
 
         // Update cursor pointer
         const activeCursor = isOverDomeGlobal ? "url('/cursor-svgrepo-com.svg') 0 0, pointer" : "url('/cursor-svgrepo-com.svg') 0 0, auto";
         if (canvas && canvas.style.cursor !== activeCursor) canvas.style.cursor = activeCursor;
         if (topCanvas && topCanvas.style.cursor !== activeCursor) topCanvas.style.cursor = activeCursor;
 
-        // Smooth lerp hover factor for fluid 60fps size expansion & text animation
+        // Smooth lerp hover factor for fluid 60fps interaction
         const targetDomeHover = isOverDomeGlobal ? 1.0 : 0.0;
-        domeHoverFactor += (targetDomeHover - domeHoverFactor) * 0.14;
+        domeHoverFactor += (targetDomeHover - domeHoverFactor) * 0.16;
 
-        // 1. Scale Animation: Slightly increase size on hover (8.5% scale boost)
-        const domeScale = 1.0 + domeHoverFactor * 0.085;
-        const currentDomeRadius = baseDomeRadius * domeScale;
+        // Corner Points
+        const bLeftX = contentCenterX - btnW / 2;
+        const bRightX = contentCenterX + btnW / 2;
+        const pTL = { x: bLeftX + hLeft * 0.45, y: currentBaseY - hLeft };
+        const pTR = { x: bRightX + hRight * 0.45, y: currentBaseY - hRight };
 
-        // Outer Ring Arc (Moss Green #4D5D3E with brightened hover state)
         mctx.save();
         mctx.beginPath();
-        mctx.arc(contentCenterX, currentDomeY, currentDomeRadius, Math.PI, Math.PI * 2, false);
-        mctx.fillStyle = isOverDomeGlobal ? '#5C704A' : '#4D5D3E';
+        mctx.moveTo(bLeftX, currentBaseY);
+        mctx.arcTo(pTL.x, pTL.y, pTR.x, pTR.y, cornerRadius);
+        mctx.arcTo(pTR.x, pTR.y, bRightX, currentBaseY, cornerRadius);
+        mctx.lineTo(bRightX, currentBaseY);
+        mctx.closePath();
+
+        // Single 8px outer border in button color at 25% opacity (lineWidth 16, so 8px extends outside)
+        mctx.lineWidth = 16;
+        mctx.strokeStyle = 'rgba(2, 32, 46, 0.25)';
+        mctx.stroke();
+
+        // Button background (#02202E)
+        mctx.fillStyle = isOverDomeGlobal ? '#082C3D' : '#02202E';
         mctx.fill();
 
-        // Inner Dome Arc (Deep Dark Teal #02202E with highlighted hover state)
-        const ringThickness = Math.max(7, Math.round(baseDomeRadius * 0.08));
-        const innerRadius = (baseDomeRadius - ringThickness) * domeScale;
-        mctx.beginPath();
-        mctx.arc(contentCenterX, currentDomeY, innerRadius, Math.PI, Math.PI * 2, false);
-        mctx.fillStyle = isOverDomeGlobal ? '#042C3D' : '#02202E';
-        mctx.fill();
+        // Animated Typography Adapting to Shape with 100% Even Top & Bottom Spacing
+        const textBounceY = Math.sin(time * 5.2) * 1.4 * domeHoverFactor;
+        const minSize = (isMobile ? 14 : (isTablet ? 17 : 19)) * btnScale;
+        const maxSize = (isMobile ? 22 : (isTablet ? 26 : 29)) * btnScale;
 
-        // 2. Animated Text: Light floating oscillation + gentle pulse scale on hover
-        const textBounceY = Math.sin(time * 5.2) * 1.6 * domeHoverFactor;
-        const textPulseScale = 1.0 + Math.sin(time * 3.8) * 0.035 * domeHoverFactor;
+        const words = ['VIEW', 'MORE', 'ABOUT', 'AKILESH'];
+        const wordSizes = words.map((_, i) => {
+          const t = i / (words.length - 1);
+          return Math.round(minSize + (maxSize - minSize) * t);
+        });
 
-        const baseDomeFontSize = Math.round(isMobile ? 11 : (isTablet ? 12 : Math.min(width * 0.011, 14)));
-        const domeFontSize = baseDomeFontSize * domeScale * textPulseScale;
-        const domeTextCenterY = currentDomeY - innerRadius * 0.52 + textBounceY;
+        // Measure individual word widths
+        const wordWidths = [];
+        words.forEach((w, i) => {
+          mctx.font = `400 ${wordSizes[i]}px "Luckiest Guy", cursive, sans-serif`;
+          wordWidths.push(mctx.measureText(w).width);
+        });
 
-        mctx.font = `700 ${domeFontSize}px Mohave, sans-serif`;
+        const wordGap = Math.round((isMobile ? 6 : 9) * btnScale);
+        const totalTextW = wordWidths.reduce((sum, w) => sum + w, 0) + (words.length - 1) * wordGap;
+
+        // Slanted top edge line coordinates
+        const xTL = bLeftX + hLeft * 0.45;
+        const xTR = bRightX + hRight * 0.45;
+        const yTL = currentBaseY - hLeft;
+        const yTR = currentBaseY - hRight;
+
+        // Angle along the button's vertical centerline
+        const midlineAngle = Math.atan2(-(hRight - hLeft) * 0.50, btnW);
+
+        // Center the word block horizontally within the slanted shape
+        const midX = contentCenterX + (avgHeight * 0.50) * 0.45;
+        let curWordX = midX - totalTextW / 2;
+
+        mctx.save();
         mctx.fillStyle = '#FFFFFF';
         mctx.textAlign = 'center';
         mctx.textBaseline = 'middle';
         if ('letterSpacing' in mctx) {
-          mctx.letterSpacing = (0.06 + domeHoverFactor * 0.03) + 'em';
+          mctx.letterSpacing = '0.04em';
         }
-        mctx.fillText('VIEW MORE ABOUT', contentCenterX, domeTextCenterY - domeFontSize * 0.65);
-        mctx.fillText('AKILESH', contentCenterX, domeTextCenterY + domeFontSize * 0.65);
+
+        words.forEach((w, i) => {
+          const wordCX = curWordX + wordWidths[i] / 2;
+          curWordX += wordWidths[i] + wordGap;
+
+          // Local top edge directly above wordCX
+          const topT = Math.max(0, Math.min(1, (wordCX - xTL) / Math.max(xTR - xTL, 1)));
+          const yTopAtWord = yTL + topT * (yTR - yTL);
+          const localHeight = currentBaseY - yTopAtWord;
+
+          // Exact vertical midpoint at this word's horizontal position (with 10px upward offset):
+          const wordCY = currentBaseY - localHeight / 2 - 10 + textBounceY;
+
+          mctx.save();
+          mctx.translate(wordCX, wordCY);
+          mctx.rotate(midlineAngle);
+          mctx.font = `400 ${wordSizes[i]}px "Luckiest Guy", cursive, sans-serif`;
+          mctx.fillText(w, 0, 0);
+          mctx.restore();
+        });
+
+        mctx.restore();
 
         mctx.restore();
         mctx.restore();
@@ -761,90 +850,12 @@ export function initFluidCanvas() {
   }
 
   /**
-   * Render Organic 4-Corner Dust White Portal + SVG ClipPath Synchronization for Live Projects Section
+   * Render Top Transition Layer (Cleared organic blob pattern for direct clean section scroll transitions)
    */
   function renderTopTransition(t, progress, scrollProgress) {
     if (!topCtx) return;
     topCtx.clearRect(0, 0, width, height);
-
-    if (progress <= 0) {
-      whiteDustParticles = [];
-      if (portalClipPath) portalClipPath.setAttribute('d', '');
-      return;
-    }
-
-    const cx = width * 0.5;
-    const cy = height * 0.5;
-    const maxDiag = Math.sqrt(cx * cx + cy * cy) * 1.5;
-
-    const totalPoints = 14;
-    const baseRadius = maxDiag * Math.pow(progress, 1.6);
-
-    const pts = [];
-    for (let i = 0; i < totalPoints; i++) {
-      const angle = (i / totalPoints) * Math.PI * 2;
-      
-      const cornerFactor = Math.abs(Math.sin(angle * 2));
-      const cornerNoise = (1 + cornerFactor * 0.35) * baseRadius;
-      const waveNoise = Math.sin(angle * 5 + t * 2.8) * 45 * Math.sin(progress * Math.PI);
-      const waveNoise2 = Math.cos(angle * 3 - t * 2.2) * 35 * Math.sin(progress * Math.PI);
-
-      const r = Math.min(cornerNoise + waveNoise + waveNoise2, maxDiag * 1.2);
-
-      const px = cx + Math.cos(angle) * r;
-      const py = cy + Math.sin(angle) * r;
-
-      pts.push({ x: px, y: py });
-    }
-
-    // Build SVG Path String for clip-path to strictly contain the live projects screen inside the white organic section
-    if (portalClipPath && progress > 0.001 && progress < 0.98) {
-      const midX0 = ((pts[0].x + pts[pts.length - 1].x) / 2).toFixed(1);
-      const midY0 = ((pts[0].y + pts[pts.length - 1].y) / 2).toFixed(1);
-      let d = `M ${midX0} ${midY0}`;
-      for (let i = 0; i < pts.length; i++) {
-        const nextPt = pts[(i + 1) % pts.length];
-        const midX = ((pts[i].x + nextPt.x) / 2).toFixed(1);
-        const midY = ((pts[i].y + nextPt.y) / 2).toFixed(1);
-        d += ` Q ${pts[i].x.toFixed(1)} ${pts[i].y.toFixed(1)} ${midX} ${midY}`;
-      }
-      d += ' Z';
-      portalClipPath.setAttribute('d', d);
-    } else if (portalClipPath && progress <= 0.001) {
-      portalClipPath.setAttribute('d', '');
-    }
-
-    if (progress > 0.05 && progress < 0.95 && Math.random() < 0.85) {
-      const randomPt = pts[Math.floor(Math.random() * pts.length)];
-      whiteDustParticles.push({
-        x: randomPt.x + (Math.random() - 0.5) * 50,
-        y: randomPt.y + (Math.random() - 0.5) * 50,
-        vx: (Math.random() - 0.5) * 4.0,
-        vy: (Math.random() - 0.5) * 4.0 - 1.5,
-        size: Math.random() * 4.5 + 1.2,
-        life: 1.0,
-        decay: Math.random() * 0.035 + 0.018,
-      });
-    }
-
-    topCtx.save();
-    for (let i = whiteDustParticles.length - 1; i >= 0; i--) {
-      const p = whiteDustParticles[i];
-      p.x += p.vx;
-      p.y += p.vy;
-      p.life -= p.decay;
-
-      if (p.life <= 0) {
-        whiteDustParticles.splice(i, 1);
-        continue;
-      }
-
-      topCtx.fillStyle = `rgba(255, 255, 255, ${p.life * 0.95})`;
-      topCtx.beginPath();
-      topCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      topCtx.fill();
-    }
-    topCtx.restore();
+    if (portalClipPath) portalClipPath.setAttribute('d', '');
   }
 
   /**
@@ -856,15 +867,16 @@ export function initFluidCanvas() {
     smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
     smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
 
-    // HIGH-PERFORMANCE FLUID LERP SCROLL ENGINE (Cached zero-thrash calculation)
+    // DIRECT RESPONSIVE SCROLL ENGINE:
+    // Scrolls smoothly while user scrolls and STOPS IMMEDIATELY when user stops scrolling
     if (cachedMaxScroll > 0) {
       rawScrollProgress = Math.min(Math.max(window.scrollY / cachedMaxScroll, 0), 1);
     }
     const scrollDiff = rawScrollProgress - smoothScrollProgress;
-    if (Math.abs(scrollDiff) < 0.00005) {
+    if (Math.abs(scrollDiff) < 0.0001) {
       smoothScrollProgress = rawScrollProgress;
     } else {
-      smoothScrollProgress += scrollDiff * 0.12;
+      smoothScrollProgress += scrollDiff * 0.92;
     }
 
     if (heroContent) {
@@ -875,53 +887,16 @@ export function initFluidCanvas() {
       }
     }
 
-    // White Organic Portal Expansion Progress (smoothScrollProgress 0.30 -> 0.70)
-    let whitePortalProgress = 0;
-    if (smoothScrollProgress > 0.30) {
-      whitePortalProgress = Math.min((smoothScrollProgress - 0.30) / 0.40, 1.0);
-    }
-
-    // Separate Contact Screen Progress (smoothScrollProgress 0.70 -> 1.00)
-    let contactScreenProgress = 0;
-    if (smoothScrollProgress > 0.70) {
-      contactScreenProgress = Math.min((smoothScrollProgress - 0.70) / 0.30, 1.0);
-    }
-
-    const projectsSection = document.getElementById('projects-section');
+    // Update Header Theme when Contact Section is in View
     const contactSection = document.getElementById('contact-section');
-
-    if (projectsSection) {
-      if (whitePortalProgress > 0.001 && contactScreenProgress < 0.90) {
-        projectsSection.style.opacity = '1';
-        projectsSection.style.visibility = 'visible';
-        if (whitePortalProgress >= 0.98) {
-          projectsSection.style.clipPath = 'none';
-          projectsSection.style.webkitClipPath = 'none';
-          projectsSection.style.pointerEvents = contactScreenProgress > 0.5 ? 'none' : 'auto';
-        } else {
-          projectsSection.style.clipPath = 'url(#projects-portal-clip)';
-          projectsSection.style.webkitClipPath = 'url(#projects-portal-clip)';
-          projectsSection.style.pointerEvents = whitePortalProgress > 0.85 ? 'auto' : 'none';
-        }
-      } else {
-        projectsSection.style.opacity = '0';
-        projectsSection.style.visibility = 'hidden';
-        projectsSection.style.pointerEvents = 'none';
-        projectsSection.style.clipPath = 'none';
-        projectsSection.style.webkitClipPath = 'none';
-      }
-    }
-
+    let isDarkHeader = false;
     if (contactSection) {
-      if (contactScreenProgress > 0.05) {
-        contactSection.classList.add('visible');
-      } else {
-        contactSection.classList.remove('visible');
+      const cRect = contactSection.getBoundingClientRect();
+      if (cRect.top <= 80 && cRect.bottom >= 80) {
+        isDarkHeader = true;
       }
     }
-
-    const isDarkBackground = (smoothScrollProgress > 0.06 && whitePortalProgress < 0.65) || contactScreenProgress > 0.05;
-    if (isDarkBackground) {
+    if (isDarkHeader) {
       document.body.classList.add('dark-bg-active');
       if (siteHeader) siteHeader.classList.add('dark-header');
     } else {
@@ -929,38 +904,18 @@ export function initFluidCanvas() {
       if (siteHeader) siteHeader.classList.remove('dark-header');
     }
 
-    // ABOUT ME STAGE: smoothScrollProgress 0.00 -> 0.55
-    let aboutOpacity = 1.0;
-    let aboutScale = 1.0;
+    // ABOUT ME STAGE: Always 100% full opacity in the hero section
+    const aboutOpacity = 1.0;
+    const aboutScale = 1.0;
 
-    if (smoothScrollProgress > 0.30) {
-      if (smoothScrollProgress < 0.55) {
-        const fadeProgress = Math.min((smoothScrollProgress - 0.30) / 0.25, 1.0);
-        aboutOpacity = 1.0 - fadeProgress;
-        aboutScale = 1.0 - fadeProgress * 0.12;
-      } else {
-        aboutOpacity = 0.0;
-      }
-    } else {
-      aboutOpacity = 1.0;
-      aboutScale = 1.0;
-    }
-
-    if (aboutOpacity > 0.005 || whitePortalProgress < 0.98) {
-      renderMediaTexture(time, smoothScrollProgress, aboutOpacity, aboutScale, whitePortalProgress);
-    }
+    renderMediaTexture(time, smoothScrollProgress, aboutOpacity, aboutScale, 0);
 
     ctx.clearRect(0, 0, width, height);
 
-    if (smoothScrollProgress > 0.005) {
-      const darkAlpha = Math.min(smoothScrollProgress * 2.8, 1);
-      ctx.fillStyle = `rgba(10, 10, 10, ${darkAlpha})`;
-      ctx.fillRect(0, 0, width, height);
-    }
-
-    const zoomProgress = Math.min(smoothScrollProgress / 0.10, 1);
+    // Zoom portal expansion: circle grows from hero spot into full viewport (0.00 -> 0.35)
+    const zoomProgress = Math.min(smoothScrollProgress / 0.35, 1.0);
     const easeScroll = Math.pow(zoomProgress, 2.2);
-    const zoomScale = 1.0 + easeScroll * 18.0;
+    const zoomScale = 1.0 + easeScroll * 22.0;
 
     const isMobile = width < 768;
     const isTablet = width >= 768 && width < 1024;
@@ -1053,15 +1008,15 @@ export function initFluidCanvas() {
       drawSpinningCircularText(ctx, circularTextCopy, centerX, centerY, spinningTextRadius, spinAngle, spinningTextAlpha);
     }
 
-    renderTopTransition(time, whitePortalProgress, smoothScrollProgress);
+    renderTopTransition(time, 0, smoothScrollProgress);
 
     // Base1 Dynamic Iridescent Comet Trail (Renders ABOVE Hero Text & Foreground Layer)
     const trailCtx = topCtx || ctx;
-    if (colorTrailPoints.length > 0 && whitePortalProgress < 0.95 && trailCtx) {
+    if (colorTrailPoints.length > 0 && smoothScrollProgress < 0.95 && trailCtx) {
       trailCtx.save();
       trailCtx.globalCompositeOperation = 'source-over';
 
-      const fadeOverall = (1.0 - whitePortalProgress);
+      const fadeOverall = (1.0 - smoothScrollProgress);
 
       for (let i = colorTrailPoints.length - 1; i >= 0; i--) {
         const p = colorTrailPoints[i];

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=League+Gothic:wdth,wght@100,400..900&family=Luckiest+Guy&family=Moirai+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=League+Gothic:wdth,wght@100,400..900&family=Luckiest+Guy&family=Moirai+One&family=Playfair+Display:ital,wght@0,400..700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 /* ==========================================================================
    AKILESH GLOBAL — LUXURY CINEMATIC DESIGN SYSTEM & STYLES (UNIVERSAL POPPINS)
@@ -477,7 +477,7 @@ body.dark-bg-active .nav-pill-inner button,
 .hero-scroll-wrapper {
   position: relative;
   width: 100%;
-  height: 260vh;
+  height: 160vh;
 }
 
 .hero-section.sticky-hero {
@@ -552,437 +552,301 @@ body.dark-bg-active .nav-pill-inner button,
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
 }
-
 /* ==========================================================================
-   INTERACTIVE ACCORDION PROJECTS SECTION (WARM PAPER TONE #E2E0DB)
+   CHAPTER II PROJECTS SECTION WITH "MY PROJECT" SCROLL REVEAL (WARM STONE #EDEBE6)
    ========================================================================== */
 .projects-section {
-  position: absolute;
-  inset: 0;
-  z-index: 45;
+  position: relative;
+  width: 100%;
+  background-color: var(--frame-yellow);
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.projects-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  height: 180vh;
+}
+
+.projects-sticky-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  padding: var(--frame-thickness);
+  background-color: var(--frame-yellow);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.projects-inner-frame {
+  position: relative;
   width: 100%;
   height: 100%;
-  background-color: #E2E0DB;
-  background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 0);
-  background-size: 18px 18px;
+  background-color: #EDEBE6;
+  border-radius: var(--frame-radius);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Layer 1: Centered "My Project" Intro View */
+.projects-intro-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: calc(clamp(2.5rem, 5.5vh, 4.5rem) + 54px) clamp(1.5rem, 3.5vw, 3.5rem) clamp(1.8rem, 3.5vh, 2.5rem);
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.projects-intro-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(3.4rem, 8vw, 7.2rem);
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: -0.025em;
+  color: #141414;
+  line-height: 1;
+  text-align: center;
+  margin: 0;
+}
+
+/* Layer 2: Chapter II Layout (Matching User Reference Image) */
+.projects-showcase-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  padding: calc(clamp(2rem, 5vh, 3.8rem) + 38px) clamp(2.5rem, 5.5vw, 6rem) clamp(1.8rem, 4vh, 3rem);
+  gap: clamp(2.5rem, 5vw, 5.5rem);
   box-sizing: border-box;
   opacity: 0;
   pointer-events: none;
-  visibility: hidden;
-  overflow-y: auto;
-  overflow-x: hidden;
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  will-change: clip-path, opacity;
+  z-index: 5;
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
 }
 
-.projects-section.visible {
+.projects-showcase-layer.active {
   opacity: 1;
   pointer-events: auto;
-  visibility: visible;
 }
 
-.projects-container {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
+/* Left Column: CHAPTER II Header & Bottom Preview Card */
+.chapter-left-col {
   display: flex;
   flex-direction: column;
-  gap: clamp(1.2rem, 3.2vh, 2.6rem);
-  height: auto;
-  min-height: min-content;
-  justify-content: flex-start;
-}
-
-/* Projects Top Header */
-.projects-header {
-  display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  gap: 1.5rem;
-  width: 100%;
-  margin-bottom: 16px;
-}
-
-.projects-heading {
-  font-family: 'Luckiest Guy', cursive, sans-serif !important;
-  font-size: clamp(2.8rem, 5.2vw, 4.8rem);
-  font-weight: 400 !important;
-  text-transform: uppercase;
-  color: #121212;
-  letter-spacing: 0.01em;
-  line-height: 0.92;
-  margin: 0;
-}
-
-.projects-sub-wrapper {
-  display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  max-width: 440px;
+  height: 100%;
+}
+
+.chapter-roman-title {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.chapter-preview-bottom {
+  width: 100%;
+  max-width: 480px;
+}
+
+.project-preview-card-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #DFDDD8;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.09), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.project-live-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.preview-ambient-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%);
+  pointer-events: none;
+}
+
+/* Right Column: RELATED WORK, Project List, Bottom Disclaimer & Link */
+.chapter-right-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.chapter-right-top {
+  margin-bottom: clamp(4px, 1vh, 10px);
+}
+
+.related-work-badge {
+  font-family: 'Poppins', -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #555555;
+  text-transform: uppercase;
+}
+
+/* Interactive Project Rows */
+.chapter-projects-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   margin-top: 4px;
 }
 
-.portfolio-pill {
-  background-color: #D2D0CB;
-  color: #222222;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 4px 9px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  white-space: nowrap;
-  margin-top: 2px;
-}
-
-.portfolio-desc {
-  font-family: 'Poppins', sans-serif;
-  font-size: clamp(0.82rem, 1vw, 0.95rem);
-  font-weight: 400;
-  color: #4a4a4a;
-  line-height: 1.45;
-  margin: 0;
-}
-
-/* Projects Accordion Rows */
-.projects-accordion {
+.chapter-project-item {
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.project-row {
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-  display: grid;
-  grid-template-columns: minmax(260px, 22%) 1fr minmax(50px, auto);
   align-items: center;
-  min-height: clamp(120px, 13.8vh, 132px);
-  padding: 28px clamp(12px, 1.8vw, 24px);
+  justify-content: space-between;
+  padding: clamp(14px, 2.2vh, 24px) 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   cursor: pointer;
-  position: relative;
-  transition: background-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              border-radius 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  border-radius: 0;
-  box-sizing: border-box;
+  text-decoration: none;
+  transition: padding-left 0.25s ease;
   user-select: none;
   -webkit-user-select: none;
 }
 
-.project-row .row-meta {
-  font-family: 'Space Mono', 'Courier New', monospace, sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  -webkit-text-stroke: 0.2px currentColor;
-  color: #555555;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  transition: color 0.3s ease;
+.chapter-project-item:first-child {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-.project-row .row-center {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0;
-  width: 100%;
-}
-
-.project-row.active .row-center {
-  padding-left: 0;
-}
-
-.project-row .row-title {
-  font-family: 'Luckiest Guy', cursive, sans-serif !important;
-  font-size: 54px;
-  font-weight: 400 !important;
-  -webkit-text-stroke: 0px transparent;
-  text-transform: uppercase;
-  color: #111111;
-  letter-spacing: 0.01em;
+.chapter-project-title {
+  font-family: 'Plus Jakarta Sans', 'Poppins', -apple-system, sans-serif;
+  font-size: clamp(2rem, 3.8vw, 3.8rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: #B2B0AA;
   margin: 0;
-  line-height: 1;
-  text-align: left;
-  transition: color 0.3s ease;
+  line-height: 1.1;
+  transition: color 0.25s ease, transform 0.25s ease;
 }
 
-/* Browser Mockup Card */
-.project-row .browser-mockup {
-  width: 0;
-  margin-right: 0;
-  height: clamp(54px, 6.8vh, 66px);
+.chapter-project-arrow {
+  font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+  color: #141414;
   opacity: 0;
-  overflow: hidden;
-  transform: scale(0.88);
-  transition: width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-              margin-right 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.26s ease,
-              transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-shrink: 0;
-  background: #f0eee9;
-  border-radius: 7px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  transform: translate(-10px, 10px);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1;
+}
+
+/* Active & Hover States */
+.chapter-project-item.active .chapter-project-title,
+.chapter-project-item:hover .chapter-project-title {
+  color: #141414;
+  font-weight: 600;
+}
+
+.chapter-project-item.active .chapter-project-arrow,
+.chapter-project-item:hover .chapter-project-arrow {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Bottom Bar: Disclaimer */
+.chapter-bottom-bar {
   display: flex;
-  flex-direction: column;
-}
-
-.browser-bar {
-  height: 11px;
-  background: #dedcd7;
-  display: flex;
-  align-items: center;
-  padding: 0 5px;
-  gap: 3px;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-}
-
-.browser-dot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #999792;
-}
-
-.browser-url-pill {
-  height: 4px;
-  width: 32px;
-  border-radius: 2px;
-  background: #ffffff;
-  margin-left: 4px;
-  opacity: 0.85;
-}
-
-.mockup-img {
+  align-items: flex-end;
+  justify-content: flex-start;
   width: 100%;
-  height: calc(100% - 11px);
-  object-fit: cover;
-  object-position: top;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  display: block;
+  padding-top: clamp(12px, 2vh, 20px);
 }
 
-/* Action Area */
-.project-row .row-action {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
+.chapter-disclaimer {
+  font-family: 'Poppins', -apple-system, sans-serif;
+  font-size: clamp(11.5px, 0.88vw, 13.5px);
+  font-weight: 500;
+  color: #4a4a4a;
+  letter-spacing: 0.045em;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 520px;
+  text-transform: uppercase;
 }
 
-.btn-live-website {
+.view-all-work-btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(13px, 0.95vw, 15px);
+  font-weight: 500;
+  color: #141414;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  background-color: #E2E0DB;
-  color: #161616;
-  font-family: 'Mohave', 'Poppins', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 6px 12px;
-  border-radius: 6px;
+  gap: 8px;
   text-decoration: none;
+  cursor: pointer;
   white-space: nowrap;
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-  transition: max-width 0.36s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.3s ease,
-              background-color 0.2s ease,
-              transform 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.btn-live-website:hover {
-  background-color: #ffffff;
-  transform: translateY(-1px);
+.view-all-work-btn:hover {
+  opacity: 0.75;
+  transform: translateX(3px);
 }
 
-.btn-live-website .btn-icon {
-  flex-shrink: 0;
+.view-all-work-btn .arrow-sym {
+  font-size: 1.15em;
+  transition: transform 0.2s ease;
 }
 
-.row-link-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #555555;
-  transition: color 0.3s ease, transform 0.3s ease;
+.view-all-work-btn:hover .arrow-sym {
+  transform: translateX(4px);
 }
 
-.project-row:hover .row-link-arrow {
-  transform: translate(2px, -2px);
-}
-
-/* Active / Hover Row State (Yellow Brand Card #ECC714) */
-.project-row.active,
-.project-row:hover {
-  background-color: #ECC714 !important;
-  border-radius: 12px;
-  border-color: transparent !important;
-  min-height: clamp(120px, 13.8vh, 132px);
-  padding: 28px clamp(12px, 1.8vw, 24px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
-  z-index: 2;
-}
-
-.project-row.active + .project-row,
-.project-row:hover + .project-row {
-  border-top-color: transparent;
-}
-
-.project-row.active .row-meta,
-.project-row:hover .row-meta {
-  color: #161616 !important;
-  font-weight: 700;
-  -webkit-text-stroke: 0.2px currentColor;
-}
-
-.project-row.active .row-center,
-.project-row:hover .row-center {
-  padding-left: 0;
-}
-
-.project-row.active .row-title,
-.project-row:hover .row-title {
-  color: #111111 !important;
-  font-family: 'Luckiest Guy', cursive, sans-serif !important;
-  font-size: 56px;
-  font-weight: 400 !important;
-  -webkit-text-stroke: 0px transparent;
-}
-
-.project-row.active .browser-mockup,
-.project-row:hover .browser-mockup {
-  width: clamp(96px, 9.8vw, 126px);
-  margin-right: clamp(12px, 1.6vw, 20px);
-  height: clamp(54px, 6.8vh, 66px);
-  opacity: 1;
-  transform: scale(1);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
-}
-
-.project-row.active .btn-live-website,
-.project-row:hover .btn-live-website {
-  max-width: 140px;
-  opacity: 1;
-  pointer-events: auto;
-  background-color: #161616;
-  color: #ffffff;
-}
-
-.project-row.active .btn-live-website:hover,
-.project-row:hover .btn-live-website:hover {
-  background-color: #000000;
-  color: #ffffff;
-}
-
-.project-row.active .row-link-arrow,
-.project-row:hover .row-link-arrow {
-  color: #161616;
-}
-
-/* Mobile Responsive */
-@media (max-width: 850px) {
-  .projects-section {
-    padding: calc(clamp(3.5rem, 7vh, 5rem) + 54px) clamp(1.2rem, 3vw, 2rem) 2rem;
+/* Mobile & Tablet Responsive */
+@media (max-width: 900px) {
+  .projects-showcase-layer {
+    grid-template-columns: 1fr;
+    padding: calc(clamp(1.5rem, 3vh, 2.5rem) + 40px) 1.5rem 1.5rem;
+    gap: 1.2rem;
+    overflow-y: auto;
   }
 
-  .projects-heading {
-    font-size: 2.2rem;
-  }
-
-  .projects-header {
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .project-row {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-      "meta action"
-      "center action";
-    padding: 18px clamp(12px, 3.5vw, 20px);
-    min-height: auto;
+  .chapter-left-col {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     height: auto;
-    row-gap: 6px;
-    column-gap: 16px;
-    align-items: center;
   }
 
-  .project-row .row-meta {
-    grid-area: meta;
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #666666;
-    letter-spacing: 0.04em;
-    line-height: 1.2;
-    margin: 0;
-  }
-
-  .project-row .row-center {
-    grid-area: center;
-    display: flex;
-    align-items: center;
-    gap: 0;
-    width: 100%;
-  }
-
-  .project-row .row-title {
-    font-size: clamp(1.32rem, 5vw, 1.72rem);
-    line-height: 1.05;
-    letter-spacing: 0.01em;
-    margin: 0;
-  }
-
-  .project-row .row-action {
-    grid-area: action;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-    align-self: center;
-  }
-
-  .project-row.active,
-  .project-row:hover {
-    height: auto;
-    min-height: auto;
-    padding: 18px clamp(12px, 3.5vw, 20px);
-  }
-
-  .project-row.active .browser-mockup,
-  .project-row:hover .browser-mockup {
-    width: 60px;
-    height: 40px;
-    margin-right: 12px;
-  }
-
-  .project-row.active .row-title,
-  .project-row:hover .row-title {
-    font-size: clamp(1.45rem, 5.5vw, 1.85rem);
-  }
-
-  .btn-live-website span {
+  .chapter-preview-bottom {
     display: none;
   }
 
-  .btn-live-website {
-    padding: 6px 8px;
-    max-width: 36px !important;
+  .chapter-project-title {
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+  }
+
+  .chapter-bottom-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 }
 
@@ -1767,30 +1631,33 @@ span.title-line {
    SEPARATE CONTACT / FOOTER SCREEN SECTION (DIRECT FULL-SCREEN LAYOUT)
    ========================================================================== */
 .contact-section {
-  position: absolute;
-  inset: 0;
-  z-index: 46;
+  position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--frame-yellow);
+  padding: var(--frame-thickness);
+  box-sizing: border-box;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+
+.contact-inner-frame {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - (var(--frame-thickness) * 2));
+  min-height: calc(100dvh - (var(--frame-thickness) * 2));
   background-color: #000000;
   color: #FFFFFF;
+  border-radius: var(--frame-radius);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   padding: calc(clamp(2rem, 5vh, 3.5rem) + 40px) clamp(2rem, 5vw, 5.5rem) clamp(1.2rem, 2.8vh, 2.2rem);
   box-sizing: border-box;
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
   overflow: hidden;
-}
-
-.contact-section.visible {
-  opacity: 1;
-  pointer-events: auto;
-  visibility: visible;
 }
 
 /* 1. Background Typographic Small Text Grid with Spotlight Cursor Reveal */
@@ -1813,15 +1680,15 @@ span.title-line {
   opacity: var(--watermark-opacity, 0);
   transition: opacity 0.35s ease;
   -webkit-mask-image: radial-gradient(
-    circle clamp(115px, 12.5vw, 190px) at var(--spotlight-x, -1000px) var(--spotlight-y, -1000px),
+    circle clamp(140px, 16vw, 240px) at var(--spotlight-x, -1000px) var(--spotlight-y, -1000px),
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.75) 45%,
+    rgba(0, 0, 0, 0.75) 50%,
     rgba(0, 0, 0, 0) 100%
   );
   mask-image: radial-gradient(
-    circle clamp(115px, 12.5vw, 190px) at var(--spotlight-x, -1000px) var(--spotlight-y, -1000px),
+    circle clamp(140px, 16vw, 240px) at var(--spotlight-x, -1000px) var(--spotlight-y, -1000px),
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.75) 45%,
+    rgba(0, 0, 0, 0.75) 50%,
     rgba(0, 0, 0, 0) 100%
   );
   -webkit-mask-repeat: no-repeat;
@@ -1840,7 +1707,7 @@ span.title-line {
   text-transform: uppercase;
   color: #FFFFFF;
   line-height: 1;
-  opacity: 0.42;
+  opacity: 0.55;
 }
 
 .contact-bg-row:nth-child(2n) {
@@ -2042,7 +1909,12 @@ span.title-line {
 
 @media (max-width: 768px) {
   .contact-section {
+    padding: var(--frame-thickness);
+  }
+
+  .contact-inner-frame {
     padding: calc(clamp(1.5rem, 4vh, 2.5rem) + 40px) 1.5rem 1.5rem;
+    border-radius: var(--frame-radius);
   }
 
   .contact-watermark-wrap {
@@ -2228,17 +2100,23 @@ span.title-line {
    EXPANDING CIRCLE "VIEW MORE ABOUT AKILESH" DETAIL OVERLAY
    ========================================================================== */
 .about-detail-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 60;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
   background-color: #020202;
   background-image: none;
   color: #ffffff;
   overflow-y: auto;
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-behavior: auto;
+  -webkit-overflow-scrolling: auto;
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
@@ -2637,7 +2515,7 @@ span.title-line {
 .about-capabilities-section {
   position: relative;
   width: 100%;
-  min-height: calc(115vh - 75px);
+  min-height: calc(150vh - 75px);
   padding: 7.5rem clamp(1.5rem, 4vw, 4.5rem) 4rem;
   box-sizing: border-box;
   perspective: 1400px;
@@ -2815,7 +2693,7 @@ span.title-line {
 .about-tools-section {
   position: relative;
   width: 100%;
-  min-height: calc(135vh - 75px);
+  min-height: calc(150vh - 75px);
   padding: 3.5rem clamp(1.5rem, 4vw, 4.5rem) 14rem;
   background: transparent;
   box-shadow: none;
@@ -3373,6 +3251,8 @@ span.title-line {
 
 .about-capabilities-section .arch-card {
   will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* REVERSE: Fly Out to 6 Outer Locations simultaneously */
@@ -3545,7 +3425,7 @@ span.title-line {
 /* Work Style Scrollytelling Stage */
 .work-style-scroll-track {
   position: relative;
-  height: 130vh;
+  height: 180vh;
   width: 100%;
 }
 

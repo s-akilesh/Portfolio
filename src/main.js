@@ -43,21 +43,34 @@ function initApp() {
     return scrollWrapper.offsetHeight - window.innerHeight;
   }
 
+  function scrollToProjects() {
+    const scrollWrapper = document.getElementById('projects-scroll-wrapper');
+    if (scrollWrapper) {
+      const maxScroll = Math.max(scrollWrapper.offsetHeight - window.innerHeight, 1);
+      const targetY = scrollWrapper.offsetTop + maxScroll * 0.70;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    } else {
+      const projectsSec = document.getElementById('projects-section');
+      if (projectsSec) projectsSec.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  function scrollToAbout() {
+    const maxScroll = getHeroScrollMax();
+    window.scrollTo({ top: maxScroll, behavior: 'smooth' });
+  }
+
   if (navAbout) {
     navAbout.addEventListener('click', (e) => {
       e.preventDefault();
-      const maxScroll = getHeroScrollMax();
-      const targetY = maxScroll * 0.25; // Smooth scroll directly to About Me section
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      scrollToAbout();
     });
   }
 
   if (navWork) {
     navWork.addEventListener('click', (e) => {
       e.preventDefault();
-      const maxScroll = getHeroScrollMax();
-      const targetY = maxScroll; // Smooth scroll directly to Projects section
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      scrollToProjects();
     });
   }
 
@@ -119,9 +132,7 @@ function initApp() {
     mobNavAbout.addEventListener('click', (e) => {
       e.preventDefault();
       closeMobileMenu();
-      const maxScroll = getHeroScrollMax();
-      const targetY = maxScroll * 0.25;
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      scrollToAbout();
     });
   }
 
@@ -129,9 +140,7 @@ function initApp() {
     mobNavWork.addEventListener('click', (e) => {
       e.preventDefault();
       closeMobileMenu();
-      const maxScroll = getHeroScrollMax();
-      const targetY = maxScroll;
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      scrollToProjects();
     });
   }
 
@@ -234,47 +243,47 @@ function initApp() {
       }
     }
 
-    // 1. Header (Title & Subtitle): Reveals immediately from progress 0.01 -> 0.08
+    // 1. Header (Title & Subtitle): Reveals immediately from progress 0.02 -> 0.15
     if (sectionHeader) {
-      const hState = getItemState(0.01, 0.08);
+      const hState = getItemState(0.02, 0.15);
       sectionHeader.style.opacity = hState.opacity;
       sectionHeader.style.transform = hState.transform;
       sectionHeader.style.visibility = hState.visibility;
     }
 
-    // 2. Step 1 (Understand): Reveals smoothly from progress 0.03 -> 0.14
+    // 2. Step 1 (Understand): Reveals smoothly from progress 0.08 -> 0.35
     if (step1) {
-      const s1State = getItemState(0.03, 0.14);
+      const s1State = getItemState(0.08, 0.35);
       step1.style.opacity = s1State.opacity;
       step1.style.transform = s1State.transform;
       step1.style.visibility = s1State.visibility;
     }
 
-    // 3. Step 2 (Shape): Reveals smoothly from progress 0.08 -> 0.20
+    // 3. Step 2 (Shape): Reveals smoothly from progress 0.25 -> 0.60
     if (step2) {
-      const s2State = getItemState(0.08, 0.20);
+      const s2State = getItemState(0.25, 0.60);
       step2.style.opacity = s2State.opacity;
       step2.style.transform = s2State.transform;
       step2.style.visibility = s2State.visibility;
     }
 
-    // 4. Step 3 (Evolve): Reveals smoothly from progress 0.14 -> 0.26
+    // 4. Step 3 (Evolve): Reveals smoothly from progress 0.45 -> 0.85
     if (step3) {
-      const s3State = getItemState(0.14, 0.26);
+      const s3State = getItemState(0.45, 0.85);
       step3.style.opacity = s3State.opacity;
       step3.style.transform = s3State.transform;
       step3.style.visibility = s3State.visibility;
     }
 
-    // 5. Axis Line Draw & Rotating Nodes: Draws from left to right as content loads (progress 0.03 -> 0.28)
+    // 5. Axis Line Draw & Rotating Nodes: Draws from left to right as content loads (progress 0.05 -> 0.85)
     if (axisWrapper) {
-      const aState = getItemState(0.03, 0.28);
+      const aState = getItemState(0.05, 0.85);
       axisWrapper.style.opacity = aState.opacity;
       axisWrapper.style.transform = aState.transform;
       axisWrapper.style.visibility = aState.visibility;
 
-      const lineStart = 0.03;
-      const lineEnd = 0.28;
+      const lineStart = 0.05;
+      const lineEnd = 0.85;
       let lineProgress = 0;
       if (progress >= lineStart) {
         lineProgress = Math.min(Math.max((progress - lineStart) / (lineEnd - lineStart), 0), 1);
@@ -318,8 +327,21 @@ function initApp() {
     });
   };
 
-  // What I Build / Capabilities Section Display
-  window.updateBuildScrollScrubbing = function() {
+  // 6 3D Outer Corner Vectors for "What I Bring to the Table" (WHAT I BUILD) Cards
+  const buildCardCornerOffsets = [
+    { tx: -700, ty: -500, tz: -300, rx: 45, ry: 45, rz: -20, s: 0.55 },  // Card 01 (UNTANGLE - Top-Left)
+    { tx: 0,    ty: -650, tz: -300, rx: 65, ry: 0,  rz: 0,   s: 0.55 },  // Card 02 (STRUCTURE - Top-Center)
+    { tx: 700,  ty: -500, tz: -300, rx: 45, ry: -45, rz: 20,  s: 0.55 },  // Card 03 (THINK BUSINESS - Top-Right)
+    { tx: -700, ty: 500,  tz: -300, rx: -45, ry: 45, rz: -20, s: 0.55 },  // Card 04 (BUILD - Bottom-Left)
+    { tx: 0,    ty: 650,  tz: -300, rx: -65, ry: 0,  rz: 0,   s: 0.55 },  // Card 05 (MAKE IT BETTER - Bottom-Center)
+    { tx: 700,  ty: 500,  tz: -300, rx: -45, ry: -45, rz: 20,  s: 0.55 }   // Card 06 (OWN IT - Bottom-Right)
+  ];
+
+  let currentBuildProgress = 0;
+  let targetBuildProgress = 0;
+  let buildAnimFrameId = null;
+
+  window.updateBuildScrollScrubbing = function(forceReset = false) {
     if (!overlayContainer) return;
     const buildPanel = document.getElementById('what-i-build-section');
     if (!buildPanel || !buildPanel.classList.contains('active')) return;
@@ -327,10 +349,59 @@ function initApp() {
     const cards = buildPanel.querySelectorAll('.arch-card');
     if (!cards || cards.length === 0) return;
 
-    cards.forEach((card) => {
-      card.style.opacity = '1';
-      card.style.transform = 'translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)';
+    if (forceReset) {
+      currentBuildProgress = 0;
+      targetBuildProgress = 0;
+    } else {
+      const scrollVal = overlayContainer.scrollTop;
+      const maxScroll = Math.max(overlayContainer.scrollHeight - overlayContainer.clientHeight, 1);
+      const maxScrubDist = Math.min(maxScroll, 240);
+
+      targetBuildProgress = Math.min(Math.max(scrollVal / maxScrubDist, 0), 1);
+      if (scrollVal >= maxScroll - 12) {
+        targetBuildProgress = 1;
+      }
+    }
+
+    currentBuildProgress += (targetBuildProgress - currentBuildProgress) * 0.18;
+    if (Math.abs(targetBuildProgress - currentBuildProgress) < 0.0005) {
+      currentBuildProgress = targetBuildProgress;
+    }
+
+    const p = currentBuildProgress;
+
+    cards.forEach((card, idx) => {
+      const offset = buildCardCornerOffsets[idx % buildCardCornerOffsets.length];
+      const startP = idx * 0.04;
+      const endP = Math.min(startP + 0.60, 0.95);
+
+      const cardP = p <= startP ? 0 : (p >= endP ? 1 : (p - startP) / (endP - startP));
+      const easeP = 1 - Math.pow(1 - cardP, 2.5);
+
+      if (easeP >= 0.998) {
+        card.style.opacity = '1';
+        card.style.transform = 'translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)';
+        card.style.pointerEvents = 'auto';
+      } else {
+        const tx = offset.tx * (1 - easeP);
+        const ty = offset.ty * (1 - easeP);
+        const tz = offset.tz * (1 - easeP);
+        const rx = offset.rx * (1 - easeP);
+        const ry = offset.ry * (1 - easeP);
+        const rz = offset.rz * (1 - easeP);
+        const scale = offset.s + (1 - offset.s) * easeP;
+        const opacity = Math.min(easeP * 1.4, 1);
+
+        card.style.opacity = opacity.toFixed(3);
+        card.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, ${tz.toFixed(1)}px) rotateX(${rx.toFixed(1)}deg) rotateY(${ry.toFixed(1)}deg) rotateZ(${rz.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
+        card.style.pointerEvents = easeP > 0.8 ? 'auto' : 'none';
+      }
     });
+
+    if (Math.abs(targetBuildProgress - currentBuildProgress) > 0.0005) {
+      if (buildAnimFrameId) cancelAnimationFrame(buildAnimFrameId);
+      buildAnimFrameId = requestAnimationFrame(() => window.updateBuildScrollScrubbing(false));
+    }
   };
 
   let isTabTransitioning = false;
@@ -388,19 +459,18 @@ function initApp() {
     } else if (targetSel === '#tools-section' && typeof window.updateToolsScrollScrubbing === 'function') {
       window.updateToolsScrollScrubbing();
     } else if (targetSel === '#what-i-build-section' && typeof window.updateBuildScrollScrubbing === 'function') {
-      window.updateBuildScrollScrubbing();
+      window.updateBuildScrollScrubbing(true);
     }
   }
 
   function triggerToolsToBuildTransition(direction, switchTabFn, onComplete) {
     const toolsSection = document.getElementById('tools-section');
-    const buildSection = document.getElementById('what-i-build-section');
 
     if (direction === 'forward') {
       if (toolsSection) {
-        toolsSection.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+        toolsSection.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
         toolsSection.style.opacity = '0';
-        toolsSection.style.transform = 'translateY(-20px)';
+        toolsSection.style.transform = 'translateY(-15px)';
       }
 
       setTimeout(() => {
@@ -410,26 +480,19 @@ function initApp() {
           toolsSection.style.transform = '';
           toolsSection.style.transition = '';
         }
+        if (typeof window.updateBuildScrollScrubbing === 'function') {
+          window.updateBuildScrollScrubbing(true);
+        }
         if (typeof onComplete === 'function') onComplete();
-      }, 350);
+      }, 250);
 
     } else {
       // REVERSE: What I Build -> Tools
-      if (buildSection) {
-        buildSection.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-        buildSection.style.opacity = '0';
-        buildSection.style.transform = 'translateY(20px)';
+      if (typeof switchTabFn === 'function') switchTabFn();
+      if (typeof window.updateToolsScrollScrubbing === 'function') {
+        window.updateToolsScrollScrubbing();
       }
-
-      setTimeout(() => {
-        if (typeof switchTabFn === 'function') switchTabFn();
-        if (buildSection) {
-          buildSection.style.opacity = '';
-          buildSection.style.transform = '';
-          buildSection.style.transition = '';
-        }
-        if (typeof onComplete === 'function') onComplete();
-      }, 350);
+      if (typeof onComplete === 'function') onComplete();
     }
   }
 
@@ -453,8 +516,8 @@ function initApp() {
             unlockTabTransition();
           });
         }
-      } else if (deltaY < -25) {
-        if (overlayContainer.scrollTop <= 10) {
+      } else if (deltaY < 0) {
+        if (overlayContainer.scrollTop <= 15) {
           if (typeof window.closeAboutDetail === 'function') {
             window.closeAboutDetail();
           }
@@ -472,7 +535,7 @@ function initApp() {
           });
         }
       } else if (deltaY < 0) {
-        if (overlayContainer.scrollTop <= 10) {
+        if (overlayContainer.scrollTop <= 15) {
           lockTabTransition();
           triggerDustDisperse('reverse', () => {
             switchTabByTarget('#work-style-section', 'bottom');
@@ -483,13 +546,28 @@ function initApp() {
       }
     } else if (panelId === 'what-i-build-section') {
       if (deltaY < 0) {
-        if (overlayContainer.scrollTop <= 10) {
+        if (overlayContainer.scrollTop <= 15 && currentBuildProgress <= 0.15) {
           lockTabTransition();
           triggerToolsToBuildTransition('reverse', () => {
             switchTabByTarget('#tools-section', 'bottom');
           }, () => {
             unlockTabTransition();
           });
+        }
+      } else if (deltaY > 0) {
+        const maxScroll = overlayContainer.scrollHeight - overlayContainer.clientHeight;
+        if ((overlayContainer.scrollTop >= maxScroll - 15 || maxScroll <= 10) && currentBuildProgress >= 0.90) {
+          lockTabTransition();
+          if (typeof window.closeAboutDetail === 'function') {
+            window.closeAboutDetail();
+          }
+          setTimeout(() => {
+            unlockTabTransition();
+            const contactSec = document.getElementById('contact-section');
+            if (contactSec) {
+              contactSec.scrollIntoView({ behavior: 'smooth' });
+            }
+          }, 400);
         }
       }
     }
@@ -562,10 +640,23 @@ function initApp() {
         e.stopPropagation();
         return;
       }
-      handleAutoTabScroll(e.deltaY);
+      const scrollSpeedFactor = 0.20; // 20% speed multiplier for View More About Akilesh screen
+      const maxOverlayDelta = 18;     // Ultra-slow fixed max speed cap per event (px)
+      let targetDeltaY = e.deltaY * scrollSpeedFactor;
+      if (Math.abs(targetDeltaY) > maxOverlayDelta) {
+        targetDeltaY = Math.sign(targetDeltaY) * maxOverlayDelta;
+      }
+      
+      const prevTop = overlayContainer.scrollTop;
+      overlayContainer.scrollTop += targetDeltaY;
+      const actualDelta = overlayContainer.scrollTop - prevTop;
+
+      handleAutoTabScroll(actualDelta !== 0 ? actualDelta : targetDeltaY);
+      e.preventDefault();
     }, { passive: false });
 
     let touchStartY = 0;
+    let lastTouchY = 0;
     overlayContainer.addEventListener('touchstart', (e) => {
       if (isTabTransitioning) {
         e.preventDefault();
@@ -573,6 +664,7 @@ function initApp() {
       }
       if (e.touches.length > 0) {
         touchStartY = e.touches[0].clientY;
+        lastTouchY = e.touches[0].clientY;
       }
     }, { passive: false });
 
@@ -584,10 +676,19 @@ function initApp() {
       }
       if (e.touches.length > 0) {
         const currentY = e.touches[0].clientY;
-        const deltaY = touchStartY - currentY;
+        const maxTouchDelta = 14;
+        let deltaY = (lastTouchY - currentY) * 0.20;
+        if (Math.abs(deltaY) > maxTouchDelta) {
+          deltaY = Math.sign(deltaY) * maxTouchDelta;
+        }
+        lastTouchY = currentY;
+
+        overlayContainer.scrollTop += deltaY;
         handleAutoTabScroll(deltaY);
+        e.preventDefault();
       }
     }, { passive: false });
+
 
     overlayContainer.addEventListener('keydown', (e) => {
       if (isTabTransitioning && ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) {
@@ -632,8 +733,10 @@ function initApp() {
 
   // Contact & Separate Screen Handlers
   function scrollToContact() {
-    const maxScroll = getHeroScrollMax();
-    window.scrollTo({ top: maxScroll, behavior: 'smooth' });
+    const contactSec = document.getElementById('contact-section');
+    if (contactSec) {
+      contactSec.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   if (navContact) {
@@ -659,115 +762,116 @@ function initApp() {
     });
   });
 
-  // Interactive Accordion Project Rows (Matching Reference Design)
-  const projectsAccordion = document.querySelector('.projects-accordion');
-  const projectRows = document.querySelectorAll('.project-row');
+  // --------------------------------------------------------------------------
+  // CHAPTER II PROJECTS: "My Project" Scroll Reveal & Interactive Preview
+  // --------------------------------------------------------------------------
+  const projectsScrollWrapper = document.getElementById('projects-scroll-wrapper');
+  const projectsIntroLayer = document.getElementById('projects-intro-layer');
+  const projectsShowcaseLayer = document.getElementById('projects-showcase-layer');
+  const projectLivePreviewImg = document.getElementById('project-live-preview-img');
+  const chapterProjectItems = document.querySelectorAll('.chapter-project-item');
 
-  projectRows.forEach((row) => {
-    const activateRow = () => {
-      if (!row.classList.contains('active')) {
-        projectRows.forEach((r) => r.classList.remove('active'));
-        row.classList.add('active');
-      }
-    };
+  let projectScrollTicking = false;
 
-    // Hover & pointer events
-    row.addEventListener('mouseenter', activateRow);
-    row.addEventListener('mousemove', activateRow);
-    row.addEventListener('pointerenter', activateRow);
+  function updateChapterProjectsScroll() {
+    if (!projectsScrollWrapper || !projectsIntroLayer || !projectsShowcaseLayer) return;
 
-    // When leaving a row, only collapse if cursor leaves the accordion entirely
-    row.addEventListener('mouseleave', (e) => {
-      const toEl = e.relatedTarget;
-      if (!toEl || (projectsAccordion && !projectsAccordion.contains(toEl))) {
-        row.classList.remove('active');
-      }
-    });
+    const rect = projectsScrollWrapper.getBoundingClientRect();
+    const maxScroll = projectsScrollWrapper.offsetHeight - window.innerHeight;
+    if (maxScroll <= 0) return;
 
-    // Click / Touch interaction
-    row.addEventListener('click', (e) => {
-      // Allow live website button to handle its own navigation
-      if (e.target.closest('.btn-live-website')) {
-        return;
-      }
+    const scrolled = -rect.top;
+    const progress = Math.min(Math.max(scrolled / maxScroll, 0), 1);
 
-      const isAlreadyActive = row.classList.contains('active');
-      projectRows.forEach((r) => r.classList.remove('active'));
+    // 1. "My Project" Intro Title: Stays centered, then glides up & fades out (0.05 -> 0.40)
+    const introFade = Math.min(Math.max((progress - 0.05) / 0.35, 0), 1);
+    const easeIntro = introFade * introFade;
+    projectsIntroLayer.style.opacity = (1.0 - easeIntro).toFixed(3);
+    projectsIntroLayer.style.transform = `translateY(-${(easeIntro * 48).toFixed(1)}px) scale(${(1.0 - easeIntro * 0.06).toFixed(3)})`;
+    projectsIntroLayer.style.pointerEvents = introFade >= 0.85 ? 'none' : 'auto';
 
-      if (!isAlreadyActive) {
-        row.classList.add('active');
-      } else {
-        // If clicked while active, follow the row URL if present
-        const url = row.getAttribute('data-url');
-        if (url && url !== '#') {
-          if (url.startsWith('#')) {
-            const targetEl = document.querySelector(url);
-            if (targetEl) targetEl.classList.remove('hidden');
-          } else {
-            window.location.href = url;
-          }
-        }
-      }
-    });
+    // 2. Chapter II Showcase Layer: Fades in and rises into place (0.25 -> 0.65)
+    const showFade = Math.min(Math.max((progress - 0.25) / 0.36, 0), 1);
+    const easeShow = showFade * showFade * (3.0 - 2.0 * showFade);
+    projectsShowcaseLayer.style.opacity = easeShow.toFixed(3);
+    projectsShowcaseLayer.style.transform = `translateY(${((1.0 - easeShow) * 40).toFixed(1)}px)`;
+    projectsShowcaseLayer.style.pointerEvents = showFade >= 0.6 ? 'auto' : 'none';
 
-    // Keyboard Accessibility (Enter / Space to toggle)
-    row.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        const isAlreadyActive = row.classList.contains('active');
-        projectRows.forEach((r) => r.classList.remove('active'));
-        if (!isAlreadyActive) row.classList.add('active');
-      }
-    });
-  });
-
-  // When mouse leaves the entire accordion container, collapse all rows back to default
-  if (projectsAccordion) {
-    projectsAccordion.addEventListener('mouseleave', () => {
-      projectRows.forEach((r) => r.classList.remove('active'));
-    });
-  }
-
-  // Handle Horizontal Projects Track Scroll (Right-to-Left Motion) with RAF throttling
-  const projectsWrapper = document.getElementById('projects-scroll-wrapper');
-  const horizontalTrack = document.getElementById('horizontal-projects-track');
-  let horizScrollTicking = false;
-
-  function updateHorizontalProjectsScroll() {
-    if (!projectsWrapper || !horizontalTrack) return;
-
-    const wrapperRect = projectsWrapper.getBoundingClientRect();
-    const wrapperHeight = projectsWrapper.offsetHeight;
-    const windowHeight = window.innerHeight;
-
-    const scrollDistance = wrapperHeight - windowHeight;
-    if (scrollDistance <= 0) return;
-
-    const currentScroll = -wrapperRect.top;
-    const progress = Math.min(Math.max(currentScroll / scrollDistance, 0), 1);
-
-    const trackWidth = horizontalTrack.scrollWidth;
-    const maxHorizontalShift = trackWidth - (window.innerWidth - 60);
-
-    if (maxHorizontalShift > 0) {
-      const translateX = -progress * maxHorizontalShift;
-      horizontalTrack.style.transform = `translate3d(${translateX.toFixed(2)}px, 0, 0)`;
+    if (showFade >= 0.6) {
+      projectsShowcaseLayer.classList.add('active');
+    } else {
+      projectsShowcaseLayer.classList.remove('active');
     }
   }
 
-  function requestHorizScrollUpdate() {
-    if (!horizScrollTicking) {
-      horizScrollTicking = true;
+  function requestProjectScrollUpdate() {
+    if (!projectScrollTicking) {
+      projectScrollTicking = true;
       requestAnimationFrame(() => {
-        updateHorizontalProjectsScroll();
-        horizScrollTicking = false;
+        updateChapterProjectsScroll();
+        projectScrollTicking = false;
       });
     }
   }
 
-  window.addEventListener('scroll', requestHorizScrollUpdate, { passive: true });
-  window.addEventListener('resize', requestHorizScrollUpdate, { passive: true });
-  updateHorizontalProjectsScroll();
+  window.addEventListener('scroll', requestProjectScrollUpdate, { passive: true });
+  window.addEventListener('resize', requestProjectScrollUpdate, { passive: true });
+  updateChapterProjectsScroll();
+
+  // Interactive Project Selection & Dynamic Image Preview Crossfade
+  chapterProjectItems.forEach((item) => {
+    const activateProject = () => {
+      chapterProjectItems.forEach((it) => it.classList.remove('active'));
+      item.classList.add('active');
+
+      const newImgSrc = item.getAttribute('data-img');
+      if (newImgSrc && projectLivePreviewImg && projectLivePreviewImg.getAttribute('src') !== newImgSrc) {
+        projectLivePreviewImg.style.opacity = '0.3';
+        projectLivePreviewImg.style.transform = 'scale(0.97)';
+        setTimeout(() => {
+          projectLivePreviewImg.src = newImgSrc;
+          projectLivePreviewImg.style.opacity = '1';
+          projectLivePreviewImg.style.transform = 'scale(1)';
+        }, 120);
+      }
+    };
+
+    item.addEventListener('mouseenter', activateProject);
+    item.addEventListener('focus', activateProject);
+
+    item.addEventListener('click', () => {
+      activateProject();
+      const url = item.getAttribute('data-url');
+      if (url && url !== '#') {
+        if (url.startsWith('#')) {
+          const targetEl = document.querySelector(url);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+          }
+        } else {
+          window.location.href = url;
+        }
+      }
+    });
+
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        item.click();
+      }
+    });
+  });
+
+  const btnViewAllWork = document.getElementById('btn-view-all-work');
+  if (btnViewAllWork) {
+    btnViewAllWork.addEventListener('click', (e) => {
+      e.preventDefault();
+      const contactSec = document.getElementById('contact-section');
+      if (contactSec) {
+        contactSec.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
 
   // --------------------------------------------------------------------------
   // Interactive Smooth Mouse Floating Parallax Engine for All About Tabs
@@ -910,6 +1014,8 @@ function initContactWatermarkSpotlight() {
   let targetY = -1000;
   let currentX = -1000;
   let currentY = -1000;
+  let lastClientX = -1000;
+  let lastClientY = -1000;
   let isInside = false;
   let animId = null;
 
@@ -928,16 +1034,20 @@ function initContactWatermarkSpotlight() {
   }
 
   function handlePointerMove(clientX, clientY) {
+    lastClientX = clientX;
+    lastClientY = clientY;
     const rect = watermarkWrap.getBoundingClientRect();
     targetX = clientX - rect.left;
     targetY = clientY - rect.top;
 
     if (!isInside) {
       isInside = true;
+      currentX = targetX;
+      currentY = targetY;
+      watermarkWrap.style.setProperty('--spotlight-x', `${currentX.toFixed(1)}px`);
+      watermarkWrap.style.setProperty('--spotlight-y', `${currentY.toFixed(1)}px`);
       watermarkWrap.style.setProperty('--watermark-opacity', '1');
       if (!animId) {
-        currentX = targetX;
-        currentY = targetY;
         animId = requestAnimationFrame(renderSpotlight);
       }
     }
@@ -948,12 +1058,19 @@ function initContactWatermarkSpotlight() {
     watermarkWrap.style.setProperty('--watermark-opacity', '0');
   }
 
-  // Pointer & mouse tracking across contact section
+  // Pointer & mouse tracking directly on contact section
+  contactSection.addEventListener('pointerenter', (e) => {
+    handlePointerMove(e.clientX, e.clientY);
+  });
+
+  contactSection.addEventListener('pointermove', (e) => {
+    handlePointerMove(e.clientX, e.clientY);
+  });
+
+  contactSection.addEventListener('pointerleave', handlePointerLeave);
+
+  // Global tracking for smooth pointer boundaries
   window.addEventListener('pointermove', (e) => {
-    if (!contactSection.classList.contains('visible')) {
-      if (isInside) handlePointerLeave();
-      return;
-    }
     const cRect = contactSection.getBoundingClientRect();
     if (
       e.clientX >= cRect.left &&
@@ -967,28 +1084,32 @@ function initContactWatermarkSpotlight() {
     }
   }, { passive: true });
 
-  window.addEventListener('pointerleave', handlePointerLeave, { passive: true });
-
-  // Touch support for mobile interaction
-  window.addEventListener('touchmove', (e) => {
-    if (!contactSection.classList.contains('visible')) return;
-    if (e.touches && e.touches.length > 0) {
-      const touch = e.touches[0];
+  window.addEventListener('scroll', () => {
+    if (isInside && lastClientX >= 0) {
       const cRect = contactSection.getBoundingClientRect();
       if (
-        touch.clientX >= cRect.left &&
-        touch.clientX <= cRect.right &&
-        touch.clientY >= cRect.top &&
-        touch.clientY <= cRect.bottom
+        lastClientX >= cRect.left &&
+        lastClientX <= cRect.right &&
+        lastClientY >= cRect.top &&
+        lastClientY <= cRect.bottom
       ) {
-        handlePointerMove(touch.clientX, touch.clientY);
-      } else if (isInside) {
+        handlePointerMove(lastClientX, lastClientY);
+      } else {
         handlePointerLeave();
       }
     }
   }, { passive: true });
 
-  window.addEventListener('touchend', handlePointerLeave, { passive: true });
+  window.addEventListener('pointerleave', handlePointerLeave, { passive: true });
+
+  // Touch support for mobile interaction
+  contactSection.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches.length > 0) {
+      handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  }, { passive: true });
+
+  contactSection.addEventListener('touchend', handlePointerLeave, { passive: true });
 }
 
 function initToolCardToggles() {

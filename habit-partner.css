@@ -102,10 +102,23 @@ a:focus-visible, button:focus-visible {
   top: 0;
   z-index: 100;
   padding: 20px 6%;
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border-bottom: none;
+  background: rgba(5, 8, 6, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  pointer-events: auto !important;
+  transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.site-header *,
+.nav-wrapper,
+.brand,
+.hp-desktop-nav,
+.hp-nav-list,
+.hp-nav-item,
+.hp-mobile-nav-link,
+.mobile-toggle {
+  pointer-events: auto !important;
 }
 
 .nav-wrapper {
