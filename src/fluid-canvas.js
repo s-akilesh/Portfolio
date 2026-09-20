@@ -574,8 +574,8 @@ export function initFluidCanvas() {
       const isMobile = width < 768;
       const isTablet = width >= 768 && width < 1100;
 
-      // Reveal Akilesh portrait and text inside liquid portal from frame 1
-      const revealP = 1.0;
+      // Reveal Akilesh portrait and text inside liquid portal as user scrolls down from landing screen
+      const revealP = Math.min(Math.max((scrollProgress - 0.02) / 0.25, 0.0), 1.0);
 
       // 2. Large Outlined Name 'AKILESH' in Font Family 'Moirai One' (Centered in Background)
       if (revealP > 0.01) {
