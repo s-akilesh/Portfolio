@@ -2,6 +2,22 @@ import './../style.css';
 import { initFluidCanvas } from './fluid-canvas.js';
 import { initDustParticleEngine, triggerDustDisperse } from './dust-particle-transition.js';
 
+// Enforce manual scroll restoration at top-level so browser NEVER auto-scrolls down on entry
+if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+// Strip any leftover hash on initial entry so portfolio ALWAYS starts cleanly at (0, 0)
+if (typeof window !== 'undefined' && window.location.hash) {
+  history.replaceState('', document.title, window.location.pathname + window.location.search);
+}
+
+if (typeof window !== 'undefined') {
+  window.scrollTo(0, 0);
+  window.addEventListener('pageshow', () => window.scrollTo(0, 0));
+  window.addEventListener('load', () => window.scrollTo(0, 0));
+}
+
 function initApp() {
   // Preloader Logic
   const preloader = document.getElementById('preloader');
@@ -78,7 +94,8 @@ function initApp() {
       window.closeAboutDetail();
     }
     const maxScroll = getHeroScrollMax();
-    window.scrollTo({ top: maxScroll, behavior: 'smooth' });
+    const targetY = Math.round(maxScroll * 0.50);
+    window.scrollTo({ top: targetY, behavior: 'smooth' });
   }
 
   if (navHome) {
@@ -742,34 +759,27 @@ function initApp() {
     history.scrollRestoration = 'manual';
   }
 
-  // Force landing on top of Home Screen on initial page load / refresh
+  // Strip any leftover hash on initial page entry so user ALWAYS lands on top (0, 0)
+  if (window.location.hash) {
+    history.replaceState('', document.title, window.location.pathname + window.location.search);
+  }
+
+  // Enforce top position on initial entry
   window.scrollTo(0, 0);
 
-  // Handle Hash Scroll ONLY when user explicitly navigates to #projects or #work
-  function handleInitialHashScroll() {
+  // Handle Hash Scroll ONLY when user explicitly changes location hash in active session
+  function handleHashChange() {
     const hash = window.location.hash;
-    if (hash === '#projects' || hash === '#work') {
-      setTimeout(() => {
-        const maxScroll = getHeroScrollMax();
-        const targetY = maxScroll; // Scroll to Projects Showcase
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      }, 250);
+    if (hash === '#projects' || hash === '#work' || hash === '#work-section') {
+      scrollToProjects();
+    } else if (hash === '#about') {
+      scrollToAbout();
+    } else if (hash === '#home' || hash === '' || hash === '#') {
+      scrollToLanding();
     }
   }
 
-  // On page reload, clear any leftover hash so page lands cleanly on Home Screen
-  if (window.performance && window.performance.navigation && window.performance.navigation.type === 1) {
-    if (window.location.hash) {
-      history.replaceState('', document.title, window.location.pathname + window.location.search);
-    }
-    window.scrollTo(0, 0);
-  } else if (window.location.hash === '#projects' || window.location.hash === '#work') {
-    handleInitialHashScroll();
-  } else {
-    window.scrollTo(0, 0);
-  }
-
-  window.addEventListener('hashchange', handleInitialHashScroll);
+  window.addEventListener('hashchange', handleHashChange);
 
   // Contact & Separate Screen Handlers
   function scrollToContact() {
