@@ -3082,6 +3082,30 @@ span.title-line {
 }
 
 @media (max-width: 768px) {
+  /* Work Style Section Mobile Typography Reductions */
+  .work-style-content-layer .about-section-title {
+    font-size: clamp(1.65rem, 5vw, 2.2rem) !important;
+  }
+  .work-style-content-layer .about-section-subtitle {
+    font-size: 0.84rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .process-card {
+    gap: 8px !important;
+    padding: 8px 6px !important;
+  }
+  .process-card-title {
+    font-size: 1.2rem !important;
+  }
+  .process-card-desc {
+    font-size: 0.81rem !important;
+    line-height: 1.45 !important;
+  }
+  .process-card-flow {
+    font-size: 0.70rem !important;
+    padding-top: 10px !important;
+  }
+
   .about-tools-section {
     padding: 2rem 1rem 3rem;
   }
