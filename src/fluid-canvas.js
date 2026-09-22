@@ -895,30 +895,12 @@ export function initFluidCanvas() {
     }
 
     if (heroContent) {
-      if (smoothScrollProgress > 0.20) {
+      if (smoothScrollProgress > 0.04) {
         heroContent.classList.add('fade-out-text');
       } else {
         heroContent.classList.remove('fade-out-text');
       }
     }
-
-    if (scrollWrapper) {
-      if (smoothScrollProgress >= 0.96) {
-        scrollWrapper.style.pointerEvents = 'none';
-      } else {
-        scrollWrapper.style.pointerEvents = '';
-      }
-    }
-
-    window.resetHeroScrollState = function() {
-      rawScrollProgress = 0;
-      smoothScrollProgress = 0;
-      if (heroContent) {
-        heroContent.classList.remove('fade-out-text');
-        heroContent.style.opacity = '';
-        heroContent.style.visibility = '';
-      }
-    };
 
     // Update Header Theme when Contact Section is in View
     const contactSection = document.getElementById('contact-section');

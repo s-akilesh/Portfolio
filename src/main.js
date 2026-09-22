@@ -2,35 +2,7 @@ import './../style.css';
 import { initFluidCanvas } from './fluid-canvas.js';
 import { initDustParticleEngine, triggerDustDisperse } from './dust-particle-transition.js';
 
-// Enforce manual scroll restoration at top-level so browser NEVER auto-scrolls down on entry
-if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
-  history.scrollRestoration = 'manual';
-}
-
-function forceResetToLanding() {
-  if (typeof window !== 'undefined') {
-    if (window.location.hash) {
-      history.replaceState('', document.title, window.location.pathname + window.location.search);
-    }
-    window.scrollTo(0, 0);
-    if (document.documentElement) document.documentElement.scrollTop = 0;
-    if (document.body) document.body.scrollTop = 0;
-    if (typeof window.resetHeroScrollState === 'function') {
-      window.resetHeroScrollState();
-    }
-  }
-}
-
-if (typeof window !== 'undefined') {
-  forceResetToLanding();
-  window.addEventListener('pageshow', forceResetToLanding);
-  window.addEventListener('load', forceResetToLanding);
-  document.addEventListener('DOMContentLoaded', forceResetToLanding);
-}
-
 function initApp() {
-  forceResetToLanding();
-
   // Preloader Logic
   const preloader = document.getElementById('preloader');
   const counter = document.getElementById('preloader-counter');
@@ -60,26 +32,10 @@ function initApp() {
   initDustParticleEngine();
 
   // Header Navigation Smooth Scroll Handlers
-  const navHome = document.getElementById('nav-home');
   const navWork = document.getElementById('nav-work');
   const navAbout = document.getElementById('nav-about');
   const navContact = document.getElementById('nav-contact');
   const headerLogo = document.querySelector('.header-logo');
-
-  function scrollToLanding() {
-    if (typeof window.closeAboutDetail === 'function') {
-      window.closeAboutDetail();
-    }
-    if (window.location.hash) {
-      history.replaceState('', document.title, window.location.pathname + window.location.search);
-    }
-    if (typeof window.resetHeroScrollState === 'function') {
-      window.resetHeroScrollState();
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }
 
   function getHeroScrollMax() {
     const scrollWrapper = document.getElementById('hero-scroll-wrapper');
@@ -88,38 +44,20 @@ function initApp() {
   }
 
   function scrollToProjects() {
-    if (typeof window.closeAboutDetail === 'function') {
-      window.closeAboutDetail();
-    }
-    const projectsSec = document.getElementById('projects-section');
-    if (projectsSec) {
-      const rect = projectsSec.getBoundingClientRect();
-      const targetY = rect.top + window.scrollY;
+    const scrollWrapper = document.getElementById('projects-scroll-wrapper');
+    if (scrollWrapper) {
+      const maxScroll = Math.max(scrollWrapper.offsetHeight - window.innerHeight, 1);
+      const targetY = scrollWrapper.offsetTop + maxScroll * 0.70;
       window.scrollTo({ top: targetY, behavior: 'smooth' });
     } else {
-      const scrollWrapper = document.getElementById('projects-scroll-wrapper');
-      if (scrollWrapper) {
-        const maxScroll = Math.max(scrollWrapper.offsetHeight - window.innerHeight, 1);
-        const targetY = scrollWrapper.offsetTop + maxScroll * 0.70;
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      }
+      const projectsSec = document.getElementById('projects-section');
+      if (projectsSec) projectsSec.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
   function scrollToAbout() {
-    if (typeof window.closeAboutDetail === 'function') {
-      window.closeAboutDetail();
-    }
     const maxScroll = getHeroScrollMax();
-    const targetY = Math.round(maxScroll * 0.45);
-    window.scrollTo({ top: targetY, behavior: 'smooth' });
-  }
-
-  if (navHome) {
-    navHome.addEventListener('click', (e) => {
-      e.preventDefault();
-      scrollToLanding();
-    });
+    window.scrollTo({ top: maxScroll, behavior: 'smooth' });
   }
 
   if (navAbout) {
@@ -139,14 +77,13 @@ function initApp() {
   if (headerLogo) {
     headerLogo.addEventListener('click', (e) => {
       e.preventDefault();
-      scrollToLanding();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
   // Mobile Drawer Navigation Handlers
   const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
   const mobileNavCloseBtn = document.getElementById('mobile-nav-close-btn');
-  const mobNavHome = document.getElementById('mob-nav-home');
   const mobNavWork = document.getElementById('mob-nav-work');
   const mobNavAbout = document.getElementById('mob-nav-about');
   const mobNavContact = document.getElementById('mob-nav-contact');
@@ -188,14 +125,6 @@ function initApp() {
       if (e.target === mobileNavOverlay) {
         closeMobileMenu();
       }
-    });
-  }
-
-  if (mobNavHome) {
-    mobNavHome.addEventListener('click', (e) => {
-      e.preventDefault();
-      closeMobileMenu();
-      scrollToLanding();
     });
   }
 
@@ -771,32 +700,29 @@ function initApp() {
     }, { passive: false });
   }
 
-  // Force manual scroll restoration so reloads always land on top of Home Screen
+  // Force manual scroll restoration so entering/reloading link ALWAYS lands on top of Landing Screen
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
   }
 
-  // Strip any leftover hash on initial page entry so user ALWAYS lands on top (0, 0)
+  // Clear any hash in URL so entering the link lands 100% on the Landing Screen (hero canvas)
   if (window.location.hash) {
     history.replaceState('', document.title, window.location.pathname + window.location.search);
   }
 
-  // Enforce top position on initial entry
+  // Force landing on top of Landing Screen (0, 0)
   window.scrollTo(0, 0);
 
-  // Handle Hash Scroll ONLY when user explicitly changes location hash in active session
-  function handleHashChange() {
-    const hash = window.location.hash;
-    if (hash === '#projects' || hash === '#work' || hash === '#work-section') {
-      scrollToProjects();
-    } else if (hash === '#about') {
-      scrollToAbout();
-    } else if (hash === '#home' || hash === '' || hash === '#') {
-      scrollToLanding();
+  window.addEventListener('load', () => {
+    if (window.location.hash) {
+      history.replaceState('', document.title, window.location.pathname + window.location.search);
     }
-  }
+    window.scrollTo(0, 0);
+  });
 
-  window.addEventListener('hashchange', handleHashChange);
+  window.addEventListener('pageshow', () => {
+    window.scrollTo(0, 0);
+  });
 
   // Contact & Separate Screen Handlers
   function scrollToContact() {
