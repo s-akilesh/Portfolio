@@ -517,11 +517,7 @@ function initApp() {
           });
         }
       } else if (deltaY < 0) {
-        if (overlayContainer.scrollTop <= 15) {
-          if (typeof window.closeAboutDetail === 'function') {
-            window.closeAboutDetail();
-          }
-        }
+        // Overlay remains open; user exits only via BACK TO ABOUT button
       }
     } else if (panelId === 'tools-section') {
       if (deltaY > 0) {
@@ -555,20 +551,7 @@ function initApp() {
           });
         }
       } else if (deltaY > 0) {
-        const maxScroll = overlayContainer.scrollHeight - overlayContainer.clientHeight;
-        if ((overlayContainer.scrollTop >= maxScroll - 15 || maxScroll <= 10) && currentBuildProgress >= 0.90) {
-          lockTabTransition();
-          if (typeof window.closeAboutDetail === 'function') {
-            window.closeAboutDetail();
-          }
-          setTimeout(() => {
-            unlockTabTransition();
-            const contactSec = document.getElementById('contact-section');
-            if (contactSec) {
-              contactSec.scrollIntoView({ behavior: 'smooth' });
-            }
-          }, 400);
-        }
+        // Bounded within What I Build; user exits only via BACK TO ABOUT button
       }
     }
   }
