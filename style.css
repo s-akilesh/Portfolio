@@ -3083,32 +3083,43 @@ span.title-line {
 
 @media (max-width: 768px) {
   .about-tools-section {
-    padding: 2.5rem 1.2rem 3.5rem;
+    padding: 2rem 1rem 3rem;
+  }
+  .about-tools-section .about-section-title {
+    font-size: clamp(1.75rem, 5.5vw, 2.4rem);
+  }
+  .category-row-title {
+    font-size: 1.3rem !important;
+    letter-spacing: 0.03em;
   }
   .tool-category-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
-    padding: 20px;
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 14px;
   }
   .category-row-tools {
     flex-wrap: wrap;
     width: 100%;
+    gap: 10px;
   }
   .tool-pill-badge {
-    height: 86px;
+    height: 56px !important;
+    border-radius: 12px !important;
   }
   .tool-icon-box {
-    width: 78px;
-    height: 78px;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 10px !important;
   }
   .tool-icon-img {
-    max-width: 72px;
-    max-height: 72px;
+    max-width: 40px !important;
+    max-height: 40px !important;
   }
   .tool-icon-box svg {
-    max-width: 60px;
-    max-height: 60px;
+    max-width: 34px !important;
+    max-height: 34px !important;
   }
   .usage-icon {
     font-size: 14px;
