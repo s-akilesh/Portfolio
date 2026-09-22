@@ -32,10 +32,21 @@ function initApp() {
   initDustParticleEngine();
 
   // Header Navigation Smooth Scroll Handlers
+  const navHome = document.getElementById('nav-home');
   const navWork = document.getElementById('nav-work');
   const navAbout = document.getElementById('nav-about');
   const navContact = document.getElementById('nav-contact');
   const headerLogo = document.querySelector('.header-logo');
+
+  function scrollToLanding() {
+    if (typeof window.closeAboutDetail === 'function') {
+      window.closeAboutDetail();
+    }
+    if (window.location.hash) {
+      history.replaceState('', document.title, window.location.pathname + window.location.search);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   function getHeroScrollMax() {
     const scrollWrapper = document.getElementById('hero-scroll-wrapper');
@@ -44,20 +55,37 @@ function initApp() {
   }
 
   function scrollToProjects() {
-    const scrollWrapper = document.getElementById('projects-scroll-wrapper');
-    if (scrollWrapper) {
-      const maxScroll = Math.max(scrollWrapper.offsetHeight - window.innerHeight, 1);
-      const targetY = scrollWrapper.offsetTop + maxScroll * 0.70;
+    if (typeof window.closeAboutDetail === 'function') {
+      window.closeAboutDetail();
+    }
+    const projectsSec = document.getElementById('projects-section');
+    if (projectsSec) {
+      const rect = projectsSec.getBoundingClientRect();
+      const targetY = rect.top + window.scrollY;
       window.scrollTo({ top: targetY, behavior: 'smooth' });
     } else {
-      const projectsSec = document.getElementById('projects-section');
-      if (projectsSec) projectsSec.scrollIntoView({ behavior: 'smooth' });
+      const scrollWrapper = document.getElementById('projects-scroll-wrapper');
+      if (scrollWrapper) {
+        const maxScroll = Math.max(scrollWrapper.offsetHeight - window.innerHeight, 1);
+        const targetY = scrollWrapper.offsetTop + maxScroll * 0.70;
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      }
     }
   }
 
   function scrollToAbout() {
+    if (typeof window.closeAboutDetail === 'function') {
+      window.closeAboutDetail();
+    }
     const maxScroll = getHeroScrollMax();
     window.scrollTo({ top: maxScroll, behavior: 'smooth' });
+  }
+
+  if (navHome) {
+    navHome.addEventListener('click', (e) => {
+      e.preventDefault();
+      scrollToLanding();
+    });
   }
 
   if (navAbout) {
@@ -77,13 +105,14 @@ function initApp() {
   if (headerLogo) {
     headerLogo.addEventListener('click', (e) => {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToLanding();
     });
   }
 
   // Mobile Drawer Navigation Handlers
   const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
   const mobileNavCloseBtn = document.getElementById('mobile-nav-close-btn');
+  const mobNavHome = document.getElementById('mob-nav-home');
   const mobNavWork = document.getElementById('mob-nav-work');
   const mobNavAbout = document.getElementById('mob-nav-about');
   const mobNavContact = document.getElementById('mob-nav-contact');
@@ -125,6 +154,14 @@ function initApp() {
       if (e.target === mobileNavOverlay) {
         closeMobileMenu();
       }
+    });
+  }
+
+  if (mobNavHome) {
+    mobNavHome.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMobileMenu();
+      scrollToLanding();
     });
   }
 
