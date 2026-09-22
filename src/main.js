@@ -7,18 +7,30 @@ if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 
-// Strip any leftover hash on initial entry so portfolio ALWAYS starts cleanly at (0, 0)
-if (typeof window !== 'undefined' && window.location.hash) {
-  history.replaceState('', document.title, window.location.pathname + window.location.search);
+function forceResetToLanding() {
+  if (typeof window !== 'undefined') {
+    if (window.location.hash) {
+      history.replaceState('', document.title, window.location.pathname + window.location.search);
+    }
+    window.scrollTo(0, 0);
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+    if (typeof window.resetHeroScrollState === 'function') {
+      window.resetHeroScrollState();
+    }
+  }
 }
 
 if (typeof window !== 'undefined') {
-  window.scrollTo(0, 0);
-  window.addEventListener('pageshow', () => window.scrollTo(0, 0));
-  window.addEventListener('load', () => window.scrollTo(0, 0));
+  forceResetToLanding();
+  window.addEventListener('pageshow', forceResetToLanding);
+  window.addEventListener('load', forceResetToLanding);
+  document.addEventListener('DOMContentLoaded', forceResetToLanding);
 }
 
 function initApp() {
+  forceResetToLanding();
+
   // Preloader Logic
   const preloader = document.getElementById('preloader');
   const counter = document.getElementById('preloader-counter');
@@ -61,7 +73,12 @@ function initApp() {
     if (window.location.hash) {
       history.replaceState('', document.title, window.location.pathname + window.location.search);
     }
+    if (typeof window.resetHeroScrollState === 'function') {
+      window.resetHeroScrollState();
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }
 
   function getHeroScrollMax() {
@@ -94,7 +111,7 @@ function initApp() {
       window.closeAboutDetail();
     }
     const maxScroll = getHeroScrollMax();
-    const targetY = Math.round(maxScroll * 0.50);
+    const targetY = Math.round(maxScroll * 0.45);
     window.scrollTo({ top: targetY, behavior: 'smooth' });
   }
 
