@@ -640,8 +640,9 @@ function initApp() {
         e.stopPropagation();
         return;
       }
-      const scrollSpeedFactor = 0.20; // 20% speed multiplier for View More About Akilesh screen
-      const maxOverlayDelta = 18;     // Ultra-slow fixed max speed cap per event (px)
+      const isMobile = window.innerWidth < 768;
+      const scrollSpeedFactor = isMobile ? 0.45 : 0.35; // Increased scroll speed multiplier inside View More About Akilesh screen
+      const maxOverlayDelta = isMobile ? 32 : 28;
       let targetDeltaY = e.deltaY * scrollSpeedFactor;
       if (Math.abs(targetDeltaY) > maxOverlayDelta) {
         targetDeltaY = Math.sign(targetDeltaY) * maxOverlayDelta;
@@ -676,8 +677,10 @@ function initApp() {
       }
       if (e.touches.length > 0) {
         const currentY = e.touches[0].clientY;
-        const maxTouchDelta = 14;
-        let deltaY = (lastTouchY - currentY) * 0.20;
+        const isMobile = window.innerWidth < 768;
+        const touchSpeedFactor = isMobile ? 0.65 : 0.45; // Increased mobile touch scroll speed factor inside View More About Akilesh screen
+        const maxTouchDelta = isMobile ? 40 : 25;
+        let deltaY = (lastTouchY - currentY) * touchSpeedFactor;
         if (Math.abs(deltaY) > maxTouchDelta) {
           deltaY = Math.sign(deltaY) * maxTouchDelta;
         }
