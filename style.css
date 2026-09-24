@@ -2144,6 +2144,35 @@ span.title-line {
   clip-path: circle(350% at var(--dome-x, 50%) var(--dome-y, 50%));
 }
 
+/* Ensure no elements or sections below peek through when About Detail Overlay is open */
+body.about-overlay-open #projects-section,
+body.about-overlay-open #contact-section,
+body.about-overlay-open footer,
+body:has(#about-detail-overlay.active) #projects-section,
+body:has(#about-detail-overlay.active) #contact-section,
+body:has(#about-detail-overlay.active) footer {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.about-overlay-open,
+body:has(#about-detail-overlay.active) {
+  overflow: hidden !important;
+}
+
+/* Ensure the hero section frame fills the screen edge-to-edge when overlay is open without yellow border gap */
+body.about-overlay-open .hero-section.sticky-hero,
+body:has(#about-detail-overlay.active) .hero-section.sticky-hero {
+  padding: 0 !important;
+  background-color: #020202 !important;
+}
+
+body.about-overlay-open .hero-inner-frame,
+body:has(#about-detail-overlay.active) .hero-inner-frame {
+  border-radius: 0 !important;
+}
+
 /* Sticky Detail Top Navigation Bar */
 .about-detail-header {
   position: sticky;

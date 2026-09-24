@@ -192,10 +192,17 @@ export function initFluidCanvas() {
   let domeHoverFactor = 0.0;
   let currentDomeCoords = { x: 0, y: 0 };
 
+  let savedPageScrollY = 0;
+
   window.openAboutDetail = function(x, y) {
     if (isDetailOverlayOpen) return;
     const overlay = document.getElementById('about-detail-overlay');
     if (!overlay) return;
+
+    // Save previous page scroll position and reset to 0 so hero section is fully pinned in viewport
+    savedPageScrollY = window.scrollY || window.pageYOffset || 0;
+    window.scrollTo(0, 0);
+
     const targetX = (x !== undefined && x > 0) ? x : (currentDomeCoords.x || window.innerWidth * 0.5);
     const targetY = (y !== undefined && y > 0) ? y : (currentDomeCoords.y || window.innerHeight * 0.5);
     overlay.style.setProperty('--dome-x', `${targetX}px`);
@@ -204,6 +211,7 @@ export function initFluidCanvas() {
     overlay.setAttribute('aria-hidden', 'false');
     isDetailOverlayOpen = true;
 
+    document.body.classList.add('about-overlay-open');
     document.body.style.overflow = 'hidden';
 
     if (siteHeader) {
@@ -230,6 +238,7 @@ export function initFluidCanvas() {
     if (overlay) overlay.scrollTop = 0;
 
     requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
       if (overlay) overlay.scrollTop = 0;
       if (typeof window.updateWorkStyleScrollytelling === 'function') {
         window.updateWorkStyleScrollytelling();
@@ -249,11 +258,18 @@ export function initFluidCanvas() {
     overlay.setAttribute('aria-hidden', 'true');
     isDetailOverlayOpen = false;
 
+    document.body.classList.remove('about-overlay-open');
+
     if (typeof window.stopAboutTabsFloat === 'function') {
       window.stopAboutTabsFloat();
     }
 
     document.body.style.overflow = '';
+
+    // Restore saved page scroll position
+    if (typeof savedPageScrollY === 'number') {
+      window.scrollTo(0, savedPageScrollY);
+    }
 
     if (siteHeader) {
       siteHeader.classList.remove('hide-for-overlay');
