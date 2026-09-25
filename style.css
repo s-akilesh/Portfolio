@@ -2447,7 +2447,7 @@ span.title-line {
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.5rem;
-  margin-bottom: 48px;
+  margin-bottom: 80px;
   transform-style: preserve-3d;
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
@@ -2628,7 +2628,7 @@ span.title-line {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 48px;
+  margin-bottom: 80px;
   transition: opacity 0.25s ease;
 }
 
