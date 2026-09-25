@@ -331,15 +331,15 @@ function initApp() {
     const scrolled = -rect.top;
     const progress = Math.min(Math.max(scrolled / maxScroll, 0), 1);
 
-    // ---------------- PHASE 1: TOOLS & ECOSYSTEM REVEAL (0.00 -> 0.46) ----------------
+    // ---------------- PHASE 1: TOOLS & ECOSYSTEM REVEAL (0.00 -> 0.40) ----------------
     // 1. Header: visible from the start
     if (toolsHeader) {
-      const headerFade = Math.min(Math.max((progress + 0.1) / 0.22, 0), 1);
+      const headerFade = Math.min(Math.max((progress + 0.1) / 0.20, 0), 1);
       toolsHeader.style.opacity = Math.max(0.6, headerFade).toFixed(3);
     }
 
-    // 2. Category 1 (DESIGN): reveals at 0.02 -> 0.12
-    const p1 = Math.min(Math.max((progress - 0.02) / 0.10, 0), 1);
+    // 2. Category 1 (DESIGN): reveals at 0.02 -> 0.11
+    const p1 = Math.min(Math.max((progress - 0.02) / 0.09, 0), 1);
     const ease1 = p1 * p1 * (3 - 2 * p1);
     if (toolCat1) {
       toolCat1.style.opacity = ease1.toFixed(3);
@@ -351,8 +351,8 @@ function initApp() {
       }
     }
 
-    // 3. Category 2 (MOTION): reveals at 0.13 -> 0.23
-    const p2 = Math.min(Math.max((progress - 0.13) / 0.10, 0), 1);
+    // 3. Category 2 (MOTION): reveals at 0.11 -> 0.20
+    const p2 = Math.min(Math.max((progress - 0.11) / 0.09, 0), 1);
     const ease2 = p2 * p2 * (3 - 2 * p2);
     if (toolCat2) {
       toolCat2.style.opacity = ease2.toFixed(3);
@@ -364,8 +364,8 @@ function initApp() {
       }
     }
 
-    // 4. Category 3 (CODE): reveals at 0.24 -> 0.34
-    const p3 = Math.min(Math.max((progress - 0.24) / 0.10, 0), 1);
+    // 4. Category 3 (CODE): reveals at 0.20 -> 0.29
+    const p3 = Math.min(Math.max((progress - 0.20) / 0.09, 0), 1);
     const ease3 = p3 * p3 * (3 - 2 * p3);
     if (toolCat3) {
       toolCat3.style.opacity = ease3.toFixed(3);
@@ -377,8 +377,8 @@ function initApp() {
       }
     }
 
-    // 5. Category 4 (AI & ANALYTICS): reveals at 0.35 -> 0.45
-    const p4 = Math.min(Math.max((progress - 0.35) / 0.10, 0), 1);
+    // 5. Category 4 (AI & ANALYTICS): reveals at 0.29 -> 0.38
+    const p4 = Math.min(Math.max((progress - 0.29) / 0.09, 0), 1);
     const ease4 = p4 * p4 * (3 - 2 * p4);
     if (toolCat4) {
       toolCat4.style.opacity = ease4.toFixed(3);
@@ -390,9 +390,9 @@ function initApp() {
       }
     }
 
-    // ---------------- PHASE 2: CROSSFADE DIRECTLY INTO WHAT I BRING TO THE TABLE (0.46 -> 0.70) ----------------
+    // ---------------- PHASE 2: CROSSFADE DIRECTLY INTO WHAT I BRING TO THE TABLE (0.39 -> 0.60) ----------------
     // Layer 1 (Tools) fades out smoothly
-    const toolsOutProg = Math.min(Math.max((progress - 0.46) / 0.14, 0), 1);
+    const toolsOutProg = Math.min(Math.max((progress - 0.39) / 0.12, 0), 1);
     const easeToolsOut = toolsOutProg * toolsOutProg * (3 - 2 * toolsOutProg);
     if (toolsLayerWrap) {
       toolsLayerWrap.style.opacity = (1 - easeToolsOut).toFixed(3);
@@ -401,24 +401,24 @@ function initApp() {
     }
 
     // Layer 2 (Capabilities / What I Bring to the Table) fades directly in on top
-    const capInProg = Math.min(Math.max((progress - 0.47) / 0.15, 0), 1);
+    const capInProg = Math.min(Math.max((progress - 0.40) / 0.13, 0), 1);
     const easeCapIn = capInProg * capInProg * (3 - 2 * capInProg);
     if (capabilitiesLayerWrap) {
       capabilitiesLayerWrap.style.opacity = easeCapIn.toFixed(3);
-      capabilitiesLayerWrap.style.pointerEvents = easeCapIn >= 0.6 ? 'auto' : 'none';
+      capabilitiesLayerWrap.style.pointerEvents = easeCapIn >= 0.5 ? 'auto' : 'none';
     }
 
     // Capabilities Header and 6 cards stagger-fade in
     if (capabilitiesHeader) {
-      const hProg = Math.min(Math.max((progress - 0.50) / 0.14, 0), 1);
+      const hProg = Math.min(Math.max((progress - 0.42) / 0.12, 0), 1);
       const easeH = hProg * hProg * (3 - 2 * hProg);
       capabilitiesHeader.style.opacity = easeH.toFixed(3);
       capabilitiesHeader.style.transform = `translateY(${((1 - easeH) * 20).toFixed(1)}px)`;
     }
 
     capabilityCards.forEach((card, idx) => {
-      const staggerDelay = (idx % 3) * 0.02 + Math.floor(idx / 3) * 0.04;
-      const cp = Math.min(Math.max((progress - 0.52 - staggerDelay) / 0.16, 0), 1);
+      const staggerDelay = (idx % 3) * 0.02 + Math.floor(idx / 3) * 0.03;
+      const cp = Math.min(Math.max((progress - 0.44 - staggerDelay) / 0.14, 0), 1);
       const easeCard = cp * cp * (3 - 2 * cp);
       card.style.opacity = easeCard.toFixed(3);
       card.style.transform = `translateY(${((1 - easeCard) * 30).toFixed(1)}px) scale(${(0.96 + easeCard * 0.04).toFixed(3)})`;
