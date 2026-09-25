@@ -634,147 +634,16 @@ export function initFluidCanvas() {
         mctx.fillText(line2, contentCenterX, headlineCenterY + titleLineSpacing * 0.44);
         mctx.restore();
 
-        // 7. Slanted Polygonal Button ("View More About Akilesh" matching user reference)
-        const baseBtnW = isMobile 
-          ? Math.min(Math.round(width * 0.84), 335) 
-          : (isTablet ? Math.min(Math.round(width * 0.45), 375) : Math.min(Math.round(width * 0.28), 410));
-
-        // Scale animation on hover (5% scale boost)
-        const btnScale = 1.0 + domeHoverFactor * 0.05;
-        const btnW = baseBtnW * btnScale;
-        const hLeft = Math.round(btnW * 0.20);
-        const hRight = Math.round(btnW * 0.31);
-        const cornerRadius = Math.round(btnW * 0.045);
-
-        // Slide in from bottom edge on scroll
-        const slideOffset = (1.0 - easeContent) * (hRight * 1.35);
-        const currentBaseY = height + slideOffset;
-
-        // True geometric center of the slanted button (equal margins top, bottom, left, and right)
-        const avgHeight = (hLeft + hRight) / 2;
-        const textCenterY = currentBaseY - Math.round(avgHeight * 0.51);
-        const textCenterX = contentCenterX + Math.round((currentBaseY - textCenterY) * 0.45);
-
-        // Algebraic hit test for the slanted polygon
-        checkBtnHit = function(px, py) {
-          if (easeContent <= 0.7) return false;
-          if (py > currentBaseY || py < currentBaseY - (hRight + 8)) return false;
-          const leftX = contentCenterX - btnW / 2;
-          const rightX = contentCenterX + btnW / 2;
-          const xLeftAtY = leftX + (currentBaseY - py) * 0.45;
-          const xRightAtY = rightX + (currentBaseY - py) * 0.45;
-          if (px < xLeftAtY - 6 || px > xRightAtY + 6) return false;
-          const xTL = leftX + hLeft * 0.45;
-          const xTR = rightX + hRight * 0.45;
-          const topProgress = (px - xTL) / Math.max(xTR - xTL, 1);
-          const yTopAtX = (currentBaseY - hLeft) - topProgress * (hRight - hLeft);
-          return py >= yTopAtX - 5;
-        };
-
-        const isHoverBtn = checkBtnHit(mouse.x, mouse.y);
-        isOverDomeGlobal = isHoverBtn;
-
-        // Coordinates for expanding circle overlay origin
-        currentDomeCoords = { x: textCenterX, y: textCenterY };
-
-        // Update cursor pointer
-        const activeCursor = isOverDomeGlobal ? "url('/cursor-svgrepo-com.svg') 0 0, pointer" : "url('/cursor-svgrepo-com.svg') 0 0, auto";
-        if (canvas && canvas.style.cursor !== activeCursor) canvas.style.cursor = activeCursor;
-        if (topCanvas && topCanvas.style.cursor !== activeCursor) topCanvas.style.cursor = activeCursor;
-
-        // Smooth lerp hover factor for fluid 60fps interaction
-        const targetDomeHover = isOverDomeGlobal ? 1.0 : 0.0;
-        domeHoverFactor += (targetDomeHover - domeHoverFactor) * 0.16;
-
-        // Corner Points
-        const bLeftX = contentCenterX - btnW / 2;
-        const bRightX = contentCenterX + btnW / 2;
-        const pTL = { x: bLeftX + hLeft * 0.45, y: currentBaseY - hLeft };
-        const pTR = { x: bRightX + hRight * 0.45, y: currentBaseY - hRight };
-
-        mctx.save();
-        mctx.beginPath();
-        mctx.moveTo(bLeftX, currentBaseY);
-        mctx.arcTo(pTL.x, pTL.y, pTR.x, pTR.y, cornerRadius);
-        mctx.arcTo(pTR.x, pTR.y, bRightX, currentBaseY, cornerRadius);
-        mctx.lineTo(bRightX, currentBaseY);
-        mctx.closePath();
-
-        // Single 8px outer border in button color at 25% opacity (lineWidth 16, so 8px extends outside)
-        mctx.lineWidth = 16;
-        mctx.strokeStyle = 'rgba(2, 32, 46, 0.25)';
-        mctx.stroke();
-
-        // Button background (#02202E)
-        mctx.fillStyle = isOverDomeGlobal ? '#082C3D' : '#02202E';
-        mctx.fill();
-
-        // Animated Typography Adapting to Shape with 100% Even Top & Bottom Spacing
-        const textBounceY = Math.sin(time * 5.2) * 1.4 * domeHoverFactor;
-        const minSize = (isMobile ? 14 : (isTablet ? 17 : 19)) * btnScale;
-        const maxSize = (isMobile ? 22 : (isTablet ? 26 : 29)) * btnScale;
-
-        const words = ['VIEW', 'MORE', 'ABOUT', 'AKILESH'];
-        const wordSizes = words.map((_, i) => {
-          const t = i / (words.length - 1);
-          return Math.round(minSize + (maxSize - minSize) * t);
-        });
-
-        // Measure individual word widths
-        const wordWidths = [];
-        words.forEach((w, i) => {
-          mctx.font = `400 ${wordSizes[i]}px "Luckiest Guy", cursive, sans-serif`;
-          wordWidths.push(mctx.measureText(w).width);
-        });
-
-        const wordGap = Math.round((isMobile ? 6 : 9) * btnScale);
-        const totalTextW = wordWidths.reduce((sum, w) => sum + w, 0) + (words.length - 1) * wordGap;
-
-        // Slanted top edge line coordinates
-        const xTL = bLeftX + hLeft * 0.45;
-        const xTR = bRightX + hRight * 0.45;
-        const yTL = currentBaseY - hLeft;
-        const yTR = currentBaseY - hRight;
-
-        // Angle along the button's vertical centerline
-        const midlineAngle = Math.atan2(-(hRight - hLeft) * 0.50, btnW);
-
-        // Center the word block horizontally within the slanted shape
-        const midX = contentCenterX + (avgHeight * 0.50) * 0.45;
-        let curWordX = midX - totalTextW / 2;
-
-        mctx.save();
-        mctx.fillStyle = '#FFFFFF';
-        mctx.textAlign = 'center';
-        mctx.textBaseline = 'middle';
-        if ('letterSpacing' in mctx) {
-          mctx.letterSpacing = '0.04em';
-        }
-
-        words.forEach((w, i) => {
-          const wordCX = curWordX + wordWidths[i] / 2;
-          curWordX += wordWidths[i] + wordGap;
-
-          // Local top edge directly above wordCX
-          const topT = Math.max(0, Math.min(1, (wordCX - xTL) / Math.max(xTR - xTL, 1)));
-          const yTopAtWord = yTL + topT * (yTR - yTL);
-          const localHeight = currentBaseY - yTopAtWord;
-
-          // Exact vertical midpoint at this word's horizontal position (with 10px upward offset):
-          const wordCY = currentBaseY - localHeight / 2 - 10 + textBounceY;
-
-          mctx.save();
-          mctx.translate(wordCX, wordCY);
-          mctx.rotate(midlineAngle);
-          mctx.font = `400 ${wordSizes[i]}px "Luckiest Guy", cursive, sans-serif`;
-          mctx.fillText(w, 0, 0);
-          mctx.restore();
-        });
-
         mctx.restore();
+      }
 
-        mctx.restore();
-        mctx.restore();
+      isOverDomeGlobal = false;
+      checkBtnHit = null;
+      if (canvas && canvas.style.cursor !== "url('/cursor-svgrepo-com.svg') 0 0, auto") {
+        canvas.style.cursor = "url('/cursor-svgrepo-com.svg') 0 0, auto";
+      }
+      if (topCanvas && topCanvas.style.cursor !== "url('/cursor-svgrepo-com.svg') 0 0, auto") {
+        topCanvas.style.cursor = "url('/cursor-svgrepo-com.svg') 0 0, auto";
       }
 
       mctx.restore();
