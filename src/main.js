@@ -208,6 +208,135 @@ function initApp() {
   });
 
   // --------------------------------------------------------------------------
+  // HOW I WORK: Interactive Sequential Step Activation & Axis Fill on Scroll
+  // --------------------------------------------------------------------------
+  const workStyleScrollWrapper = document.getElementById('work-style-scroll-wrapper');
+  const axisFill = document.getElementById('process-axis-fill');
+  const card1 = document.getElementById('process-step-1');
+  const card2 = document.getElementById('process-step-2');
+  const card3 = document.getElementById('process-step-3');
+  const node1 = document.getElementById('axis-node-1');
+  const node2 = document.getElementById('axis-node-2');
+  const node3 = document.getElementById('axis-node-3');
+  const node4 = document.getElementById('axis-node-4');
+  const allProcessCards = [card1, card2, card3];
+
+  let workStyleScrollTicking = false;
+  let userHoveredCard = null;
+
+  allProcessCards.forEach((card) => {
+    if (!card) return;
+    card.addEventListener('mouseenter', () => {
+      userHoveredCard = card;
+      updateWorkStyleState();
+    });
+    card.addEventListener('mouseleave', () => {
+      userHoveredCard = null;
+      updateWorkStyleState();
+    });
+    card.addEventListener('click', () => {
+      userHoveredCard = card;
+      updateWorkStyleState();
+    });
+  });
+
+  function updateWorkStyleScroll() {
+    if (!workStyleScrollWrapper) return;
+
+    const rect = workStyleScrollWrapper.getBoundingClientRect();
+    const maxScroll = workStyleScrollWrapper.offsetHeight - window.innerHeight;
+    let progress = 0;
+
+    if (maxScroll <= 0) {
+      const winH = window.innerHeight;
+      progress = Math.min(Math.max((winH - rect.top) / (winH + rect.height), 0), 1);
+    } else {
+      const scrolled = -rect.top;
+      progress = Math.min(Math.max(scrolled / maxScroll, 0), 1);
+    }
+
+    // Interactive progress line fill (smooth scaleX from 0 to 1)
+    if (axisFill) {
+      axisFill.style.transform = `scaleX(${progress.toFixed(3)})`;
+    }
+
+    // Node 1: lights up as soon as section begins
+    if (node1) node1.classList.toggle('active', progress >= 0.02);
+    // Node 2: lights up at 33% progress
+    if (node2) node2.classList.toggle('active', progress >= 0.33);
+    // Node 3: lights up at 66% progress
+    if (node3) node3.classList.toggle('active', progress >= 0.66);
+    // Node 4: lights up at 95% progress
+    if (node4) node4.classList.toggle('active', progress >= 0.95);
+
+    // If user is hovering/interacting directly with a card, let hover override
+    if (userHoveredCard) return;
+
+    // Step 1: Understand
+    if (card1) {
+      if (progress < 0.35) {
+        card1.classList.add('active');
+        card1.classList.remove('completed');
+      } else {
+        card1.classList.remove('active');
+        card1.classList.add('completed');
+      }
+    }
+
+    // Step 2: Shape
+    if (card2) {
+      if (progress >= 0.35 && progress < 0.70) {
+        card2.classList.add('active');
+        card2.classList.remove('completed');
+      } else if (progress >= 0.70) {
+        card2.classList.remove('active');
+        card2.classList.add('completed');
+      } else {
+        card2.classList.remove('active', 'completed');
+      }
+    }
+
+    // Step 3: Evolve
+    if (card3) {
+      if (progress >= 0.70) {
+        card3.classList.add('active');
+        card3.classList.remove('completed');
+      } else {
+        card3.classList.remove('active', 'completed');
+      }
+    }
+  }
+
+  function updateWorkStyleState() {
+    if (userHoveredCard) {
+      allProcessCards.forEach((c) => {
+        if (!c) return;
+        if (c === userHoveredCard) {
+          c.classList.add('active');
+        } else {
+          c.classList.remove('active');
+        }
+      });
+    } else {
+      updateWorkStyleScroll();
+    }
+  }
+
+  function requestWorkStyleScrollUpdate() {
+    if (!workStyleScrollTicking) {
+      workStyleScrollTicking = true;
+      requestAnimationFrame(() => {
+        updateWorkStyleScroll();
+        workStyleScrollTicking = false;
+      });
+    }
+  }
+
+  window.addEventListener('scroll', requestWorkStyleScrollUpdate, { passive: true });
+  window.addEventListener('resize', requestWorkStyleScrollUpdate, { passive: true });
+  updateWorkStyleScroll();
+
+  // --------------------------------------------------------------------------
   // CHAPTER II PROJECTS: "My Project" Scroll Reveal & Interactive Preview
   // --------------------------------------------------------------------------
   const projectsScrollWrapper = document.getElementById('projects-scroll-wrapper');

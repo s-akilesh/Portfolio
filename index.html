@@ -129,52 +129,57 @@
 
     <!-- About Detail Sections: How I Work, Tools & Ecosystem, What I Build -->
     <section id="about-more-sections" class="about-more-sections" aria-label="About Akilesh - Process & Capabilities">
-      <!-- Part 1: How I Work (Process / Work Style) Section -->
-      <div id="work-style-section" class="about-process-section">
-        <div class="work-style-container">
-          <div class="about-section-header">
-            <h2 class="about-section-title">How I Work</h2>
-            <p class="about-section-subtitle">
-              A systematic approach to shaping experiences and scaling business value.
-            </p>
-          </div>
-
-          <!-- Process 3-Step Grid -->
-          <div class="about-process-grid">
-            <div id="process-step-1" class="process-card">
-              <h3 class="process-card-title">Understand</h3>
-              <p class="process-card-desc">
-                I start with the business and the people — understanding goals, users, context, and the problem worth solving.
+      <!-- Part 1: How I Work (Process / Work Style) Section with Interactive Scroll Experience -->
+      <div id="work-style-scroll-wrapper" class="work-style-scroll-wrapper">
+        <div id="work-style-section" class="about-process-section sticky-process-stage">
+          <div class="work-style-container">
+            <div class="about-section-header">
+              <h2 class="about-section-title">How I Work</h2>
+              <p class="about-section-subtitle">
+                A systematic approach to shaping experiences and scaling business value.
               </p>
-              <div class="process-card-flow">Business &rarr; Users &rarr; Insights</div>
             </div>
 
-            <div id="process-step-2" class="process-card">
-              <h3 class="process-card-title">Shape</h3>
-              <p class="process-card-desc">
-                I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.
-              </p>
-              <div class="process-card-flow">Gaps &rarr; Structure &rarr; Design</div>
+            <!-- Process 3-Step Grid -->
+            <div class="about-process-grid">
+              <div id="process-step-1" class="process-card" tabindex="0">
+                <div class="process-card-step-badge">STEP 01</div>
+                <h3 class="process-card-title">Understand</h3>
+                <p class="process-card-desc">
+                  I start with the business and the people — understanding goals, users, context, and the problem worth solving.
+                </p>
+                <div class="process-card-flow">Business &rarr; Users &rarr; Insights</div>
+              </div>
+
+              <div id="process-step-2" class="process-card" tabindex="0">
+                <div class="process-card-step-badge">STEP 02</div>
+                <h3 class="process-card-title">Shape</h3>
+                <p class="process-card-desc">
+                  I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.
+                </p>
+                <div class="process-card-flow">Gaps &rarr; Structure &rarr; Design</div>
+              </div>
+
+              <div id="process-step-3" class="process-card" tabindex="0">
+                <div class="process-card-step-badge">STEP 03</div>
+                <h3 class="process-card-title">Evolve</h3>
+                <p class="process-card-desc">
+                  I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.
+                </p>
+                <div class="process-card-flow">Validate &rarr; Improve &rarr; Grow</div>
+              </div>
             </div>
 
-            <div id="process-step-3" class="process-card">
-              <h3 class="process-card-title">Evolve</h3>
-              <p class="process-card-desc">
-                I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.
-              </p>
-              <div class="process-card-flow">Validate &rarr; Improve &rarr; Grow</div>
+            <!-- Animated Axis Line with Rotating Plus Nodes -->
+            <div class="process-axis-wrapper" aria-hidden="true">
+              <div class="process-axis-line">
+                <div id="process-axis-fill" class="process-axis-line-fill"></div>
+              </div>
+              <div id="axis-node-1" class="axis-node node-1"><span>+</span></div>
+              <div id="axis-node-2" class="axis-node node-2"><span>+</span></div>
+              <div id="axis-node-3" class="axis-node node-3"><span>+</span></div>
+              <div id="axis-node-4" class="axis-node node-4"><span>+</span></div>
             </div>
-          </div>
-
-          <!-- Animated Axis Line with Rotating Plus Nodes -->
-          <div class="process-axis-wrapper" aria-hidden="true">
-            <div class="process-axis-line">
-              <div id="process-axis-fill" class="process-axis-line-fill"></div>
-            </div>
-            <div id="axis-node-1" class="axis-node node-1 active"><span>+</span></div>
-            <div id="axis-node-2" class="axis-node node-2 active"><span>+</span></div>
-            <div id="axis-node-3" class="axis-node node-3 active"><span>+</span></div>
-            <div id="axis-node-4" class="axis-node node-4 active"><span>+</span></div>
           </div>
         </div>
       </div>
