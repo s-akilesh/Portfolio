@@ -459,12 +459,29 @@ function initApp() {
       capabilitiesHeader.style.transform = `translateY(${((1 - easeH) * 20).toFixed(1)}px)`;
     }
 
+    const isMobileView = typeof window !== 'undefined' && window.innerWidth <= 850;
+
     capabilityCards.forEach((card, idx) => {
-      const staggerDelay = (idx % 3) * 0.02 + Math.floor(idx / 3) * 0.03;
-      const cp = Math.min(Math.max((progress - 0.44 - staggerDelay) / 0.14, 0), 1);
-      const easeCard = cp * cp * (3 - 2 * cp);
-      card.style.opacity = easeCard.toFixed(3);
-      card.style.transform = `translateY(${((1 - easeCard) * 30).toFixed(1)}px) scale(${(0.96 + easeCard * 0.04).toFixed(3)})`;
+      if (isMobileView) {
+        // Mobile: Reveal cards sequentially one after another in a single column
+        const cardStart = 0.44 + idx * 0.08;
+        const cp = Math.min(Math.max((progress - cardStart) / 0.09, 0), 1);
+        const easeCard = cp * cp * (3 - 2 * cp);
+        card.style.opacity = easeCard.toFixed(3);
+        card.style.transform = `translateY(${((1 - easeCard) * 20).toFixed(1)}px)`;
+        if (easeCard >= 0.5) {
+          card.classList.add('active-card');
+        } else {
+          card.classList.remove('active-card');
+        }
+      } else {
+        // Desktop: Staggered reveal for 3-column architectural grid
+        const staggerDelay = (idx % 3) * 0.02 + Math.floor(idx / 3) * 0.03;
+        const cp = Math.min(Math.max((progress - 0.44 - staggerDelay) / 0.14, 0), 1);
+        const easeCard = cp * cp * (3 - 2 * cp);
+        card.style.opacity = easeCard.toFixed(3);
+        card.style.transform = `translateY(${((1 - easeCard) * 30).toFixed(1)}px) scale(${(0.96 + easeCard * 0.04).toFixed(3)})`;
+      }
     });
   }
 
