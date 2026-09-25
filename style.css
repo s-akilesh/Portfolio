@@ -130,7 +130,6 @@ body.dark-bg-active .header-logo,
 .light-theme-tools a,
 .light-theme-tools button,
 .light-theme-tools [role="button"],
-.light-theme-tools .subnav-item,
 .light-theme-tools .tool-pill-badge,
 .light-theme-tools .arch-card,
 .about-tools-section a,
@@ -2109,78 +2108,6 @@ span.title-line {
   margin: 0;
   box-sizing: border-box;
   overflow: visible;
-}
-
-/* Sticky Detail Submenu Capsule Navigation Bar */
-.about-subnav-sticky-bar {
-  position: sticky;
-  top: 24px;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 0 1rem;
-  pointer-events: none;
-  margin-bottom: -48px;
-}
-
-.about-subnav-pill {
-  position: relative;
-  pointer-events: auto;
-}
-
-.subnav-pill-inner {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(15, 23, 42, 0.92);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  padding: 5px 8px;
-  gap: 6px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-  white-space: nowrap;
-}
-
-.subnav-item {
-  font-family: 'Luckiest Guy', 'Mohave', var(--font-heading);
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: #ffffff;
-  opacity: 0.75;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 7px 16px;
-  position: relative;
-  border-radius: 999px;
-  transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
-}
-
-.subnav-item:hover {
-  opacity: 1;
-  color: #ffffff;
-}
-
-.subnav-item.active {
-  opacity: 1;
-  background-color: rgba(255, 255, 255, 0.22);
-  color: #ffffff;
-}
-
-@media (max-width: 768px) {
-  .about-subnav-sticky-bar {
-    top: 16px;
-    margin-bottom: -36px;
-  }
-  .subnav-item {
-    font-size: 12px;
-    padding: 6px 12px;
-  }
 }
 
 /* Part 1: How I Work (Process Section) */

@@ -152,49 +152,6 @@ function initApp() {
     });
   }
 
-  // About Subnav Capsule Navigation (Work Style, Tool, What I Build)
-  const subnavItems = document.querySelectorAll('.subnav-item');
-  subnavItems.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetSel = btn.getAttribute('data-target');
-      if (!targetSel) return;
-      const targetEl = document.querySelector(targetSel);
-      if (targetEl) {
-        targetEl.scrollIntoView({ behavior: 'smooth' });
-      }
-      subnavItems.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
-
-  // ScrollSpy to update active subnav button as user scrolls
-  const aboutSectionIds = ['#work-style-section', '#tools-section', '#what-i-build-section'];
-  function updateAboutSubnavActive() {
-    const scrollPos = window.scrollY + window.innerHeight * 0.4;
-    let activeId = null;
-
-    for (let i = aboutSectionIds.length - 1; i >= 0; i--) {
-      const el = document.querySelector(aboutSectionIds[i]);
-      if (el && el.offsetTop <= scrollPos) {
-        activeId = aboutSectionIds[i];
-        break;
-      }
-    }
-
-    if (activeId) {
-      subnavItems.forEach((b) => {
-        if (b.getAttribute('data-target') === activeId) {
-          b.classList.add('active');
-        } else {
-          b.classList.remove('active');
-        }
-      });
-    }
-  }
-
-  window.addEventListener('scroll', updateAboutSubnavActive, { passive: true });
-
   // Force manual scroll restoration so entering/reloading link ALWAYS lands on top of Landing Screen
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
