@@ -398,6 +398,7 @@ function initApp() {
       toolsLayerWrap.style.opacity = (1 - easeToolsOut).toFixed(3);
       toolsLayerWrap.style.transform = `translateY(-${(easeToolsOut * 25).toFixed(1)}px) scale(${(1 - easeToolsOut * 0.03).toFixed(3)})`;
       toolsLayerWrap.style.pointerEvents = easeToolsOut >= 0.7 ? 'none' : 'auto';
+      toolsLayerWrap.style.visibility = progress >= 0.65 ? 'hidden' : 'visible';
     }
 
     // Layer 2 (Capabilities / What I Bring to the Table) fades directly in on top
@@ -405,7 +406,14 @@ function initApp() {
     const easeCapIn = capInProg * capInProg * (3 - 2 * capInProg);
     if (capabilitiesLayerWrap) {
       capabilitiesLayerWrap.style.opacity = easeCapIn.toFixed(3);
-      capabilitiesLayerWrap.style.pointerEvents = easeCapIn >= 0.5 ? 'auto' : 'none';
+      capabilitiesLayerWrap.style.visibility = progress >= 0.39 ? 'visible' : 'hidden';
+      if (progress >= 0.50) {
+        capabilitiesLayerWrap.classList.add('active');
+        capabilitiesLayerWrap.style.pointerEvents = 'auto';
+      } else {
+        capabilitiesLayerWrap.classList.remove('active');
+        capabilitiesLayerWrap.style.pointerEvents = 'none';
+      }
     }
 
     // Capabilities Header and 6 cards stagger-fade in
@@ -438,6 +446,24 @@ function initApp() {
   window.addEventListener('scroll', requestToolsScrollUpdate, { passive: true });
   window.addEventListener('resize', requestToolsScrollUpdate, { passive: true });
   updateToolsScroll();
+
+  // Tool Item Badges Interactive Hover & Click Engine
+  const toolItemWrappers = document.querySelectorAll('.tool-item-wrapper');
+  toolItemWrappers.forEach((wrapper) => {
+    wrapper.addEventListener('click', (e) => {
+      const wasActive = wrapper.classList.contains('active');
+      toolItemWrappers.forEach(w => w.classList.remove('active'));
+      if (!wasActive) {
+        wrapper.classList.add('active');
+      }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.tool-item-wrapper')) {
+      toolItemWrappers.forEach(w => w.classList.remove('active'));
+    }
+  });
 
   // --------------------------------------------------------------------------
   // CHAPTER II PROJECTS: "My Project" Scroll Reveal & Interactive Preview

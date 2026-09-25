@@ -2361,10 +2361,20 @@ span.title-line {
   align-items: center;
   z-index: 20;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   background-color: #FFFFFF;
   overflow: hidden;
-  will-change: opacity;
+  will-change: opacity, visibility;
+}
+
+.capabilities-layer-wrap.active {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.capabilities-layer-wrap:not(.active) * {
+  pointer-events: none !important;
 }
 
 .capabilities-grid-bg {
@@ -2454,8 +2464,12 @@ span.title-line {
   opacity: 0;
   transform: translateY(30px) scale(0.96);
   will-change: transform, opacity;
-  pointer-events: auto;
+  pointer-events: none;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.capabilities-layer-wrap.active .arch-card {
+  pointer-events: auto;
 }
 
 .arch-card:hover {
@@ -2794,6 +2808,7 @@ span.title-line {
   max-height: 80px;
   object-fit: contain;
   display: block;
+  pointer-events: none;
   transition: transform 0.3s ease;
 }
 
@@ -2802,6 +2817,7 @@ span.title-line {
   height: 100%;
   max-width: 68px;
   max-height: 68px;
+  pointer-events: none;
 }
 
 .tool-name {
@@ -2845,47 +2861,25 @@ span.title-line {
               visibility 0.25s ease;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .tool-item-wrapper:hover .tool-icon-box,
-  .tool-item-wrapper:focus-within .tool-icon-box {
-    background: #FFFFFF;
-    padding: 8px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
-  }
-
-  .tool-item-wrapper:hover .tool-pill-badge,
-  .tool-item-wrapper:focus-within .tool-pill-badge {
-    background: var(--tool-bg);
-    border-radius: 20px;
-    padding-right: 24px;
-    box-shadow: 0 10px 28px var(--tool-shadow);
-    transform: translateY(-2px);
-  }
-
-  .tool-item-wrapper:hover .tool-name,
-  .tool-item-wrapper:focus-within .tool-name {
-    max-width: 260px;
-    opacity: 1;
-    padding-left: 14px;
-    color: var(--tool-color);
-  }
-
-  .tool-item-wrapper:hover .tool-usage-card,
-  .tool-item-wrapper:focus-within .tool-usage-card {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0);
-  }
+/* Lower rows popup upward to avoid screen bottom clipping */
+#tool-cat-3 .tool-usage-card,
+#tool-cat-4 .tool-usage-card {
+  top: auto;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%) translateY(-8px);
 }
 
-/* Explicit Active Class (Toggled via JS Tap/Click for Mobile & Mouse Click) */
+/* Tool Hover, Focus & Active States */
+.tool-item-wrapper:hover .tool-icon-box,
+.tool-item-wrapper:focus-within .tool-icon-box,
 .tool-item-wrapper.active .tool-icon-box {
   background: #FFFFFF;
   padding: 8px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
 }
 
+.tool-item-wrapper:hover .tool-pill-badge,
+.tool-item-wrapper:focus-within .tool-pill-badge,
 .tool-item-wrapper.active .tool-pill-badge {
   background: var(--tool-bg);
   border-radius: 20px;
@@ -2894,6 +2888,8 @@ span.title-line {
   transform: translateY(-2px);
 }
 
+.tool-item-wrapper:hover .tool-name,
+.tool-item-wrapper:focus-within .tool-name,
 .tool-item-wrapper.active .tool-name {
   max-width: 260px;
   opacity: 1;
@@ -2901,10 +2897,21 @@ span.title-line {
   color: var(--tool-color);
 }
 
+.tool-item-wrapper:hover .tool-usage-card,
+.tool-item-wrapper:focus-within .tool-usage-card,
 .tool-item-wrapper.active .tool-usage-card {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+#tool-cat-3 .tool-item-wrapper:hover .tool-usage-card,
+#tool-cat-3 .tool-item-wrapper:focus-within .tool-usage-card,
+#tool-cat-3 .tool-item-wrapper.active .tool-usage-card,
+#tool-cat-4 .tool-item-wrapper:hover .tool-usage-card,
+#tool-cat-4 .tool-item-wrapper:focus-within .tool-usage-card,
+#tool-cat-4 .tool-item-wrapper.active .tool-usage-card {
   transform: translateX(-50%) translateY(0);
 }
 
