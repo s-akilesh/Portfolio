@@ -400,6 +400,61 @@ function initApp() {
   updateToolsScroll();
 
   // --------------------------------------------------------------------------
+  // WHAT I BRING TO THE TABLE: Fade-Over Scroll Reveal Engine
+  // --------------------------------------------------------------------------
+  const capabilitiesScrollWrapper = document.getElementById('capabilities-scroll-wrapper');
+  const capabilitiesStickyStage = document.querySelector('.capabilities-sticky-stage');
+  const capabilitiesHeader = document.getElementById('capabilities-header');
+  const capabilityCards = document.querySelectorAll('.about-capabilities-section .arch-card');
+
+  let capabilitiesScrollTicking = false;
+
+  function updateCapabilitiesScroll() {
+    if (!capabilitiesScrollWrapper || !capabilitiesStickyStage) return;
+
+    const rect = capabilitiesScrollWrapper.getBoundingClientRect();
+    const maxScroll = capabilitiesScrollWrapper.offsetHeight - window.innerHeight;
+    if (maxScroll <= 0) return;
+
+    const scrolled = -rect.top;
+    const progress = Math.min(Math.max(scrolled / maxScroll, 0), 1);
+
+    // 1. Fade stage in directly over the previous section as scroll begins (0.00 -> 0.28)
+    const stageFade = Math.min(Math.max(progress / 0.28, 0), 1);
+    const easeStage = stageFade * stageFade * (3 - 2 * stageFade);
+    capabilitiesStickyStage.style.opacity = easeStage.toFixed(3);
+    capabilitiesStickyStage.style.pointerEvents = easeStage >= 0.7 ? 'auto' : 'none';
+
+    // 2. Header and cards fade & lift into place (0.04 -> 0.45)
+    if (capabilitiesHeader) {
+      capabilitiesHeader.style.opacity = easeStage.toFixed(3);
+      capabilitiesHeader.style.transform = `translateY(${((1 - easeStage) * 20).toFixed(1)}px)`;
+    }
+
+    capabilityCards.forEach((card, idx) => {
+      const staggerDelay = (idx % 3) * 0.05 + Math.floor(idx / 3) * 0.08;
+      const cp = Math.min(Math.max((progress - 0.04 - staggerDelay) / 0.32, 0), 1);
+      const easeCard = cp * cp * (3 - 2 * cp);
+      card.style.opacity = easeCard.toFixed(3);
+      card.style.transform = `translateY(${((1 - easeCard) * 30).toFixed(1)}px) scale(${(0.96 + easeCard * 0.04).toFixed(3)})`;
+    });
+  }
+
+  function requestCapabilitiesScrollUpdate() {
+    if (!capabilitiesScrollTicking) {
+      capabilitiesScrollTicking = true;
+      requestAnimationFrame(() => {
+        updateCapabilitiesScroll();
+        capabilitiesScrollTicking = false;
+      });
+    }
+  }
+
+  window.addEventListener('scroll', requestCapabilitiesScrollUpdate, { passive: true });
+  window.addEventListener('resize', requestCapabilitiesScrollUpdate, { passive: true });
+  updateCapabilitiesScroll();
+
+  // --------------------------------------------------------------------------
   // CHAPTER II PROJECTS: "My Project" Scroll Reveal & Interactive Preview
   // --------------------------------------------------------------------------
   const projectsScrollWrapper = document.getElementById('projects-scroll-wrapper');
