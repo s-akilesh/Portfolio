@@ -2114,12 +2114,15 @@ span.title-line {
 .about-process-section {
   position: relative;
   width: 100%;
-  padding: clamp(5rem, 9vh, 8rem) clamp(1.5rem, 4vw, 4.5rem);
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(3rem, 6vh, 5rem) clamp(1.5rem, 4vw, 4.5rem);
   background-color: #020202;
   color: #ffffff;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
@@ -2127,7 +2130,7 @@ span.title-line {
   position: relative;
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2257,35 +2260,20 @@ span.title-line {
   animation: spinAxisNode 8s linear infinite;
 }
 
-/* What I Build Section Light Theme Overrides */
+/* Part 3: What I Build Section (What I Bring to the Table) */
 .about-capabilities-section {
   position: relative;
   width: 100%;
-  min-height: calc(150vh - 75px);
-  padding: 7.5rem clamp(1.5rem, 4vw, 4.5rem) 4rem;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(3rem, 6vh, 5rem) clamp(1.5rem, 4vw, 4.5rem);
   box-sizing: border-box;
   perspective: 1400px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  background-color: #FFFFFF;
-}
-
-/* Full-Screen Architectural Grid Pattern Background (Spanning 100% Edge-to-Edge) */
-/* What I Build Section (What I Bring to the Table) */
-.about-capabilities-section {
-  position: relative;
-  width: 100%;
-  padding: clamp(5rem, 9vh, 8rem) clamp(1.5rem, 4vw, 4.5rem);
-  box-sizing: border-box;
-  perspective: 1400px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   background-color: #FFFFFF;
 }
 
@@ -2311,13 +2299,13 @@ span.title-line {
   position: relative;
   width: 100%;
   max-width: 1340px;
-  margin: 0 auto;
+  margin: auto 0;
   z-index: 2;
   transform-style: preserve-3d;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .capabilities-header {
@@ -2445,17 +2433,26 @@ span.title-line {
 @media (max-width: 1024px) {
   .cards-deck {
     grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
+    gap: 16px;
   }
 }
 
 @media (max-width: 680px) {
   .cards-deck {
-    grid-template-columns: 1fr;
-    gap: 14px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
   .about-capabilities-section {
-    padding: 3rem 1rem 4rem;
+    padding: clamp(2rem, 4vh, 3rem) clamp(1rem, 3vw, 1.5rem);
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
+@media (max-width: 480px) {
+  .cards-deck {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 }
 
@@ -2463,20 +2460,30 @@ span.title-line {
 .about-tools-section {
   position: relative;
   width: 100%;
-  padding: clamp(5rem, 9vh, 8rem) clamp(1.5rem, 4vw, 4.5rem);
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(3rem, 6vh, 5rem) clamp(1.5rem, 4vw, 4.5rem);
   background-color: #FFFFFF;
   color: #0F172A;
   box-shadow: none;
   box-sizing: border-box;
   perspective: 1400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .tools-container {
   position: relative;
   width: 100%;
   max-width: 1340px;
-  margin: 0 auto;
+  margin: auto 0;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .tools-floating-wrap {
@@ -2850,68 +2857,87 @@ span.title-line {
 }
 
 @media (max-width: 768px) {
-  /* Work Style Section Mobile Typography Reductions */
-  .work-style-content-layer .about-section-title {
+  /* Work Style Section Mobile Typography & Viewport Fitting */
+  .about-process-section {
+    padding: clamp(2rem, 4vh, 3rem) clamp(1rem, 3vw, 1.5rem);
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .about-process-section .about-section-title {
     font-size: clamp(1.65rem, 5vw, 2.2rem) !important;
   }
-  .work-style-content-layer .about-section-subtitle {
+  .about-process-section .about-section-subtitle {
     font-size: 0.84rem !important;
-    margin-bottom: 1.5rem !important;
+    margin-bottom: 1.2rem !important;
+  }
+  .about-process-grid {
+    gap: 10px !important;
   }
   .process-card {
     gap: 8px !important;
-    padding: 8px 6px !important;
+    padding: 10px 8px !important;
   }
   .process-card-title {
-    font-size: 1.2rem !important;
+    font-size: 1.1rem !important;
   }
   .process-card-desc {
-    font-size: 0.81rem !important;
-    line-height: 1.45 !important;
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
   }
   .process-card-flow {
-    font-size: 0.70rem !important;
-    padding-top: 10px !important;
+    font-size: 0.68rem !important;
+    padding-top: 8px !important;
+  }
+  .process-axis-wrapper {
+    margin-top: 1.5rem;
+    height: 18px;
   }
 
+  /* Tools Section Mobile Typography & Viewport Fitting */
   .about-tools-section {
-    padding: 2rem 1rem 3rem;
+    padding: clamp(2rem, 4vh, 3rem) 1rem;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
   .about-tools-section .about-section-title {
-    font-size: clamp(1.75rem, 5.5vw, 2.4rem);
+    font-size: clamp(1.65rem, 5.5vw, 2.2rem);
+  }
+  .about-tools-section .about-section-subtitle {
+    font-size: 0.84rem !important;
+    margin-bottom: 1.2rem !important;
   }
   .category-row-title {
-    font-size: 1.3rem !important;
+    font-size: 1.15rem !important;
     letter-spacing: 0.03em;
   }
   .tool-category-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
-    padding: 16px 18px;
-    border-radius: 14px;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 12px;
   }
   .category-row-tools {
     flex-wrap: wrap;
     width: 100%;
-    gap: 10px;
+    gap: 8px;
   }
   .tool-pill-badge {
-    height: 56px !important;
-    border-radius: 12px !important;
-  }
-  .tool-icon-box {
-    width: 48px !important;
     height: 48px !important;
     border-radius: 10px !important;
   }
+  .tool-icon-box {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 8px !important;
+  }
   .tool-icon-img {
-    max-width: 40px !important;
-    max-height: 40px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
   }
   .tool-icon-box svg {
-    max-width: 34px !important;
-    max-height: 34px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
   }
   .usage-icon {
     font-size: 14px;
