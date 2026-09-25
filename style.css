@@ -2990,98 +2990,113 @@ span.title-line {
   color: var(--tool-color);
 }
 
-@media (max-width: 768px) {
-  /* Work Style (How I Work) Section Mobile Stacked Layout */
+@media (max-width: 850px) {
+  /* Work Style (How I Work) Section Mobile Stacked & Top-Aligned Layout */
   .about-process-section {
-    padding: clamp(1.5rem, 3vh, 2.5rem) clamp(1rem, 3vw, 1.5rem);
     min-height: 100vh;
     min-height: 100dvh;
   }
   .work-style-sticky-stage {
-    padding: clamp(1.5rem, 3vh, 2.5rem) clamp(1rem, 4vw, 1.5rem);
+    justify-content: flex-start !important;
+    align-items: center !important;
+    padding: calc(75px + 2vh) clamp(1.2rem, 4.5vw, 2rem) 2rem !important;
   }
   .work-style-container {
-    max-width: 460px;
-    margin: auto 0;
+    width: 100% !important;
+    max-width: 520px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
   }
   .about-process-section .about-section-header {
-    margin-bottom: 1rem !important;
+    margin-bottom: clamp(14px, 2.5vh, 22px) !important;
   }
   .about-process-section .about-section-title {
-    font-size: clamp(1.75rem, 6vw, 2.3rem) !important;
+    font-size: clamp(2rem, 7.5vw, 2.7rem) !important;
     margin: 0.2rem 0 0.4rem 0 !important;
   }
   .about-process-section .about-section-subtitle {
-    font-size: 0.82rem !important;
-    margin: 0 auto 1rem auto !important;
-    max-width: 92% !important;
-    line-height: 1.45 !important;
+    font-size: clamp(0.85rem, 2.8vw, 0.95rem) !important;
+    margin: 0 auto clamp(14px, 2.5vh, 22px) auto !important;
+    max-width: 95% !important;
+    line-height: 1.5 !important;
   }
   .about-process-grid {
     display: flex !important;
     flex-direction: column !important;
-    gap: 10px !important;
+    gap: clamp(12px, 1.8vh, 16px) !important;
     width: 100% !important;
-    max-width: 460px !important;
+    max-width: 520px !important;
     margin: 0 auto !important;
   }
   .process-card {
-    gap: 5px !important;
-    padding: 12px 16px !important;
-    border-radius: 14px !important;
+    gap: 6px !important;
+    padding: clamp(14px, 2vh, 18px) clamp(16px, 3.5vw, 22px) !important;
+    border-radius: 16px !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
     text-align: left !important;
   }
   .process-card-title {
-    font-size: 1.15rem !important;
+    font-size: clamp(1.2rem, 4.2vw, 1.4rem) !important;
     font-weight: 700 !important;
   }
   .process-card-desc {
-    font-size: 0.78rem !important;
-    line-height: 1.4 !important;
+    font-size: clamp(0.82rem, 2.6vw, 0.90rem) !important;
+    line-height: 1.5 !important;
     color: #cbd5e1 !important;
   }
   .process-card-flow {
-    font-size: 0.70rem !important;
-    padding-top: 6px !important;
-    margin-top: 2px !important;
+    font-size: clamp(0.72rem, 2.2vw, 0.78rem) !important;
+    padding-top: 10px !important;
+    margin-top: 4px !important;
   }
   .process-axis-wrapper {
-    margin-top: 1.2rem !important;
+    margin-top: clamp(16px, 2.5vh, 24px) !important;
     width: 100% !important;
-    max-width: 460px !important;
+    max-width: 520px !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    height: 20px !important;
+    height: 24px !important;
   }
   .axis-node {
-    width: 18px !important;
-    height: 18px !important;
-    font-size: 11px !important;
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 13px !important;
   }
 
   /* Tools & Ecosystem Section Mobile View */
-  .about-tools-section {
-    padding: clamp(1.5rem, 3vh, 2.5rem) 1rem;
-    min-height: 100vh;
-    min-height: 100dvh;
+  .tools-sticky-stage {
+    justify-content: flex-start !important;
+    padding-top: calc(75px + 2vh) !important;
+  }
+  .tools-layer-wrap {
+    justify-content: flex-start !important;
+    padding: calc(75px + 2vh) clamp(1rem, 3.5vw, 1.8rem) 2rem !important;
+  }
+  .tools-container {
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 520px !important;
   }
   .about-tools-section .about-section-title {
-    font-size: clamp(1.65rem, 5.5vw, 2.2rem);
+    font-size: clamp(1.8rem, 6.5vw, 2.4rem);
   }
   .about-tools-section .about-section-subtitle {
-    font-size: 0.82rem !important;
-    margin-bottom: 1rem !important;
+    font-size: 0.85rem !important;
+    margin-bottom: 1.2rem !important;
   }
   .category-row-title {
-    font-size: 1.15rem !important;
+    font-size: 1.2rem !important;
     letter-spacing: 0.03em;
   }
   .tool-category-row {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
-    padding: 10px 14px;
-    border-radius: 12px;
+    padding: 12px 16px;
+    border-radius: 14px;
   }
   .category-row-tools {
     flex-wrap: wrap;
@@ -3089,24 +3104,24 @@ span.title-line {
     gap: 8px;
   }
   .tool-pill-badge {
-    height: 48px !important;
-    border-radius: 10px !important;
+    height: 52px !important;
+    border-radius: 12px !important;
   }
   .tool-icon-box {
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 8px !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 10px !important;
   }
   .tool-icon-img {
-    max-width: 32px !important;
-    max-height: 32px !important;
+    max-width: 36px !important;
+    max-height: 36px !important;
   }
   .tool-icon-box svg {
-    max-width: 28px !important;
-    max-height: 28px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
   }
   .usage-icon {
-    font-size: 14px;
+    font-size: 15px;
   }
   .tool-usage-card {
     left: 0;
@@ -3120,33 +3135,43 @@ span.title-line {
   }
 
   /* What I Bring to the Table Mobile Viewport Fitting */
+  .capabilities-layer-wrap {
+    justify-content: flex-start !important;
+    padding: calc(75px + 2vh) clamp(1rem, 3.5vw, 1.8rem) 2rem !important;
+  }
+  .capabilities-container {
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 520px !important;
+  }
   .capabilities-header {
-    margin-bottom: clamp(12px, 2.5vh, 20px) !important;
+    margin-bottom: clamp(14px, 2.5vh, 22px) !important;
   }
   .capabilities-layer-wrap .about-section-title {
-    font-size: clamp(1.65rem, 5.5vw, 2.2rem) !important;
+    font-size: clamp(1.8rem, 6.5vw, 2.4rem) !important;
   }
   .cards-deck {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px !important;
-    max-width: 480px !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: 520px !important;
     margin: 0 auto !important;
   }
   .arch-card {
-    padding: 10px 12px !important;
-    min-height: 110px !important;
-    border-radius: 12px !important;
+    padding: 12px 14px !important;
+    min-height: 120px !important;
+    border-radius: 14px !important;
   }
   .arch-card-title {
-    font-size: 0.92rem !important;
+    font-size: 0.98rem !important;
   }
   .arch-card-num {
-    font-size: 0.70rem !important;
+    font-size: 0.75rem !important;
   }
   .arch-card-desc {
-    font-size: 0.72rem !important;
-    line-height: 1.35 !important;
-    margin: 4px 0 !important;
+    font-size: 0.76rem !important;
+    line-height: 1.4 !important;
+    margin: 6px 0 !important;
   }
   .arch-card-pills {
     display: none !important;
