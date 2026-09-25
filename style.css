@@ -3382,5 +3382,23 @@ span.title-line {
   }
 }
 
+/* --------------------------------------------------------------------------
+   Mobile Responsive Scroll Runway Heights (Slightly Faster & Snappier Mobile Flow)
+   -------------------------------------------------------------------------- */
+@media (max-width: 850px) {
+  .hero-scroll-wrapper {
+    height: 190vh !important;
+  }
+  .projects-scroll-wrapper {
+    height: 190vh !important;
+  }
+  .work-style-scroll-wrapper {
+    height: 220vh !important;
+  }
+  .tools-scroll-wrapper {
+    height: 260vh !important;
+  }
+}
+
 
 

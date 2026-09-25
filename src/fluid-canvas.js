@@ -696,11 +696,13 @@ export function initFluidCanvas() {
     if (cachedMaxScroll > 0) {
       rawScrollProgress = Math.min(Math.max(window.scrollY / cachedMaxScroll, 0), 1);
     }
+    const isMobileDevice = width < 850;
+    const scrollLerpRate = isMobileDevice ? 0.12 : 0.06;
     const scrollDiff = rawScrollProgress - smoothScrollProgress;
     if (Math.abs(scrollDiff) < 0.0001) {
       smoothScrollProgress = rawScrollProgress;
     } else {
-      smoothScrollProgress += scrollDiff * 0.06;
+      smoothScrollProgress += scrollDiff * scrollLerpRate;
     }
 
     const headerLogo = document.querySelector('.header-logo');

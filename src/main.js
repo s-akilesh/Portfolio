@@ -27,11 +27,13 @@ function initApp() {
     }
   }, 40);
 
+  const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 850 || 'ontouchstart' in window);
+
   // Initialize Lenis Ultra-Smooth Oceanic Wave Scroll Engine
   const lenis = new Lenis({
-    lerp: 0.045, // Heavy, silky, continuous oceanic wave momentum
-    wheelMultiplier: 0.55, // Slows mouse wheel speed down by ~45% for a calm, deliberate scroll pace
-    touchMultiplier: 1.0,
+    lerp: isMobile ? 0.08 : 0.045, // Snappier, responsive scroll on mobile, silky ocean wave on desktop
+    wheelMultiplier: 0.55, // Slows desktop mouse wheel speed down by ~45% for a calm, deliberate scroll pace
+    touchMultiplier: isMobile ? 1.6 : 1.0, // More responsive, slightly faster touch swipe on mobile
     smoothWheel: true,
     orientation: 'vertical',
     gestureOrientation: 'vertical',
