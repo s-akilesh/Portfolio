@@ -305,6 +305,101 @@ function initApp() {
   updateWorkStyleScroll();
 
   // --------------------------------------------------------------------------
+  // TOOLS & ECOSYSTEM: Step-by-Step Scroll Reveal Engine
+  // --------------------------------------------------------------------------
+  const toolsScrollWrapper = document.getElementById('tools-scroll-wrapper');
+  const toolsHeader = document.getElementById('tools-header');
+  const toolCat1 = document.getElementById('tool-cat-1');
+  const toolCat2 = document.getElementById('tool-cat-2');
+  const toolCat3 = document.getElementById('tool-cat-3');
+  const toolCat4 = document.getElementById('tool-cat-4');
+
+  let toolsScrollTicking = false;
+
+  function updateToolsScroll() {
+    if (!toolsScrollWrapper) return;
+
+    const rect = toolsScrollWrapper.getBoundingClientRect();
+    const maxScroll = toolsScrollWrapper.offsetHeight - window.innerHeight;
+    if (maxScroll <= 0) return;
+
+    const scrolled = -rect.top;
+    const progress = Math.min(Math.max(scrolled / maxScroll, 0), 1);
+
+    // 1. Header: visible from the start
+    if (toolsHeader) {
+      const headerFade = Math.min(Math.max((progress + 0.1) / 0.22, 0), 1);
+      toolsHeader.style.opacity = Math.max(0.6, headerFade).toFixed(3);
+    }
+
+    // 2. Category 1 (DESIGN): reveals at 0.03 -> 0.26
+    const p1 = Math.min(Math.max((progress - 0.03) / 0.23, 0), 1);
+    const ease1 = p1 * p1 * (3 - 2 * p1);
+    if (toolCat1) {
+      toolCat1.style.opacity = ease1.toFixed(3);
+      toolCat1.style.transform = `translateY(${((1 - ease1) * 28).toFixed(1)}px) scale(${(0.97 + ease1 * 0.03).toFixed(3)})`;
+      if (ease1 >= 0.5) {
+        toolCat1.classList.add('active-glow');
+      } else {
+        toolCat1.classList.remove('active-glow');
+      }
+    }
+
+    // 3. Category 2 (MOTION): reveals at 0.26 -> 0.49
+    const p2 = Math.min(Math.max((progress - 0.26) / 0.23, 0), 1);
+    const ease2 = p2 * p2 * (3 - 2 * p2);
+    if (toolCat2) {
+      toolCat2.style.opacity = ease2.toFixed(3);
+      toolCat2.style.transform = `translateY(${((1 - ease2) * 28).toFixed(1)}px) scale(${(0.97 + ease2 * 0.03).toFixed(3)})`;
+      if (ease2 >= 0.5) {
+        toolCat2.classList.add('active-glow');
+      } else {
+        toolCat2.classList.remove('active-glow');
+      }
+    }
+
+    // 4. Category 3 (CODE): reveals at 0.49 -> 0.72
+    const p3 = Math.min(Math.max((progress - 0.49) / 0.23, 0), 1);
+    const ease3 = p3 * p3 * (3 - 2 * p3);
+    if (toolCat3) {
+      toolCat3.style.opacity = ease3.toFixed(3);
+      toolCat3.style.transform = `translateY(${((1 - ease3) * 28).toFixed(1)}px) scale(${(0.97 + ease3 * 0.03).toFixed(3)})`;
+      if (ease3 >= 0.5) {
+        toolCat3.classList.add('active-glow');
+      } else {
+        toolCat3.classList.remove('active-glow');
+      }
+    }
+
+    // 5. Category 4 (AI & ANALYTICS): reveals at 0.72 -> 0.95
+    const p4 = Math.min(Math.max((progress - 0.72) / 0.23, 0), 1);
+    const ease4 = p4 * p4 * (3 - 2 * p4);
+    if (toolCat4) {
+      toolCat4.style.opacity = ease4.toFixed(3);
+      toolCat4.style.transform = `translateY(${((1 - ease4) * 28).toFixed(1)}px) scale(${(0.97 + ease4 * 0.03).toFixed(3)})`;
+      if (ease4 >= 0.5) {
+        toolCat4.classList.add('active-glow');
+      } else {
+        toolCat4.classList.remove('active-glow');
+      }
+    }
+  }
+
+  function requestToolsScrollUpdate() {
+    if (!toolsScrollTicking) {
+      toolsScrollTicking = true;
+      requestAnimationFrame(() => {
+        updateToolsScroll();
+        toolsScrollTicking = false;
+      });
+    }
+  }
+
+  window.addEventListener('scroll', requestToolsScrollUpdate, { passive: true });
+  window.addEventListener('resize', requestToolsScrollUpdate, { passive: true });
+  updateToolsScroll();
+
+  // --------------------------------------------------------------------------
   // CHAPTER II PROJECTS: "My Project" Scroll Reveal & Interactive Preview
   // --------------------------------------------------------------------------
   const projectsScrollWrapper = document.getElementById('projects-scroll-wrapper');

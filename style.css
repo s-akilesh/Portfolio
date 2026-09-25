@@ -2492,28 +2492,45 @@ span.title-line {
   }
 }
 
-/* Part 2: Tools Section Category Layout & Interactive Badge/Card */
+/* Part 2: Tools Section Category Layout & Interactive Badge/Card (Full-Width Stretched with Scroll-Driven Reveal) */
 .about-tools-section {
   position: relative;
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding: clamp(3rem, 6vh, 5rem) clamp(1.5rem, 4vw, 4.5rem);
   background-color: #FFFFFF;
   color: #0F172A;
   box-shadow: none;
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
   perspective: 1400px;
+}
+
+.tools-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  height: 260vh;
+}
+
+.tools-sticky-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  padding: clamp(2rem, 4vh, 3.5rem) clamp(1rem, 3.5vw, 4rem);
+  background-color: #FFFFFF;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 .tools-container {
   position: relative;
   width: 100%;
-  max-width: 1340px;
+  max-width: 1440px;
   margin: auto 0;
   box-sizing: border-box;
   display: flex;
@@ -2537,7 +2554,8 @@ span.title-line {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: clamp(1rem, 2vh, 1.8rem);
+  transition: opacity 0.25s ease;
 }
 
 .about-tools-section .about-section-title {
@@ -2563,31 +2581,44 @@ span.title-line {
 }
 
 .tools-categories-list {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  margin-top: 2.5rem;
+  gap: clamp(10px, 1.6vh, 16px);
+  margin-top: clamp(0.8rem, 1.8vh, 1.5rem);
 }
 
 .tool-category-row {
   position: relative;
   z-index: 1;
+  width: 100%;
   background: #F8FAFC;
   border: 1px solid #E2E8F0;
   border-radius: 16px;
-  padding: 24px 32px;
+  padding: clamp(14px, 2.2vh, 22px) clamp(20px, 3.5vw, 44px);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
   overflow: visible;
-  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(28px) scale(0.97);
+  will-change: transform, opacity;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .tool-category-row:hover,
 .tool-category-row:focus-within {
   background: #F1F5F9;
   border-color: #CBD5E1;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
   z-index: 30;
+}
+
+.tool-category-row.active-glow {
+  background: #F8FAFC;
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 26px rgba(15, 23, 42, 0.05), 0 0 18px rgba(56, 189, 248, 0.12);
 }
 
 .category-row-title {
