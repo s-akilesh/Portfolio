@@ -552,12 +552,12 @@ body.dark-bg-active .nav-pill-inner button,
   backface-visibility: hidden;
 }
 /* ==========================================================================
-   CHAPTER II PROJECTS SECTION WITH "MY PROJECT" SCROLL REVEAL (WARM STONE #EDEBE6)
+   CHAPTER II PROJECTS SECTION WITH "MY PROJECT" SCROLL REVEAL (CLEAN WHITE #FFFFFF)
    ========================================================================== */
 .projects-section {
   position: relative;
   width: 100%;
-  background-color: var(--frame-yellow);
+  background-color: #FFFFFF;
   padding: 0;
   box-sizing: border-box;
 }
@@ -574,8 +574,8 @@ body.dark-bg-active .nav-pill-inner button,
   width: 100%;
   height: 100vh;
   height: 100dvh;
-  padding: var(--frame-thickness);
-  background-color: var(--frame-yellow);
+  padding: 0;
+  background-color: #FFFFFF;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -584,8 +584,8 @@ body.dark-bg-active .nav-pill-inner button,
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: #EDEBE6;
-  border-radius: var(--frame-radius);
+  background-color: #FFFFFF;
+  border-radius: 0;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -671,7 +671,8 @@ body.dark-bg-active .nav-pill-inner button,
   aspect-ratio: 16 / 10;
   border-radius: 16px;
   overflow: hidden;
-  background-color: #DFDDD8;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.09), 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
