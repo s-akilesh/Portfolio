@@ -195,7 +195,11 @@ export function initFluidCanvas() {
   window.openAboutDetail = function() {
     const target = document.getElementById('work-style-section') || document.getElementById('about-more-sections');
     if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
+      if (window.lenis) {
+        window.lenis.scrollTo(target, { duration: 1.6 });
+      } else {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
@@ -203,9 +207,17 @@ export function initFluidCanvas() {
     const scrollWrapper = document.getElementById('hero-scroll-wrapper');
     if (scrollWrapper) {
       const maxScroll = Math.max(scrollWrapper.offsetHeight - window.innerHeight, 1);
-      window.scrollTo({ top: maxScroll, behavior: 'smooth' });
+      if (window.lenis) {
+        window.lenis.scrollTo(maxScroll, { duration: 1.6 });
+      } else {
+        window.scrollTo({ top: maxScroll, behavior: 'smooth' });
+      }
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.lenis) {
+        window.lenis.scrollTo(0, { duration: 1.6 });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 

@@ -1,4 +1,6 @@
 import './../style.css';
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
 import { initFluidCanvas } from './fluid-canvas.js';
 import { initDustParticleEngine, triggerDustDisperse } from './dust-particle-transition.js';
 
@@ -25,6 +27,26 @@ function initApp() {
     }
   }, 40);
 
+  // Initialize Lenis Ultra-Smooth Oceanic Wave Scroll Engine
+  const lenis = new Lenis({
+    duration: 1.6, // Silky oceanic wave momentum glide
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Smooth exponential wave curve
+    orientation: 'vertical',
+    gestureOrientation: 'vertical',
+    smoothWheel: true,
+    wheelMultiplier: 1.0,
+    touchMultiplier: 1.2,
+    infinite: false,
+  });
+
+  window.lenis = lenis;
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
   // Initialize Fluid Canvas & Portal Zoom Engine
   initFluidCanvas();
 
@@ -48,16 +70,16 @@ function initApp() {
     if (scrollWrapper) {
       const maxScroll = Math.max(scrollWrapper.offsetHeight - window.innerHeight, 1);
       const targetY = scrollWrapper.offsetTop + maxScroll * 0.70;
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      lenis.scrollTo(targetY, { duration: 1.6 });
     } else {
       const projectsSec = document.getElementById('projects-section');
-      if (projectsSec) projectsSec.scrollIntoView({ behavior: 'smooth' });
+      if (projectsSec) lenis.scrollTo(projectsSec, { duration: 1.6 });
     }
   }
 
   function scrollToAbout() {
     const maxScroll = getHeroScrollMax();
-    window.scrollTo({ top: maxScroll, behavior: 'smooth' });
+    lenis.scrollTo(maxScroll, { duration: 1.6 });
   }
 
   if (navAbout) {
@@ -77,7 +99,7 @@ function initApp() {
   if (headerLogo) {
     headerLogo.addEventListener('click', (e) => {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lenis.scrollTo(0, { duration: 1.6 });
     });
   }
 
@@ -180,7 +202,7 @@ function initApp() {
   function scrollToContact() {
     const contactSec = document.getElementById('contact-section');
     if (contactSec) {
-      contactSec.scrollIntoView({ behavior: 'smooth' });
+      lenis.scrollTo(contactSec, { duration: 1.6 });
     }
   }
 
@@ -549,7 +571,7 @@ function initApp() {
         if (url.startsWith('#')) {
           const targetEl = document.querySelector(url);
           if (targetEl) {
-            targetEl.scrollIntoView({ behavior: 'smooth' });
+            lenis.scrollTo(targetEl, { duration: 1.6 });
           }
         } else {
           window.location.href = url;
@@ -571,7 +593,7 @@ function initApp() {
       e.preventDefault();
       const contactSec = document.getElementById('contact-section');
       if (contactSec) {
-        contactSec.scrollIntoView({ behavior: 'smooth' });
+        lenis.scrollTo(contactSec, { duration: 1.6 });
       }
     });
   }

@@ -44,7 +44,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   font-family: var(--font-body);
   background-color: var(--color-bg-light);
   color: var(--color-text-dark);
@@ -53,6 +52,30 @@ html {
   user-select: text;
   -webkit-user-select: text;
   cursor: url('/cursor-svgrepo-com.svg') 0 0, auto;
+}
+
+html.lenis, html.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
 
 body {
