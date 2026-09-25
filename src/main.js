@@ -208,118 +208,86 @@ function initApp() {
   });
 
   // --------------------------------------------------------------------------
-  // HOW I WORK: Interactive Sequential Step Activation & Axis Fill on Scroll
+  // HOW I WORK (Process Section): Step-by-Step Scroll Reveal Engine
   // --------------------------------------------------------------------------
   const workStyleScrollWrapper = document.getElementById('work-style-scroll-wrapper');
+  const processHeader = document.getElementById('process-header');
+  const step1Card = document.getElementById('process-step-1');
+  const step2Card = document.getElementById('process-step-2');
+  const step3Card = document.getElementById('process-step-3');
   const axisFill = document.getElementById('process-axis-fill');
-  const card1 = document.getElementById('process-step-1');
-  const card2 = document.getElementById('process-step-2');
-  const card3 = document.getElementById('process-step-3');
-  const node1 = document.getElementById('axis-node-1');
-  const node2 = document.getElementById('axis-node-2');
-  const node3 = document.getElementById('axis-node-3');
-  const node4 = document.getElementById('axis-node-4');
-  const allProcessCards = [card1, card2, card3];
+  const axisNode1 = document.getElementById('axis-node-1');
+  const axisNode2 = document.getElementById('axis-node-2');
+  const axisNode3 = document.getElementById('axis-node-3');
+  const axisNode4 = document.getElementById('axis-node-4');
 
   let workStyleScrollTicking = false;
-  let userHoveredCard = null;
-
-  allProcessCards.forEach((card) => {
-    if (!card) return;
-    card.addEventListener('mouseenter', () => {
-      userHoveredCard = card;
-      updateWorkStyleState();
-    });
-    card.addEventListener('mouseleave', () => {
-      userHoveredCard = null;
-      updateWorkStyleState();
-    });
-    card.addEventListener('click', () => {
-      userHoveredCard = card;
-      updateWorkStyleState();
-    });
-  });
 
   function updateWorkStyleScroll() {
     if (!workStyleScrollWrapper) return;
 
     const rect = workStyleScrollWrapper.getBoundingClientRect();
     const maxScroll = workStyleScrollWrapper.offsetHeight - window.innerHeight;
-    let progress = 0;
+    if (maxScroll <= 0) return;
 
-    if (maxScroll <= 0) {
-      const winH = window.innerHeight;
-      progress = Math.min(Math.max((winH - rect.top) / (winH + rect.height), 0), 1);
-    } else {
-      const scrolled = -rect.top;
-      progress = Math.min(Math.max(scrolled / maxScroll, 0), 1);
+    const scrolled = -rect.top;
+    const progress = Math.min(Math.max(scrolled / maxScroll, 0), 1);
+
+    // 1. Header: visible from the start
+    if (processHeader) {
+      const headerFade = Math.min(Math.max((progress + 0.1) / 0.25, 0), 1);
+      processHeader.style.opacity = Math.max(0.6, headerFade).toFixed(3);
     }
 
-    // Interactive progress line fill (smooth scaleX from 0 to 1)
+    // 2. Step 1 (Understand): reveals at 0.04 -> 0.32
+    const p1 = Math.min(Math.max((progress - 0.04) / 0.28, 0), 1);
+    const ease1 = p1 * p1 * (3 - 2 * p1);
+    if (step1Card) {
+      step1Card.style.opacity = ease1.toFixed(3);
+      step1Card.style.transform = `translateY(${((1 - ease1) * 32).toFixed(1)}px) scale(${(0.95 + ease1 * 0.05).toFixed(3)})`;
+      if (ease1 >= 0.5) {
+        step1Card.classList.add('active-glow');
+      } else {
+        step1Card.classList.remove('active-glow');
+      }
+    }
+
+    // 3. Step 2 (Shape): reveals at 0.34 -> 0.62
+    const p2 = Math.min(Math.max((progress - 0.34) / 0.28, 0), 1);
+    const ease2 = p2 * p2 * (3 - 2 * p2);
+    if (step2Card) {
+      step2Card.style.opacity = ease2.toFixed(3);
+      step2Card.style.transform = `translateY(${((1 - ease2) * 32).toFixed(1)}px) scale(${(0.95 + ease2 * 0.05).toFixed(3)})`;
+      if (ease2 >= 0.5) {
+        step2Card.classList.add('active-glow');
+      } else {
+        step2Card.classList.remove('active-glow');
+      }
+    }
+
+    // 4. Step 3 (Evolve): reveals at 0.64 -> 0.92
+    const p3 = Math.min(Math.max((progress - 0.64) / 0.28, 0), 1);
+    const ease3 = p3 * p3 * (3 - 2 * p3);
+    if (step3Card) {
+      step3Card.style.opacity = ease3.toFixed(3);
+      step3Card.style.transform = `translateY(${((1 - ease3) * 32).toFixed(1)}px) scale(${(0.95 + ease3 * 0.05).toFixed(3)})`;
+      if (ease3 >= 0.5) {
+        step3Card.classList.add('active-glow');
+      } else {
+        step3Card.classList.remove('active-glow');
+      }
+    }
+
+    // 5. Axis line fill & nodes: progress-linked
     if (axisFill) {
-      axisFill.style.transform = `scaleX(${progress.toFixed(3)})`;
+      const axisProg = Math.min(Math.max((progress - 0.04) / 0.88, 0), 1);
+      axisFill.style.transform = `scaleX(${axisProg.toFixed(3)})`;
     }
 
-    // Node 1: lights up as soon as section begins
-    if (node1) node1.classList.toggle('active', progress >= 0.02);
-    // Node 2: lights up at 33% progress
-    if (node2) node2.classList.toggle('active', progress >= 0.33);
-    // Node 3: lights up at 66% progress
-    if (node3) node3.classList.toggle('active', progress >= 0.66);
-    // Node 4: lights up at 95% progress
-    if (node4) node4.classList.toggle('active', progress >= 0.95);
-
-    // If user is hovering/interacting directly with a card, let hover override
-    if (userHoveredCard) return;
-
-    // Step 1: Understand
-    if (card1) {
-      if (progress < 0.35) {
-        card1.classList.add('active');
-        card1.classList.remove('completed');
-      } else {
-        card1.classList.remove('active');
-        card1.classList.add('completed');
-      }
-    }
-
-    // Step 2: Shape
-    if (card2) {
-      if (progress >= 0.35 && progress < 0.70) {
-        card2.classList.add('active');
-        card2.classList.remove('completed');
-      } else if (progress >= 0.70) {
-        card2.classList.remove('active');
-        card2.classList.add('completed');
-      } else {
-        card2.classList.remove('active', 'completed');
-      }
-    }
-
-    // Step 3: Evolve
-    if (card3) {
-      if (progress >= 0.70) {
-        card3.classList.add('active');
-        card3.classList.remove('completed');
-      } else {
-        card3.classList.remove('active', 'completed');
-      }
-    }
-  }
-
-  function updateWorkStyleState() {
-    if (userHoveredCard) {
-      allProcessCards.forEach((c) => {
-        if (!c) return;
-        if (c === userHoveredCard) {
-          c.classList.add('active');
-        } else {
-          c.classList.remove('active');
-        }
-      });
-    } else {
-      updateWorkStyleScroll();
-    }
+    if (axisNode1) axisNode1.classList.toggle('active', progress >= 0.04);
+    if (axisNode2) axisNode2.classList.toggle('active', progress >= 0.34);
+    if (axisNode3) axisNode3.classList.toggle('active', progress >= 0.64);
+    if (axisNode4) axisNode4.classList.toggle('active', progress >= 0.88);
   }
 
   function requestWorkStyleScrollUpdate() {
