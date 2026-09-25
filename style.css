@@ -3177,7 +3177,7 @@ span.title-line {
     max-width: 480px !important;
   }
   .capabilities-header {
-    margin-bottom: clamp(14px, 2.5vh, 20px) !important;
+    margin-bottom: 60px !important;
   }
   .capabilities-layer-wrap .about-section-title {
     font-size: clamp(26px, 6vw, 36px) !important;
