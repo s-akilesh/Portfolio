@@ -152,536 +152,48 @@ function initApp() {
     });
   }
 
-  // About Detail Overlay Back Button & Escape Key
-  const aboutBackBtn = document.getElementById('about-detail-back-btn');
-  if (aboutBackBtn) {
-    aboutBackBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (typeof window.closeAboutDetail === 'function') {
-        window.closeAboutDetail();
-      }
-    });
-  }
-
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (typeof window.closeAboutDetail === 'function') {
-        window.closeAboutDetail();
-      }
-    }
-  });
-
-  // About Detail Top Subnav Pill Tab Switching
+  // About Subnav Capsule Navigation (Work Style, Tool, What I Build)
   const subnavItems = document.querySelectorAll('.subnav-item');
-  const overlayContainer = document.getElementById('about-detail-overlay');
-  const tabPanels = document.querySelectorAll('.about-tab-panel');
-
-  // Work Style Scrollytelling Animation (Sequential reveal of Step 1, Step 2, Step 3 on scroll)
-  const heroVideoLayer = document.getElementById('work-style-hero-video');
-  const contentLayer = document.getElementById('work-style-content-layer');
-  const scrollTrack = document.querySelector('.work-style-scroll-track');
-  const step1 = document.getElementById('process-step-1');
-  const step2 = document.getElementById('process-step-2');
-  const step3 = document.getElementById('process-step-3');
-  const sectionHeader = document.querySelector('#work-style-content-layer .about-section-header');
-  const axisWrapper = document.querySelector('#work-style-content-layer .process-axis-wrapper');
-
-  window.updateWorkStyleScrollytelling = function() {
-    if (!overlayContainer || !heroVideoLayer || !contentLayer || !scrollTrack) return;
-    const workStylePanel = document.getElementById('work-style-section');
-    if (!workStylePanel || !workStylePanel.classList.contains('active')) return;
-
-    const totalScrollable = scrollTrack.offsetHeight - overlayContainer.clientHeight;
-    if (totalScrollable <= 0) return;
-
-    const currentScroll = overlayContainer.scrollTop;
-    const progress = Math.min(Math.max(currentScroll / totalScrollable, 0), 1);
-
-    // Phase 1: Video Float Up to Top & Fade Out (Progress 0.0 -> 0.14 for instant responsiveness)
-    const videoPhaseMax = 0.14;
-    const videoProgress = Math.min(progress / videoPhaseMax, 1);
-
-    const translateY = -50 - videoProgress * 60; // Moves UP from -50% to -110%
-    const videoScale = 1.0 - videoProgress * 0.25;
-    const videoOpacity = Math.max(0, 1.0 - videoProgress * 1.5);
-
-    heroVideoLayer.style.transform = `translate(-50%, ${translateY.toFixed(2)}%) scale(${videoScale.toFixed(3)})`;
-    heroVideoLayer.style.opacity = videoOpacity.toFixed(3);
-
-    if (videoOpacity <= 0.02) {
-      heroVideoLayer.style.visibility = 'hidden';
-      heroVideoLayer.style.pointerEvents = 'none';
-    } else {
-      heroVideoLayer.style.visibility = 'visible';
-      heroVideoLayer.style.pointerEvents = 'auto';
-    }
-
-    // Phase 2: Content Layer Container Visibility (Immediate on start of scroll)
-    const contentStart = 0.01;
-    if (progress < contentStart) {
-      contentLayer.style.opacity = '0';
-      contentLayer.style.visibility = 'hidden';
-      contentLayer.style.pointerEvents = 'none';
-    } else {
-      contentLayer.style.opacity = '1';
-      contentLayer.style.transform = 'translate(-50%, -50%)';
-      contentLayer.style.visibility = 'visible';
-      contentLayer.style.pointerEvents = 'auto';
-    }
-
-    // Helper to calculate item opacity & slide up
-    function getItemState(startP, endP) {
-      if (progress < startP) {
-        return { opacity: '0', transform: 'translateY(24px) scale(0.96)', visibility: 'hidden' };
-      } else if (progress >= endP) {
-        return { opacity: '1', transform: 'translateY(0px) scale(1)', visibility: 'visible' };
-      } else {
-        const itemP = (progress - startP) / (endP - startP);
-        const y = 24 * (1 - itemP);
-        const scale = 0.96 + itemP * 0.04;
-        return { opacity: itemP.toFixed(3), transform: `translateY(${y.toFixed(1)}px) scale(${scale.toFixed(3)})`, visibility: 'visible' };
-      }
-    }
-
-    // 1. Header (Title & Subtitle): Reveals immediately from progress 0.02 -> 0.15
-    if (sectionHeader) {
-      const hState = getItemState(0.02, 0.15);
-      sectionHeader.style.opacity = hState.opacity;
-      sectionHeader.style.transform = hState.transform;
-      sectionHeader.style.visibility = hState.visibility;
-    }
-
-    // 2. Step 1 (Understand): Reveals smoothly from progress 0.08 -> 0.35
-    if (step1) {
-      const s1State = getItemState(0.08, 0.35);
-      step1.style.opacity = s1State.opacity;
-      step1.style.transform = s1State.transform;
-      step1.style.visibility = s1State.visibility;
-    }
-
-    // 3. Step 2 (Shape): Reveals smoothly from progress 0.25 -> 0.60
-    if (step2) {
-      const s2State = getItemState(0.25, 0.60);
-      step2.style.opacity = s2State.opacity;
-      step2.style.transform = s2State.transform;
-      step2.style.visibility = s2State.visibility;
-    }
-
-    // 4. Step 3 (Evolve): Reveals smoothly from progress 0.45 -> 0.85
-    if (step3) {
-      const s3State = getItemState(0.45, 0.85);
-      step3.style.opacity = s3State.opacity;
-      step3.style.transform = s3State.transform;
-      step3.style.visibility = s3State.visibility;
-    }
-
-    // 5. Axis Line Draw & Rotating Nodes: Draws from left to right as content loads (progress 0.05 -> 0.85)
-    if (axisWrapper) {
-      const aState = getItemState(0.05, 0.85);
-      axisWrapper.style.opacity = aState.opacity;
-      axisWrapper.style.transform = aState.transform;
-      axisWrapper.style.visibility = aState.visibility;
-
-      const lineStart = 0.05;
-      const lineEnd = 0.85;
-      let lineProgress = 0;
-      if (progress >= lineStart) {
-        lineProgress = Math.min(Math.max((progress - lineStart) / (lineEnd - lineStart), 0), 1);
-      }
-
-      const axisFill = document.getElementById('process-axis-fill');
-      const node1 = document.getElementById('axis-node-1');
-      const node2 = document.getElementById('axis-node-2');
-      const node3 = document.getElementById('axis-node-3');
-      const node4 = document.getElementById('axis-node-4');
-
-      if (axisFill) {
-        axisFill.style.transform = `scaleX(${lineProgress.toFixed(3)})`;
-      }
-
-      if (node1) node1.classList.toggle('active', lineProgress >= 0.02);
-      if (node2) node2.classList.toggle('active', lineProgress >= 0.33);
-      if (node3) node3.classList.toggle('active', lineProgress >= 0.66);
-      if (node4) node4.classList.toggle('active', lineProgress >= 0.96);
-    }
-  };
-
-  // Tools Section Display & Scrubbing
-  window.updateToolsScrollScrubbing = function() {
-    if (!overlayContainer) return;
-    const toolsPanel = document.getElementById('tools-section');
-    if (!toolsPanel || !toolsPanel.classList.contains('active')) return;
-
-    const categoryRows = toolsPanel.querySelectorAll('.tool-category-row');
-    if (!categoryRows || categoryRows.length === 0) return;
-
-    categoryRows.forEach((row) => {
-      row.style.opacity = '1';
-      row.style.transform = 'translateY(0px)';
-      row.style.clipPath = 'none';
-      const pills = row.querySelectorAll('.tool-pill-badge');
-      pills.forEach((pill) => {
-        pill.style.opacity = '1';
-        pill.style.transform = 'scale(1)';
-      });
-    });
-  };
-
-  // 6 3D Outer Corner Vectors for "What I Bring to the Table" (WHAT I BUILD) Cards
-  const buildCardCornerOffsets = [
-    { tx: -700, ty: -500, tz: -300, rx: 45, ry: 45, rz: -20, s: 0.55 },  // Card 01 (UNTANGLE - Top-Left)
-    { tx: 0,    ty: -650, tz: -300, rx: 65, ry: 0,  rz: 0,   s: 0.55 },  // Card 02 (STRUCTURE - Top-Center)
-    { tx: 700,  ty: -500, tz: -300, rx: 45, ry: -45, rz: 20,  s: 0.55 },  // Card 03 (THINK BUSINESS - Top-Right)
-    { tx: -700, ty: 500,  tz: -300, rx: -45, ry: 45, rz: -20, s: 0.55 },  // Card 04 (BUILD - Bottom-Left)
-    { tx: 0,    ty: 650,  tz: -300, rx: -65, ry: 0,  rz: 0,   s: 0.55 },  // Card 05 (MAKE IT BETTER - Bottom-Center)
-    { tx: 700,  ty: 500,  tz: -300, rx: -45, ry: -45, rz: 20,  s: 0.55 }   // Card 06 (OWN IT - Bottom-Right)
-  ];
-
-  let currentBuildProgress = 0;
-  let targetBuildProgress = 0;
-  let buildAnimFrameId = null;
-
-  window.updateBuildScrollScrubbing = function(forceReset = false) {
-    if (!overlayContainer) return;
-    const buildPanel = document.getElementById('what-i-build-section');
-    if (!buildPanel || !buildPanel.classList.contains('active')) return;
-
-    const cards = buildPanel.querySelectorAll('.arch-card');
-    if (!cards || cards.length === 0) return;
-
-    if (forceReset) {
-      currentBuildProgress = 0;
-      targetBuildProgress = 0;
-    } else {
-      const scrollVal = overlayContainer.scrollTop;
-      const maxScroll = Math.max(overlayContainer.scrollHeight - overlayContainer.clientHeight, 1);
-      const maxScrubDist = Math.min(maxScroll, 240);
-
-      targetBuildProgress = Math.min(Math.max(scrollVal / maxScrubDist, 0), 1);
-      if (scrollVal >= maxScroll - 12) {
-        targetBuildProgress = 1;
-      }
-    }
-
-    currentBuildProgress += (targetBuildProgress - currentBuildProgress) * 0.18;
-    if (Math.abs(targetBuildProgress - currentBuildProgress) < 0.0005) {
-      currentBuildProgress = targetBuildProgress;
-    }
-
-    const p = currentBuildProgress;
-
-    cards.forEach((card, idx) => {
-      const offset = buildCardCornerOffsets[idx % buildCardCornerOffsets.length];
-      const startP = idx * 0.04;
-      const endP = Math.min(startP + 0.60, 0.95);
-
-      const cardP = p <= startP ? 0 : (p >= endP ? 1 : (p - startP) / (endP - startP));
-      const easeP = 1 - Math.pow(1 - cardP, 2.5);
-
-      if (easeP >= 0.998) {
-        card.style.opacity = '1';
-        card.style.transform = 'translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)';
-        card.style.pointerEvents = 'auto';
-      } else {
-        const tx = offset.tx * (1 - easeP);
-        const ty = offset.ty * (1 - easeP);
-        const tz = offset.tz * (1 - easeP);
-        const rx = offset.rx * (1 - easeP);
-        const ry = offset.ry * (1 - easeP);
-        const rz = offset.rz * (1 - easeP);
-        const scale = offset.s + (1 - offset.s) * easeP;
-        const opacity = Math.min(easeP * 1.4, 1);
-
-        card.style.opacity = opacity.toFixed(3);
-        card.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, ${tz.toFixed(1)}px) rotateX(${rx.toFixed(1)}deg) rotateY(${ry.toFixed(1)}deg) rotateZ(${rz.toFixed(1)}deg) scale(${scale.toFixed(3)})`;
-        card.style.pointerEvents = easeP > 0.8 ? 'auto' : 'none';
-      }
-    });
-
-    if (Math.abs(targetBuildProgress - currentBuildProgress) > 0.0005) {
-      if (buildAnimFrameId) cancelAnimationFrame(buildAnimFrameId);
-      buildAnimFrameId = requestAnimationFrame(() => window.updateBuildScrollScrubbing(false));
-    }
-  };
-
-  let isTabTransitioning = false;
-  let transitionCooldownTimer = null;
-
-  function lockTabTransition() {
-    isTabTransitioning = true;
-    if (overlayContainer) {
-      overlayContainer.style.overflow = 'hidden';
-    }
-  }
-
-  function unlockTabTransition() {
-    clearTimeout(transitionCooldownTimer);
-    transitionCooldownTimer = setTimeout(() => {
-      isTabTransitioning = false;
-      if (overlayContainer) {
-        overlayContainer.style.overflow = '';
-      }
-    }, 350);
-  }
-
-  function switchTabByTarget(targetSel, scrollPos = 'top') {
-    const btn = document.querySelector(`.subnav-item[data-target="${targetSel}"]`);
-    const targetEl = document.querySelector(targetSel);
-    if (!targetEl || !btn) return;
-
-    subnavItems.forEach((b) => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    tabPanels.forEach((panel) => {
-      panel.classList.remove('active');
-    });
-    targetEl.classList.add('active');
-
-    if (overlayContainer) {
-      if (targetSel === '#tools-section' || targetSel === '#what-i-build-section') {
-        overlayContainer.classList.add('light-theme-tools');
-      } else {
-        overlayContainer.classList.remove('light-theme-tools');
-      }
-    }
-
-    if (overlayContainer) {
-      if (scrollPos === 'top') {
-        overlayContainer.scrollTop = 0;
-      } else if (scrollPos === 'bottom') {
-        const totalScrollable = overlayContainer.scrollHeight - overlayContainer.clientHeight;
-        overlayContainer.scrollTop = totalScrollable > 0 ? totalScrollable : 0;
-      }
-    }
-
-    if (targetSel === '#work-style-section' && typeof window.updateWorkStyleScrollytelling === 'function') {
-      window.updateWorkStyleScrollytelling();
-    } else if (targetSel === '#tools-section' && typeof window.updateToolsScrollScrubbing === 'function') {
-      window.updateToolsScrollScrubbing();
-    } else if (targetSel === '#what-i-build-section' && typeof window.updateBuildScrollScrubbing === 'function') {
-      window.updateBuildScrollScrubbing(true);
-    }
-  }
-
-  function triggerToolsToBuildTransition(direction, switchTabFn, onComplete) {
-    const toolsSection = document.getElementById('tools-section');
-
-    if (direction === 'forward') {
-      if (toolsSection) {
-        toolsSection.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-        toolsSection.style.opacity = '0';
-        toolsSection.style.transform = 'translateY(-15px)';
-      }
-
-      setTimeout(() => {
-        if (typeof switchTabFn === 'function') switchTabFn();
-        if (toolsSection) {
-          toolsSection.style.opacity = '';
-          toolsSection.style.transform = '';
-          toolsSection.style.transition = '';
-        }
-        if (typeof window.updateBuildScrollScrubbing === 'function') {
-          window.updateBuildScrollScrubbing(true);
-        }
-        if (typeof onComplete === 'function') onComplete();
-      }, 250);
-
-    } else {
-      // REVERSE: What I Build -> Tools
-      if (typeof switchTabFn === 'function') switchTabFn();
-      if (typeof window.updateToolsScrollScrubbing === 'function') {
-        window.updateToolsScrollScrubbing();
-      }
-      if (typeof onComplete === 'function') onComplete();
-    }
-  }
-
-  function handleAutoTabScroll(deltaY) {
-    if (isTabTransitioning || !overlayContainer) return;
-
-    const activePanel = document.querySelector('.about-tab-panel.active');
-    if (!activePanel) return;
-
-    const panelId = activePanel.id;
-
-    if (panelId === 'work-style-section') {
-      if (deltaY > 0) {
-        const totalScrollable = scrollTrack ? (scrollTrack.offsetHeight - overlayContainer.clientHeight) : 0;
-        const currentScroll = overlayContainer.scrollTop;
-        if (totalScrollable > 0 && currentScroll >= totalScrollable - 20) {
-          lockTabTransition();
-          triggerDustDisperse('forward', () => {
-            switchTabByTarget('#tools-section', 'top');
-          }, () => {
-            unlockTabTransition();
-          });
-        }
-      } else if (deltaY < 0) {
-        // Overlay remains open; user exits only via BACK TO ABOUT button
-      }
-    } else if (panelId === 'tools-section') {
-      if (deltaY > 0) {
-        const maxScroll = overlayContainer.scrollHeight - overlayContainer.clientHeight;
-        if (overlayContainer.scrollTop >= maxScroll - 5 || maxScroll <= 0) {
-          lockTabTransition();
-          triggerToolsToBuildTransition('forward', () => {
-            switchTabByTarget('#what-i-build-section', 'top');
-          }, () => {
-            unlockTabTransition();
-          });
-        }
-      } else if (deltaY < 0) {
-        if (overlayContainer.scrollTop <= 15) {
-          lockTabTransition();
-          triggerDustDisperse('reverse', () => {
-            switchTabByTarget('#work-style-section', 'bottom');
-          }, () => {
-            unlockTabTransition();
-          });
-        }
-      }
-    } else if (panelId === 'what-i-build-section') {
-      if (deltaY < 0) {
-        if (overlayContainer.scrollTop <= 15 && currentBuildProgress <= 0.15) {
-          lockTabTransition();
-          triggerToolsToBuildTransition('reverse', () => {
-            switchTabByTarget('#tools-section', 'bottom');
-          }, () => {
-            unlockTabTransition();
-          });
-        }
-      } else if (deltaY > 0) {
-        // Bounded within What I Build; user exits only via BACK TO ABOUT button
-      }
-    }
-  }
-
   subnavItems.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      if (isTabTransitioning) return;
-
       const targetSel = btn.getAttribute('data-target');
       if (!targetSel) return;
-
-      const activePanel = document.querySelector('.about-tab-panel.active');
-      const currentId = activePanel ? activePanel.id : '';
-
-      if (currentId === 'work-style-section' && targetSel === '#tools-section') {
-        lockTabTransition();
-        triggerDustDisperse('forward', () => {
-          switchTabByTarget('#tools-section', 'top');
-        }, () => {
-          unlockTabTransition();
-        });
-      } else if (currentId === 'tools-section' && targetSel === '#work-style-section') {
-        lockTabTransition();
-        triggerDustDisperse('reverse', () => {
-          switchTabByTarget('#work-style-section', 'bottom');
-        }, () => {
-          unlockTabTransition();
-        });
-      } else if (currentId === 'tools-section' && targetSel === '#what-i-build-section') {
-        lockTabTransition();
-        triggerToolsToBuildTransition('forward', () => {
-          switchTabByTarget('#what-i-build-section', 'top');
-        }, () => {
-          unlockTabTransition();
-        });
-      } else if (currentId === 'what-i-build-section' && targetSel === '#tools-section') {
-        lockTabTransition();
-        triggerToolsToBuildTransition('reverse', () => {
-          switchTabByTarget('#tools-section', 'bottom');
-        }, () => {
-          unlockTabTransition();
-        });
-      } else {
-        switchTabByTarget(targetSel, 'top');
+      const targetEl = document.querySelector(targetSel);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth' });
       }
+      subnavItems.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
     });
   });
 
-  if (overlayContainer) {
-    const handleOverlayScrollScrub = () => {
-      const activePanel = document.querySelector('.about-tab-panel.active');
-      const currentId = activePanel ? activePanel.id : '';
+  // ScrollSpy to update active subnav button as user scrolls
+  const aboutSectionIds = ['#work-style-section', '#tools-section', '#what-i-build-section'];
+  function updateAboutSubnavActive() {
+    const scrollPos = window.scrollY + window.innerHeight * 0.4;
+    let activeId = null;
 
-      if (currentId === 'work-style-section' && typeof window.updateWorkStyleScrollytelling === 'function') {
-        window.updateWorkStyleScrollytelling();
-      } else if (currentId === 'tools-section' && typeof window.updateToolsScrollScrubbing === 'function') {
-        window.updateToolsScrollScrubbing();
-      } else if (currentId === 'what-i-build-section' && typeof window.updateBuildScrollScrubbing === 'function') {
-        window.updateBuildScrollScrubbing();
+    for (let i = aboutSectionIds.length - 1; i >= 0; i--) {
+      const el = document.querySelector(aboutSectionIds[i]);
+      if (el && el.offsetTop <= scrollPos) {
+        activeId = aboutSectionIds[i];
+        break;
       }
-    };
+    }
 
-    overlayContainer.addEventListener('scroll', handleOverlayScrollScrub, { passive: true });
-
-    overlayContainer.addEventListener('wheel', (e) => {
-      if (isTabTransitioning) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      const isMobile = window.innerWidth < 768;
-      const scrollSpeedFactor = isMobile ? 0.45 : 0.35; // Increased scroll speed multiplier inside View More About Akilesh screen
-      const maxOverlayDelta = isMobile ? 32 : 28;
-      let targetDeltaY = e.deltaY * scrollSpeedFactor;
-      if (Math.abs(targetDeltaY) > maxOverlayDelta) {
-        targetDeltaY = Math.sign(targetDeltaY) * maxOverlayDelta;
-      }
-      
-      const prevTop = overlayContainer.scrollTop;
-      overlayContainer.scrollTop += targetDeltaY;
-      const actualDelta = overlayContainer.scrollTop - prevTop;
-
-      handleAutoTabScroll(actualDelta !== 0 ? actualDelta : targetDeltaY);
-      e.preventDefault();
-    }, { passive: false });
-
-    let touchStartY = 0;
-    let lastTouchY = 0;
-    overlayContainer.addEventListener('touchstart', (e) => {
-      if (isTabTransitioning) {
-        e.preventDefault();
-        return;
-      }
-      if (e.touches.length > 0) {
-        touchStartY = e.touches[0].clientY;
-        lastTouchY = e.touches[0].clientY;
-      }
-    }, { passive: false });
-
-    overlayContainer.addEventListener('touchmove', (e) => {
-      if (isTabTransitioning) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (e.touches.length > 0) {
-        const currentY = e.touches[0].clientY;
-        const isMobile = window.innerWidth < 768;
-        const touchSpeedFactor = isMobile ? 0.65 : 0.45; // Increased mobile touch scroll speed factor inside View More About Akilesh screen
-        const maxTouchDelta = isMobile ? 40 : 25;
-        let deltaY = (lastTouchY - currentY) * touchSpeedFactor;
-        if (Math.abs(deltaY) > maxTouchDelta) {
-          deltaY = Math.sign(deltaY) * maxTouchDelta;
+    if (activeId) {
+      subnavItems.forEach((b) => {
+        if (b.getAttribute('data-target') === activeId) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
         }
-        lastTouchY = currentY;
-
-        overlayContainer.scrollTop += deltaY;
-        handleAutoTabScroll(deltaY);
-        e.preventDefault();
-      }
-    }, { passive: false });
-
-
-    overlayContainer.addEventListener('keydown', (e) => {
-      if (isTabTransitioning && ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) {
-        e.preventDefault();
-      }
-    }, { passive: false });
+      });
+    }
   }
+
+  window.addEventListener('scroll', updateAboutSubnavActive, { passive: true });
 
   // Force manual scroll restoration so entering/reloading link ALWAYS lands on top of Landing Screen
   if ('scrollRestoration' in history) {
@@ -850,37 +362,27 @@ function initApp() {
   }
 
   // --------------------------------------------------------------------------
-  // Interactive Smooth Mouse Floating Parallax Engine for All About Tabs
-  // (Work Style, Tool, and What I Bring to the Table)
+  // Interactive Smooth Mouse Floating Parallax Engine for About Sections
   // --------------------------------------------------------------------------
   function initAboutTabsMouseFloat() {
-    const overlay = document.getElementById('about-detail-overlay');
-    if (!overlay) return;
+    const aboutContainer = document.getElementById('about-more-sections');
+    if (!aboutContainer) return;
 
-    // Elements for "What I Build" Tab
     const buildSection = document.getElementById('what-i-build-section');
     const buildWrap = buildSection ? buildSection.querySelector('.capabilities-floating-wrap') : null;
     const buildGridBg = buildSection ? buildSection.querySelector('.capabilities-grid-bg') : null;
-    const buildHeader = buildSection ? buildSection.querySelector('.capabilities-header') : null;
 
-    // Elements for "Work Style" Tab
-    const workStyleSection = document.getElementById('work-style-section');
-    const workStyleVideoCard = workStyleSection ? workStyleSection.querySelector('.video-container-card') : null;
-    const workStyleWrap = workStyleSection ? workStyleSection.querySelector('.work-style-floating-wrap') : null;
-    const workStyleHeader = workStyleSection ? workStyleSection.querySelector('.about-section-header') : null;
-
-    // Elements for "Tools" Tab
     const toolsSection = document.getElementById('tools-section');
     const toolsWrap = toolsSection ? toolsSection.querySelector('.tools-floating-wrap') : null;
-    const toolsHeader = toolsSection ? toolsSection.querySelector('.about-section-header') : null;
 
     let targetX = 0, targetY = 0;
     let currentX = 0, currentY = 0;
     let floatTime = 0;
-    let floatAnimId = null;
 
     function onMouseMove(e) {
-      if (!overlay.classList.contains('active')) return;
+      const rect = aboutContainer.getBoundingClientRect();
+      if (rect.top > window.innerHeight || rect.bottom < 0) return;
+
       const cx = window.innerWidth * 0.5;
       const cy = window.innerHeight * 0.5;
 
@@ -894,85 +396,38 @@ function initApp() {
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     function renderFloat() {
-      if (!overlay.classList.contains('active')) {
-        floatAnimId = null;
-        return;
-      }
+      const rect = aboutContainer.getBoundingClientRect();
+      if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+        floatTime += 0.02;
 
-      floatTime += 0.02;
+        currentX += (targetX - currentX) * 0.065;
+        currentY += (targetY - currentY) * 0.065;
 
-      // Smooth Inertial Lerp Damping (0.065 for organic, viscous feel)
-      currentX += (targetX - currentX) * 0.065;
-      currentY += (targetY - currentY) * 0.065;
+        const ambientFloatY = Math.sin(floatTime * 1.5) * 2;
+        const ambientFloatX = Math.cos(floatTime * 1.2) * 1.5;
 
-      // Subtle ambient breathing float oscillation
-      const ambientFloatY = Math.sin(floatTime * 1.5) * 3;
-      const ambientFloatX = Math.cos(floatTime * 1.2) * 2;
+        const moveX = currentX * 14 + ambientFloatX;
+        const moveY = currentY * 10 + ambientFloatY;
+        const rotX = -currentY * 3.5;
+        const rotY = currentX * 4.2;
 
-      const moveX = currentX * 22 + ambientFloatX;
-      const moveY = currentY * 16 + ambientFloatY;
-      const rotX = -currentY * 5.5; // subtle tilt X
-      const rotY = currentX * 6.8;   // subtle tilt Y
-      const hX = currentX * 9;
-      const hY = currentY * 7;
-
-      // 1. What I Build Screen Parallax Float
-      if (buildSection && buildSection.classList.contains('active')) {
         if (buildWrap) {
           buildWrap.style.transform = `translate3d(${moveX.toFixed(2)}px, ${moveY.toFixed(2)}px, 0) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
         }
         if (buildGridBg) {
-          const bgX = -currentX * 14 - ambientFloatX * 0.5;
-          const bgY = -currentY * 11 - ambientFloatY * 0.5;
+          const bgX = -currentX * 10 - ambientFloatX * 0.5;
+          const bgY = -currentY * 8 - ambientFloatY * 0.5;
           buildGridBg.style.transform = `translate3d(${bgX.toFixed(2)}px, ${bgY.toFixed(2)}px, 0)`;
         }
-        if (buildHeader) {
-          buildHeader.style.transform = `translate3d(${hX.toFixed(2)}px, ${hY.toFixed(2)}px, 16px)`;
-        }
-      }
-
-      // 2. Work Style Screen Parallax Float
-      if (workStyleSection && workStyleSection.classList.contains('active')) {
-        if (workStyleVideoCard) {
-          const vMoveX = moveX * 0.75;
-          const vMoveY = moveY * 0.75;
-          const vRotX = rotX * 0.7;
-          const vRotY = rotY * 0.7;
-          workStyleVideoCard.style.transform = `translate3d(${vMoveX.toFixed(2)}px, ${vMoveY.toFixed(2)}px, 0) rotateX(${vRotX.toFixed(2)}deg) rotateY(${vRotY.toFixed(2)}deg)`;
-        }
-        if (workStyleWrap) {
-          workStyleWrap.style.transform = `translate3d(${moveX.toFixed(2)}px, ${moveY.toFixed(2)}px, 0) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
-        }
-        if (workStyleHeader) {
-          workStyleHeader.style.transform = `translate3d(${hX.toFixed(2)}px, ${hY.toFixed(2)}px, 14px)`;
-        }
-      }
-
-      // 3. Tools Screen Parallax Float
-      if (toolsSection && toolsSection.classList.contains('active')) {
         if (toolsWrap) {
           toolsWrap.style.transform = `translate3d(${moveX.toFixed(2)}px, ${moveY.toFixed(2)}px, 0) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
         }
-        if (toolsHeader) {
-          toolsHeader.style.transform = `translate3d(${hX.toFixed(2)}px, ${hY.toFixed(2)}px, 16px)`;
-        }
       }
 
-      floatAnimId = requestAnimationFrame(renderFloat);
+      requestAnimationFrame(renderFloat);
     }
 
-    window.startAboutTabsFloat = function() {
-      if (!floatAnimId) {
-        floatAnimId = requestAnimationFrame(renderFloat);
-      }
-    };
-
-    window.stopAboutTabsFloat = function() {
-      if (floatAnimId) {
-        cancelAnimationFrame(floatAnimId);
-        floatAnimId = null;
-      }
-    };
+    requestAnimationFrame(renderFloat);
   }
 
   initAboutTabsMouseFloat();

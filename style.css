@@ -2097,151 +2097,50 @@ span.title-line {
 }
 
 /* ==========================================================================
-   EXPANDING CIRCLE "VIEW MORE ABOUT AKILESH" DETAIL OVERLAY
+/* ==========================================================================
+   ABOUT DETAIL SECTIONS (HOW I WORK, TOOLS & ECOSYSTEM, WHAT I BUILD)
    ========================================================================== */
-.about-detail-overlay {
-  position: fixed;
-  inset: 0;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 99999;
-  width: 100vw;
-  width: 100dvw;
-  height: 100vh;
-  height: 100dvh;
+.about-more-sections {
+  position: relative;
+  width: 100%;
   background-color: #020202;
-  background-image: none;
   color: #ffffff;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  scroll-behavior: auto;
-  -webkit-overflow-scrolling: touch;
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-  clip-path: circle(0% at var(--dome-x, 50%) var(--dome-y, 50%));
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  will-change: clip-path, opacity;
-  transition: clip-path 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.4s ease,
-              visibility 0.4s ease;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow: visible;
 }
 
-.about-detail-overlay:not(.active),
-.about-detail-overlay:not(.active) * {
-  pointer-events: none !important;
-  visibility: hidden !important;
-}
-
-.about-detail-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-  visibility: visible;
-  clip-path: circle(350% at var(--dome-x, 50%) var(--dome-y, 50%));
-}
-
-/* Ensure no elements or sections below peek through when About Detail Overlay is open */
-body.about-overlay-open #projects-section,
-body.about-overlay-open #contact-section,
-body.about-overlay-open footer,
-body:has(#about-detail-overlay.active) #projects-section,
-body:has(#about-detail-overlay.active) #contact-section,
-body:has(#about-detail-overlay.active) footer {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-
-body.about-overlay-open,
-body:has(#about-detail-overlay.active) {
-  overflow: hidden !important;
-}
-
-/* Ensure the hero section frame fills the screen edge-to-edge when overlay is open without yellow border gap */
-body.about-overlay-open .hero-section.sticky-hero,
-body:has(#about-detail-overlay.active) .hero-section.sticky-hero {
-  padding: 0 !important;
-  background-color: #020202 !important;
-}
-
-body.about-overlay-open .hero-inner-frame,
-body:has(#about-detail-overlay.active) .hero-inner-frame {
-  border-radius: 0 !important;
-}
-
-/* Sticky Detail Top Navigation Bar */
-.about-detail-header {
+/* Sticky Detail Submenu Capsule Navigation Bar */
+.about-subnav-sticky-bar {
   position: sticky;
-  top: 0;
+  top: 24px;
   z-index: 100;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 1.1rem clamp(1.2rem, 3.5vw, 3rem);
-  background: rgba(2, 2, 2, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.about-detail-back-btn {
-  position: relative;
-  z-index: 50;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 8px 18px;
-  border-radius: 9999px;
-  font-family: 'Mohave', 'Poppins', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  pointer-events: auto !important;
-  transition: all 0.25s ease;
-}
-
-.about-detail-back-btn * {
+  width: 100%;
+  padding: 0 1rem;
   pointer-events: none;
+  margin-bottom: -48px;
 }
 
-.about-detail-back-btn:hover {
-  background: #ECC714;
-  color: #111111;
-  border-color: #ECC714;
-  transform: translateX(-3px);
-  box-shadow: 0 4px 14px rgba(236, 199, 20, 0.35);
-}
-
-/* Top Right Submenu Capsule Navigation inside Detail Overlay */
 .about-subnav-pill {
   position: relative;
-  left: auto;
-  transform: none;
-  margin-left: auto;
-  z-index: 30;
   pointer-events: auto;
 }
 
 .subnav-pill-inner {
   display: inline-flex;
   align-items: center;
-  height: 48px;
-  box-sizing: border-box;
-  background: transparent;
-  border: none;
-  padding: 0;
-  gap: clamp(8px, 1.2vw, 16px);
-  box-shadow: none;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 5px 8px;
+  gap: 6px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
   white-space: nowrap;
 }
 
@@ -2252,11 +2151,11 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: #ffffff;
-  opacity: 0.7;
+  opacity: 0.75;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px 16px;
+  padding: 7px 16px;
   position: relative;
   border-radius: 999px;
   transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
@@ -2269,109 +2168,53 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
 
 .subnav-item.active {
   opacity: 1;
-  background-color: rgba(255, 255, 255, 0.18);
+  background-color: rgba(255, 255, 255, 0.22);
   color: #ffffff;
-}
-
-.subnav-item.subnav-accent-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  box-sizing: border-box;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border-radius: 999px;
-  padding: 0 18px;
-  font-weight: 400;
-  opacity: 1;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.subnav-item.subnav-accent-btn:hover,
-.subnav-item.subnav-accent-btn.active {
-  opacity: 1;
-  background-color: rgba(255, 255, 255, 0.3);
-  transform: scale(1.02);
 }
 
 @media (max-width: 768px) {
-  .about-detail-back-btn span {
-    display: none !important;
+  .about-subnav-sticky-bar {
+    top: 16px;
+    margin-bottom: -36px;
   }
-  .about-detail-back-btn {
-    width: 38px;
-    height: 38px;
-    padding: 0 !important;
-    justify-content: center;
-    border-radius: 50% !important;
-    flex-shrink: 0;
-  }
-  .about-subnav-pill {
-    position: relative;
-    left: auto;
-    transform: none;
-    max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .subnav-item {
+    font-size: 12px;
+    padding: 6px 12px;
   }
 }
 
-.about-header-accent {
+/* Part 1: How I Work (Process Section) */
+.about-process-section {
+  position: relative;
   width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.4), transparent);
-}
-
-.detail-live-status {
+  padding: clamp(5rem, 9vh, 8rem) clamp(1.5rem, 4vw, 4.5rem);
+  background-color: #020202;
+  color: #ffffff;
+  box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.75rem;
-  color: #94a3b8;
-  letter-spacing: 0.08em;
 }
 
-.detail-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #38bdf8;
-  box-shadow: 0 0 8px #38bdf8;
-}
-
-/* Tab Panel Switching */
-.about-tab-panel {
-  display: none !important;
-}
-
-.about-tab-panel.active {
-  display: block !important;
-}
-
-/* Scrollable Content Body */
-.about-detail-scroll-body {
+.work-style-container {
+  position: relative;
   width: 100%;
-  min-height: 100%;
-  padding: 0;
-  margin: 0;
-  display: block;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-.about-kicker {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.78rem;
-  color: #38bdf8;
-  letter-spacing: 0.16em;
-  font-weight: 600;
-  text-transform: uppercase;
-  display: inline-block;
+.about-process-section .about-section-header {
+  margin-bottom: 2.8rem;
+  text-align: center;
 }
 
 .about-section-title {
   font-family: 'Luckiest Guy', cursive, sans-serif !important;
-  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
   font-weight: 400 !important;
   color: #ffffff;
   margin: 0.35rem 0 0.5rem;
@@ -2383,39 +2226,35 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   font-size: clamp(0.92rem, 1.1vw, 1.1rem);
   color: #94a3b8;
   max-width: 580px;
-  margin: 0 0 2.2rem;
+  margin: 0 auto 2.2rem;
   line-height: 1.55;
+  text-align: center;
 }
 
 /* Process 3-Column Text Layout */
 .about-process-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
+  gap: 28px;
+  width: 100%;
 }
 
 .process-card {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 12px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 28px 22px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
 }
 
 .process-card:hover {
   transform: translateY(-4px);
-}
-
-.process-card-badge {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.72rem;
-  color: #38bdf8;
-  letter-spacing: 0.14em;
-  font-weight: 700;
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .process-card-title {
@@ -2437,19 +2276,19 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
 .process-card-flow {
   margin-top: auto;
   padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-family: 'Space Mono', monospace;
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: #38bdf8;
   letter-spacing: 0.03em;
 }
 
-/* Axis Line with Rotating Plus Nodes (Draws on Scroll) */
+/* Axis Line with Rotating Plus Nodes */
 .process-axis-wrapper {
   position: relative;
   width: 100%;
   height: 24px;
-  margin-top: 2rem;
+  margin-top: 2.8rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2470,76 +2309,25 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   height: 100%;
   background: linear-gradient(90deg, #38bdf8, #ECC714);
   transform-origin: left center;
-  transform: scaleX(0);
-  will-change: transform;
-  transition: transform 0.1s linear;
+  transform: scaleX(1);
 }
 
 .axis-node {
   position: relative;
   z-index: 2;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.25);
+  color: #38bdf8;
   font-weight: bold;
   font-size: 14px;
-  background: #070a10;
+  background: #020202;
+  border: 1px solid rgba(56, 189, 248, 0.5);
   border-radius: 50%;
-  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.axis-node.active {
-  color: #38bdf8;
   text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
   animation: spinAxisNode 8s linear infinite;
-}
-
-/* Light Theme Full-Screen Overrides for Tools Section */
-#about-detail-overlay {
-  transition: background-color 0.4s ease;
-}
-
-#about-detail-overlay.light-theme-tools {
-  background-color: #FFFFFF !important;
-}
-
-.light-theme-tools .about-detail-header {
-  background: rgba(255, 255, 255, 0.82) !important;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-}
-
-.light-theme-tools .about-detail-back-btn {
-  background: #F1F5F9 !important;
-  color: #0F172A !important;
-  border: 1px solid #CBD5E1 !important;
-}
-
-.light-theme-tools .about-detail-back-btn:hover {
-  background: #E2E8F0 !important;
-  color: #0F172A !important;
-  border-color: #94A3B8 !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-}
-
-.light-theme-tools .subnav-item {
-  color: #475569 !important;
-  opacity: 0.85;
-}
-
-.light-theme-tools .subnav-item:hover {
-  color: #0F172A !important;
-  opacity: 1;
-}
-
-.light-theme-tools .subnav-item.active {
-  color: #0F172A !important;
-  background-color: #F1F5F9 !important;
-  opacity: 1;
 }
 
 /* What I Build Section Light Theme Overrides */
@@ -2559,6 +2347,21 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
 }
 
 /* Full-Screen Architectural Grid Pattern Background (Spanning 100% Edge-to-Edge) */
+/* What I Build Section (What I Bring to the Table) */
+.about-capabilities-section {
+  position: relative;
+  width: 100%;
+  padding: clamp(5rem, 9vh, 8rem) clamp(1.5rem, 4vw, 4.5rem);
+  box-sizing: border-box;
+  perspective: 1400px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #FFFFFF;
+}
+
 .capabilities-grid-bg {
   position: absolute;
   top: -150px;
@@ -2596,7 +2399,7 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
   margin-bottom: 2.5rem;
   transform-style: preserve-3d;
 }
@@ -2618,7 +2421,7 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   transform-style: preserve-3d;
 }
 
-.light-theme-tools .about-capabilities-section .about-section-title {
+.about-capabilities-section .about-section-title {
   color: #0F172A !important;
   font-family: 'Luckiest Guy', cursive, sans-serif !important;
   font-size: clamp(2.2rem, 3.8vw, 3.4rem);
@@ -2627,8 +2430,8 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   margin: 0;
 }
 
-/* Cards Built Flush Inside Grid Modules (Matching Reference Wireframe) */
-.light-theme-tools .about-capabilities-section .arch-card {
+/* Cards Built Flush Inside Grid Modules */
+.about-capabilities-section .arch-card {
   position: relative;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
@@ -2642,6 +2445,15 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   transform-style: preserve-3d;
   z-index: 1;
   box-sizing: border-box;
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.about-capabilities-section .arch-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1) !important;
 }
 
 .arch-card-top {
@@ -2665,7 +2477,7 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   border-radius: 4px;
 }
 
-.light-theme-tools .about-capabilities-section .arch-card-title {
+.about-capabilities-section .arch-card-title {
   font-family: 'Mohave', sans-serif;
   font-size: 1.35rem;
   font-weight: 700;
@@ -2675,7 +2487,7 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   margin: 0;
 }
 
-.light-theme-tools .about-capabilities-section .arch-card-desc {
+.about-capabilities-section .arch-card-desc {
   font-family: 'Poppins', sans-serif;
   font-size: 0.88rem;
   color: #334155;
@@ -2684,7 +2496,7 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   flex-grow: 1;
 }
 
-.light-theme-tools .about-capabilities-section .arch-card-pills {
+.about-capabilities-section .arch-card-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -2692,7 +2504,7 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   padding-top: 10px;
 }
 
-.light-theme-tools .about-capabilities-section .pill-tag {
+.about-capabilities-section .pill-tag {
   font-family: 'Space Mono', monospace;
   font-size: 0.66rem;
   font-weight: 600;
@@ -2716,17 +2528,17 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
     gap: 14px;
   }
   .about-capabilities-section {
-    padding: 2rem 1rem 3rem;
+    padding: 3rem 1rem 4rem;
   }
 }
 
-/* Tools Section Category Layout & Interactive Badge/Card */
+/* Part 2: Tools Section Category Layout & Interactive Badge/Card */
 .about-tools-section {
   position: relative;
   width: 100%;
-  min-height: calc(150vh - 75px);
-  padding: 3.5rem clamp(1.5rem, 4vw, 4.5rem) 14rem;
-  background: transparent;
+  padding: clamp(5rem, 9vh, 8rem) clamp(1.5rem, 4vw, 4.5rem);
+  background-color: #FFFFFF;
+  color: #0F172A;
   box-shadow: none;
   box-sizing: border-box;
   perspective: 1400px;
@@ -3483,159 +3295,5 @@ body:has(#about-detail-overlay.active) .hero-inner-frame {
   }
 }
 
-#work-style-section {
-  margin-top: -2.5rem;
-  width: 100%;
-}
 
-/* Work Style Scrollytelling Stage */
-.work-style-scroll-track {
-  position: relative;
-  height: 180vh;
-  width: 100%;
-}
-
-.work-style-sticky-stage {
-  position: sticky;
-  top: 60px;
-  height: calc(100vh - 80px);
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  perspective: 1400px;
-  transform-style: preserve-3d;
-}
-
-/* Layer 1: Video Animation Layer (Initial full screen focus, zooms out & fades) */
-.work-style-video-layer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  width: 100%;
-  max-width: 820px;
-  z-index: 2;
-  will-change: transform, opacity;
-  transition: opacity 0.05s linear, transform 0.05s linear;
-}
-
-.work-style-video-layer .video-container-card {
-  position: relative;
-  top: 0;
-  width: 100%;
-  border-radius: 20px;
-  box-shadow: none;
-  border: none;
-  transform-style: preserve-3d;
-  will-change: transform;
-  transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1);
-  background: #020202;
-}
-
-.work-style-video-layer .character-video-player {
-  width: 100%;
-  height: auto;
-  max-height: 62vh;
-  object-fit: cover;
-  border-radius: 20px;
-  border: none;
-}
-
-/* Layer 2: How I Work Content Layer (Reveals Sequential Items in Center) */
-.work-style-content-layer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 1120px;
-  padding: 0 12px;
-  z-index: 1;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  transform-style: preserve-3d;
-}
-
-.work-style-floating-wrap {
-  position: relative;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  transform-style: preserve-3d;
-  will-change: transform;
-  transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.work-style-content-layer .about-section-header,
-.work-style-content-layer .process-card,
-.work-style-content-layer .process-axis-wrapper {
-  will-change: transform, opacity;
-  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
-  transform-style: preserve-3d;
-}
-
-.work-style-content-layer .about-section-header {
-  margin-top: 28px;
-  margin-bottom: 1.8rem;
-}
-
-.work-style-content-layer .about-process-grid {
-  width: 100%;
-  transform-style: preserve-3d;
-}
-
-.work-style-content-layer .process-axis-wrapper {
-  margin-top: 2rem;
-  width: 100%;
-}
-
-.video-container-card {
-  position: sticky;
-  top: 90px;
-  border-radius: 16px;
-  overflow: hidden;
-  border: none;
-  background: #020202;
-  box-shadow: none;
-}
-
-.character-video-player {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  aspect-ratio: 16/10;
-}
-
-/* Responsive Overrides */
-@media (max-width: 900px) {
-  .work-style-content-layer,
-  .work-style-floating-wrap,
-  .about-process-grid {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-  .about-process-grid {
-    grid-template-columns: 1fr;
-  }
-  .capabilities-grid {
-    grid-template-columns: 1fr;
-  }
-  .video-container-card {
-    position: relative;
-    top: 0;
-  }
-  .work-style-content-layer .about-section-header {
-    margin-top: 10vh;
-  }
-}
 

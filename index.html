@@ -123,523 +123,492 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+    </div>
 
+    <!-- About Detail Sections: How I Work, Tools & Ecosystem, What I Build -->
+    <section id="about-more-sections" class="about-more-sections" aria-label="About Akilesh - Process & Capabilities">
+      <!-- Sticky Detail Submenu Capsule Navigation -->
+      <div class="about-subnav-sticky-bar">
+        <nav class="about-subnav-pill" aria-label="About Sections Navigation">
+          <div class="subnav-pill-inner">
+            <button type="button" class="subnav-item active" data-target="#work-style-section">WORK STYLE</button>
+            <button type="button" class="subnav-item" data-target="#tools-section">TOOL</button>
+            <button type="button" class="subnav-item" data-target="#what-i-build-section">WHAT I BUILD</button>
+          </div>
+        </nav>
+      </div>
 
-          <!-- Expanding Circle "View More About Akilesh" Detail Overlay (How I Work & Capabilities) -->
-          <div id="about-detail-overlay" class="about-detail-overlay" role="dialog" aria-modal="true" aria-label="About Akilesh - Process & Capabilities">
-            <!-- Dust Particle Disintegration & Assembly Canvas Overlay -->
-            <canvas id="dust-particle-canvas" class="dust-particle-canvas" aria-hidden="true"></canvas>
+      <!-- Part 1: How I Work (Process / Work Style) Section -->
+      <div id="work-style-section" class="about-process-section">
+        <div class="work-style-container">
+          <div class="about-section-header">
+            <h2 class="about-section-title">How I Work</h2>
+            <p class="about-section-subtitle">
+              A systematic approach to shaping experiences and scaling business value.
+            </p>
+          </div>
 
-            <!-- Sticky Detail Top Navigation Bar -->
-            <div class="about-detail-header">
-              <button type="button" id="about-detail-back-btn" class="about-detail-back-btn" aria-label="Back to About Me" onclick="if(typeof window.closeAboutDetail === 'function') window.closeAboutDetail();">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="19" y1="12" x2="5" y2="12"></line>
-                  <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-                <span>BACK TO ABOUT</span>
-              </button>
-
-              <!-- Top Center Submenu Capsule Navigation -->
-              <nav class="about-subnav-pill" aria-label="About Sections Navigation">
-                <div class="subnav-pill-inner">
-                  <button type="button" class="subnav-item active" data-target="#work-style-section">WORK STYLE</button>
-                  <button type="button" class="subnav-item" data-target="#tools-section">TOOL</button>
-                  <button type="button" class="subnav-item" data-target="#what-i-build-section">WHAT I BUILD</button>
-                </div>
-              </nav>
+          <!-- Process 3-Step Grid -->
+          <div class="about-process-grid">
+            <div id="process-step-1" class="process-card">
+              <h3 class="process-card-title">Understand</h3>
+              <p class="process-card-desc">
+                I start with the business and the people — understanding goals, users, context, and the problem worth solving.
+              </p>
+              <div class="process-card-flow">Business &rarr; Users &rarr; Insights</div>
             </div>
 
-            <!-- Scrollable Content Body -->
-            <div class="about-detail-scroll-body">
-              <!-- Part 1: How I Work (Process / Work Style) Scrollytelling Section -->
-              <div id="work-style-section" class="about-process-section about-tab-panel active">
-                <div class="work-style-scroll-track">
-                  <div class="work-style-sticky-stage">
-                    <!-- Layer 1: 3D Character Video (Zooms out to 20% & Fades on Scroll) -->
-                    <div id="work-style-hero-video" class="work-style-video-layer">
-                      <div class="video-container-card">
-                        <video id="work-style-character-video" class="character-video-player" src="/Char_Anim.mp4" autoplay loop muted playsinline></video>
-                        <div class="video-ambient-glow" aria-hidden="true"></div>
-                      </div>
+            <div id="process-step-2" class="process-card">
+              <h3 class="process-card-title">Shape</h3>
+              <p class="process-card-desc">
+                I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.
+              </p>
+              <div class="process-card-flow">Gaps &rarr; Structure &rarr; Design</div>
+            </div>
+
+            <div id="process-step-3" class="process-card">
+              <h3 class="process-card-title">Evolve</h3>
+              <p class="process-card-desc">
+                I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.
+              </p>
+              <div class="process-card-flow">Validate &rarr; Improve &rarr; Grow</div>
+            </div>
+          </div>
+
+          <!-- Animated Axis Line with Rotating Plus Nodes -->
+          <div class="process-axis-wrapper" aria-hidden="true">
+            <div class="process-axis-line">
+              <div id="process-axis-fill" class="process-axis-line-fill"></div>
+            </div>
+            <div id="axis-node-1" class="axis-node node-1 active"><span>+</span></div>
+            <div id="axis-node-2" class="axis-node node-2 active"><span>+</span></div>
+            <div id="axis-node-3" class="axis-node node-3 active"><span>+</span></div>
+            <div id="axis-node-4" class="axis-node node-4 active"><span>+</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 2: Tools & Ecosystem (Category-Wise Interactive Tools) Section -->
+      <div id="tools-section" class="about-tools-section">
+        <div class="tools-container tools-floating-wrap">
+          <div class="about-section-header">
+            <h2 class="about-section-title">Tools &amp; Ecosystem</h2>
+            <p class="about-section-subtitle">
+              Industry-standard tools and platforms I use to design, prototype, code, and ship products.
+            </p>
+          </div>
+
+          <div class="tools-categories-list">
+            <!-- Category Row 1: DESIGN -->
+            <div class="tool-category-row">
+              <h3 class="category-row-title">DESIGN</h3>
+              <div class="category-row-tools">
+                
+                <!-- Tool 1: Figma -->
+                <div class="tool-item-wrapper" data-tool="figma">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Figma Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/figma.svg" alt="Figma" class="tool-icon-img" />
                     </div>
+                    <span class="tool-name">FIGMA</span>
+                  </div>
 
-                    <!-- Layer 2: How I Work Content (Reveals in Center after 80% Video Fade) -->
-                    <div id="work-style-content-layer" class="work-style-content-layer">
-                      <div class="work-style-floating-wrap">
-                        <div class="about-section-header">
-                          <h2 class="about-section-title">How I Work</h2>
-                          <p class="about-section-subtitle">
-                            A systematic approach to shaping experiences and scaling business value.
-                          </p>
-                        </div>
-
-                        <!-- Process 3-Step Grid -->
-                        <div class="about-process-grid">
-                          <div id="process-step-1" class="process-card">
-                            <h3 class="process-card-title">Understand</h3>
-                            <p class="process-card-desc">
-                              I start with the business and the people — understanding goals, users, context, and the problem worth solving.
-                            </p>
-                            <div class="process-card-flow">Business &rarr; Users &rarr; Insights</div>
-                          </div>
-
-                          <div id="process-step-2" class="process-card">
-                            <h3 class="process-card-title">Shape</h3>
-                            <p class="process-card-desc">
-                              I turn insights into structure and solutions — simplifying complex problems and designing experiences that balance user needs with business goals.
-                            </p>
-                            <div class="process-card-flow">Gaps &rarr; Structure &rarr; Design</div>
-                          </div>
-
-                          <div id="process-step-3" class="process-card">
-                            <h3 class="process-card-title">Evolve</h3>
-                            <p class="process-card-desc">
-                              I test, learn, and refine the experience — using feedback and data to create a product that keeps getting better.
-                            </p>
-                            <div class="process-card-flow">Validate &rarr; Improve &rarr; Grow</div>
-                          </div>
-                        </div>
-
-                        <!-- Animated Axis Line with Rotating Plus Nodes (Draws on Scroll) -->
-                        <div class="process-axis-wrapper" aria-hidden="true">
-                          <div class="process-axis-line">
-                            <div id="process-axis-fill" class="process-axis-line-fill"></div>
-                          </div>
-                          <div id="axis-node-1" class="axis-node node-1"><span>+</span></div>
-                          <div id="axis-node-2" class="axis-node node-2"><span>+</span></div>
-                          <div id="axis-node-3" class="axis-node node-3"><span>+</span></div>
-                          <div id="axis-node-4" class="axis-node node-4"><span>+</span></div>
-                        </div>
-                      </div>
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">design_services</span>
+                      <span class="usage-text">UI/UX design, prototyping, and design systems.</span>
                     </div>
                   </div>
                 </div>
+
+                <!-- Tool 2: Photoshop -->
+                <div class="tool-item-wrapper" data-tool="photoshop">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Photoshop Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/photoshop.svg" alt="Photoshop" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">PHOTOSHOP</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">image</span>
+                      <span class="usage-text">Visual assets, image editing, and design compositions.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tool 3: Framer -->
+                <div class="tool-item-wrapper" data-tool="framer">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Framer Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/vecteezy_3d-framer-website-builder-icon-on-a-transparent-background_67672061.png" alt="Framer" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">FRAMER</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">web</span>
+                      <span class="usage-text">Interactive prototypes and responsive portfolio experiences.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tool 4: Wix -->
+                <div class="tool-item-wrapper" data-tool="wix">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Wix Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/wix.svg" alt="Wix" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">WIX</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">language</span>
+                      <span class="usage-text">Building and managing websites and landing pages.</span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
+            </div>
 
-              <!-- Part 2: Tools & Ecosystem (Category-Wise Interactive Tools) Section -->
-              <div id="tools-section" class="about-tools-section about-tab-panel">
-                <div class="tools-container tools-floating-wrap">
-                  <div class="about-section-header">
-                    <h2 class="about-section-title">Tools &amp; Ecosystem</h2>
-                    <p class="about-section-subtitle">
-                      Industry-standard tools and platforms I use to design, prototype, code, and ship products.
-                    </p>
+            <!-- Category Row 2: MOTION -->
+            <div class="tool-category-row">
+              <h3 class="category-row-title">MOTION</h3>
+              <div class="category-row-tools">
+                
+                <!-- Tool 5: DaVinci Resolve -->
+                <div class="tool-item-wrapper" data-tool="davinci">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="DaVinci Resolve Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/vecteezy_davinci-resolve-app-icon-on-transparent-background_57355775.png" alt="DaVinci Resolve" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">DAVINCI RESOLVE</span>
                   </div>
 
-                  <div class="tools-categories-list">
-                    <!-- Category Row 1: DESIGN -->
-                    <div class="tool-category-row">
-                      <h3 class="category-row-title">DESIGN</h3>
-                      <div class="category-row-tools">
-                        
-                        <!-- Tool 1: Figma -->
-                        <div class="tool-item-wrapper" data-tool="figma">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Figma Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/figma.svg" alt="Figma" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">FIGMA</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">design_services</span>
-                              <span class="usage-text">UI/UX design, prototyping, and design systems.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Tool 2: Photoshop -->
-                        <div class="tool-item-wrapper" data-tool="photoshop">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Photoshop Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/photoshop.svg" alt="Photoshop" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">PHOTOSHOP</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">image</span>
-                              <span class="usage-text">Visual assets, image editing, and design compositions.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Tool 3: Framer -->
-                        <div class="tool-item-wrapper" data-tool="framer">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Framer Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/vecteezy_3d-framer-website-builder-icon-on-a-transparent-background_67672061.png" alt="Framer" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">FRAMER</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">web</span>
-                              <span class="usage-text">Interactive prototypes and responsive portfolio experiences.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Tool 4: Wix -->
-                        <div class="tool-item-wrapper" data-tool="wix">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Wix Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/wix.svg" alt="Wix" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">WIX</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">language</span>
-                              <span class="usage-text">Building and managing websites and landing pages.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">movie</span>
+                      <span class="usage-text">Editing videos and creating visual content for case studies.</span>
                     </div>
-
-                    <!-- Category Row 2: MOTION -->
-                    <div class="tool-category-row">
-                      <h3 class="category-row-title">MOTION</h3>
-                      <div class="category-row-tools">
-                        
-                        <!-- Tool 5: DaVinci Resolve -->
-                        <div class="tool-item-wrapper" data-tool="davinci">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="DaVinci Resolve Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/vecteezy_davinci-resolve-app-icon-on-transparent-background_57355775.png" alt="DaVinci Resolve" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">DAVINCI RESOLVE</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">movie</span>
-                              <span class="usage-text">Editing videos and creating visual content for case studies.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
-
-                    <!-- Category Row 3: CODE -->
-                    <div class="tool-category-row">
-                      <h3 class="category-row-title">CODE</h3>
-                      <div class="category-row-tools">
-                        
-                        <!-- Tool 6: React -->
-                        <div class="tool-item-wrapper" data-tool="react">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="React Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/react.svg" alt="React" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">REACT</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">integration_instructions</span>
-                              <span class="usage-text">Understanding component-based development and collaborating with developers.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Tool 7: Angular -->
-                        <div class="tool-item-wrapper" data-tool="angular">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Angular Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/angular.svg" alt="Angular" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">ANGULAR</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">account_tree</span>
-                              <span class="usage-text">Understanding enterprise application structure and development workflows.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Tool 8: HTML5 -->
-                        <div class="tool-item-wrapper" data-tool="html">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="HTML5 Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/html.svg" alt="HTML5" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">HTML5</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">code</span>
-                              <span class="usage-text">Understanding web structure for practical design handoff.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Tool 9: CSS3 -->
-                        <div class="tool-item-wrapper" data-tool="css">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="CSS3 Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/css.svg" alt="CSS3" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">CSS3</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">css</span>
-                              <span class="usage-text">Understanding responsive layouts and styling constraints.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Tool 10: VS Code -->
-                        <div class="tool-item-wrapper" data-tool="vscode">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="VS Code Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/vscode.svg" alt="VS Code" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">VS CODE</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">terminal</span>
-                              <span class="usage-text">Exploring code, making quick edits, and improving developer collaboration.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
-
-                    <!-- Category Row 4: AI & ANALYTICS -->
-                    <div class="tool-category-row">
-                      <h3 class="category-row-title">AI &amp; ANALYTICS</h3>
-                      <div class="category-row-tools">
-                        
-                        <!-- Tool 11: Claude -->
-                        <div class="tool-item-wrapper" data-tool="claude">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Claude Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/claude.svg" alt="Claude" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">CLAUDE</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">psychology</span>
-                              <span class="usage-text">Research, ideation, analysis, and content exploration.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Tool 12: Antigravity -->
-                        <div class="tool-item-wrapper" data-tool="antigravity">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Antigravity Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/google-antigravity.svg" alt="Antigravity" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">ANTIGRAVITY</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">auto_awesome</span>
-                              <span class="usage-text">Research, idea generation, summarization, and exploration.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Tool 13: Notion -->
-                        <div class="tool-item-wrapper" data-tool="notion">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Notion Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/notion.svg" alt="Notion" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">NOTION</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">description</span>
-                              <span class="usage-text">Organizing research, notes, documentation, and project knowledge.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Tool 14: Google Analytics -->
-                        <div class="tool-item-wrapper" data-tool="analytics">
-                          <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Google Analytics Tool Usage">
-                            <div class="tool-icon-box">
-                              <img src="/Tools/google-analytics.svg" alt="Google Analytics" class="tool-icon-img" />
-                            </div>
-                            <span class="tool-name">ANALYTICS</span>
-                          </div>
-
-                          <!-- Usage Card Popup -->
-                          <div class="tool-usage-card">
-                            <h4 class="usage-card-title">USAGE</h4>
-                            <div class="usage-body">
-                              <span class="material-symbols-outlined usage-icon">analytics</span>
-                              <span class="usage-text">Understanding user behavior and making data-informed design decisions.</span>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
-
                   </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Category Row 3: CODE -->
+            <div class="tool-category-row">
+              <h3 class="category-row-title">CODE</h3>
+              <div class="category-row-tools">
+                
+                <!-- Tool 6: React -->
+                <div class="tool-item-wrapper" data-tool="react">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="React Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/react.svg" alt="React" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">REACT</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">integration_instructions</span>
+                      <span class="usage-text">Understanding component-based development and collaborating with developers.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tool 7: Angular -->
+                <div class="tool-item-wrapper" data-tool="angular">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Angular Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/angular.svg" alt="Angular" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">ANGULAR</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">account_tree</span>
+                      <span class="usage-text">Understanding enterprise application structure and development workflows.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tool 8: HTML5 -->
+                <div class="tool-item-wrapper" data-tool="html">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="HTML5 Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/html.svg" alt="HTML5" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">HTML5</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">code</span>
+                      <span class="usage-text">Understanding web structure for practical design handoff.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tool 9: CSS3 -->
+                <div class="tool-item-wrapper" data-tool="css">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="CSS3 Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/css.svg" alt="CSS3" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">CSS3</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">css</span>
+                      <span class="usage-text">Understanding responsive layouts and styling constraints.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tool 10: VS Code -->
+                <div class="tool-item-wrapper" data-tool="vscode">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="VS Code Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/vscode.svg" alt="VS Code" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">VS CODE</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">terminal</span>
+                      <span class="usage-text">Exploring code, making quick edits, and improving developer collaboration.</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Category Row 4: AI & ANALYTICS -->
+            <div class="tool-category-row">
+              <h3 class="category-row-title">AI &amp; ANALYTICS</h3>
+              <div class="category-row-tools">
+                
+                <!-- Tool 11: Claude -->
+                <div class="tool-item-wrapper" data-tool="claude">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Claude Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/claude.svg" alt="Claude" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">CLAUDE</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">psychology</span>
+                      <span class="usage-text">Research, ideation, analysis, and content exploration.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tool 12: Antigravity -->
+                <div class="tool-item-wrapper" data-tool="antigravity">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Antigravity Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/google-antigravity.svg" alt="Antigravity" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">ANTIGRAVITY</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">auto_awesome</span>
+                      <span class="usage-text">Research, idea generation, summarization, and exploration.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tool 13: Notion -->
+                <div class="tool-item-wrapper" data-tool="notion">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Notion Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/notion.svg" alt="Notion" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">NOTION</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">description</span>
+                      <span class="usage-text">Organizing research, notes, documentation, and project knowledge.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tool 14: Google Analytics -->
+                <div class="tool-item-wrapper" data-tool="analytics">
+                  <div class="tool-pill-badge" tabindex="0" role="button" aria-label="Google Analytics Tool Usage">
+                    <div class="tool-icon-box">
+                      <img src="/Tools/google-analytics.svg" alt="Google Analytics" class="tool-icon-img" />
+                    </div>
+                    <span class="tool-name">ANALYTICS</span>
+                  </div>
+
+                  <!-- Usage Card Popup -->
+                  <div class="tool-usage-card">
+                    <h4 class="usage-card-title">USAGE</h4>
+                    <div class="usage-body">
+                      <span class="material-symbols-outlined usage-icon">analytics</span>
+                      <span class="usage-text">Understanding user behavior and making data-informed design decisions.</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 3: Architectural Capabilities (What I Build) Section -->
+      <div id="what-i-build-section" class="about-capabilities-section">
+        <!-- Architectural Full-Width Grid Pattern Background -->
+        <div class="capabilities-grid-bg" aria-hidden="true"></div>
+
+        <div class="capabilities-container">
+          <div class="capabilities-header">
+            <h2 class="about-section-title">What I Bring to the Table</h2>
+          </div>
+
+          <div class="capabilities-floating-wrap">
+            <div class="cards-deck">
+              <!-- Card 1 -->
+              <div class="arch-card" data-index="01">
+                <div class="arch-card-top">
+                  <h4 class="arch-card-title">UNTANGLE</h4>
+                  <span class="arch-card-num">01</span>
+                </div>
+                <p class="arch-card-desc">I enjoy taking complicated products and figuring out how they should actually work.</p>
+                <div class="arch-card-pills">
+                  <span class="pill-tag">Complex Products</span>
+                  <span class="pill-tag">Enterprise UX</span>
+                  <span class="pill-tag">Workflow Logic</span>
+                  <span class="pill-tag">Problem Solving</span>
                 </div>
               </div>
 
-              <!-- Part 3: Architectural Capabilities (What I Build) Section -->
-              <div id="what-i-build-section" class="about-capabilities-section about-tab-panel">
-                <!-- Architectural Full-Width Grid Pattern Background -->
-                <div class="capabilities-grid-bg" aria-hidden="true"></div>
+              <!-- Card 2 -->
+              <div class="arch-card" data-index="02">
+                <div class="arch-card-top">
+                  <h4 class="arch-card-title">STRUCTURE</h4>
+                  <span class="arch-card-num">02</span>
+                </div>
+                <p class="arch-card-desc">I turn scattered requirements and messy processes into clear product experiences.</p>
+                <div class="arch-card-pills">
+                  <span class="pill-tag">Information Architecture</span>
+                  <span class="pill-tag">Product Structure</span>
+                  <span class="pill-tag">User Flows</span>
+                  <span class="pill-tag">Simplification</span>
+                </div>
+              </div>
 
-                <div class="capabilities-container">
-                  <div class="capabilities-header">
-                    <h2 class="about-section-title">What I Bring to the Table</h2>
-                  </div>
+              <!-- Card 3 -->
+              <div class="arch-card" data-index="03">
+                <div class="arch-card-top">
+                  <h4 class="arch-card-title">THINK BUSINESS</h4>
+                  <span class="arch-card-num">03</span>
+                </div>
+                <p class="arch-card-desc">I design with an eye on users, business goals, product value, and what is actually feasible.</p>
+                <div class="arch-card-pills">
+                  <span class="pill-tag">Product Thinking</span>
+                  <span class="pill-tag">Business Goals</span>
+                  <span class="pill-tag">Prioritization</span>
+                  <span class="pill-tag">Trade-offs</span>
+                </div>
+              </div>
 
-                  <div class="capabilities-floating-wrap">
-                    <div class="cards-deck">
-                      <!-- Card 1 -->
-                      <div class="arch-card" data-index="01">
-                        <div class="arch-card-top">
-                          <h4 class="arch-card-title">UNTANGLE</h4>
-                          <span class="arch-card-num">01</span>
-                        </div>
-                        <p class="arch-card-desc">I enjoy taking complicated products and figuring out how they should actually work.</p>
-                        <div class="arch-card-pills">
-                          <span class="pill-tag">Complex Products</span>
-                          <span class="pill-tag">Enterprise UX</span>
-                          <span class="pill-tag">Workflow Logic</span>
-                          <span class="pill-tag">Problem Solving</span>
-                        </div>
-                      </div>
+              <!-- Card 4 -->
+              <div class="arch-card" data-index="04">
+                <div class="arch-card-top">
+                  <h4 class="arch-card-title">BUILD</h4>
+                  <span class="arch-card-num">04</span>
+                </div>
+                <p class="arch-card-desc">I understand the space between design and development, helping ideas move from Figma into real products.</p>
+                <div class="arch-card-pills">
+                  <span class="pill-tag">Developer Collaboration</span>
+                  <span class="pill-tag">Design Handoff</span>
+                  <span class="pill-tag">Frontend Awareness</span>
+                  <span class="pill-tag">Feasibility</span>
+                </div>
+              </div>
 
-                      <!-- Card 2 -->
-                      <div class="arch-card" data-index="02">
-                        <div class="arch-card-top">
-                          <h4 class="arch-card-title">STRUCTURE</h4>
-                          <span class="arch-card-num">02</span>
-                        </div>
-                        <p class="arch-card-desc">I turn scattered requirements and messy processes into clear product experiences.</p>
-                        <div class="arch-card-pills">
-                          <span class="pill-tag">Information Architecture</span>
-                          <span class="pill-tag">Product Structure</span>
-                          <span class="pill-tag">User Flows</span>
-                          <span class="pill-tag">Simplification</span>
-                        </div>
-                      </div>
+              <!-- Card 5 -->
+              <div class="arch-card" data-index="05">
+                <div class="arch-card-top">
+                  <h4 class="arch-card-title">MAKE IT BETTER</h4>
+                  <span class="arch-card-num">05</span>
+                </div>
+                <p class="arch-card-desc">I bring strong visual thinking to functional products, turning usable experiences into polished ones.</p>
+                <div class="arch-card-pills">
+                  <span class="pill-tag">Visual Design</span>
+                  <span class="pill-tag">Interaction</span>
+                  <span class="pill-tag">UI Craft</span>
+                  <span class="pill-tag">Design Systems</span>
+                </div>
+              </div>
 
-                      <!-- Card 3 -->
-                      <div class="arch-card" data-index="03">
-                        <div class="arch-card-top">
-                          <h4 class="arch-card-title">THINK BUSINESS</h4>
-                          <span class="arch-card-num">03</span>
-                        </div>
-                        <p class="arch-card-desc">I design with an eye on users, business goals, product value, and what is actually feasible.</p>
-                        <div class="arch-card-pills">
-                          <span class="pill-tag">Product Thinking</span>
-                          <span class="pill-tag">Business Goals</span>
-                          <span class="pill-tag">Prioritization</span>
-                          <span class="pill-tag">Trade-offs</span>
-                        </div>
-                      </div>
-
-                      <!-- Card 4 -->
-                      <div class="arch-card" data-index="04">
-                        <div class="arch-card-top">
-                          <h4 class="arch-card-title">BUILD</h4>
-                          <span class="arch-card-num">04</span>
-                        </div>
-                        <p class="arch-card-desc">I understand the space between design and development, helping ideas move from Figma into real products.</p>
-                        <div class="arch-card-pills">
-                          <span class="pill-tag">Developer Collaboration</span>
-                          <span class="pill-tag">Design Handoff</span>
-                          <span class="pill-tag">Frontend Awareness</span>
-                          <span class="pill-tag">Feasibility</span>
-                        </div>
-                      </div>
-
-                      <!-- Card 5 -->
-                      <div class="arch-card" data-index="05">
-                        <div class="arch-card-top">
-                          <h4 class="arch-card-title">MAKE IT BETTER</h4>
-                          <span class="arch-card-num">05</span>
-                        </div>
-                        <p class="arch-card-desc">I bring strong visual thinking to functional products, turning usable experiences into polished ones.</p>
-                        <div class="arch-card-pills">
-                          <span class="pill-tag">Visual Design</span>
-                          <span class="pill-tag">Interaction</span>
-                          <span class="pill-tag">UI Craft</span>
-                          <span class="pill-tag">Design Systems</span>
-                        </div>
-                      </div>
-
-                      <!-- Card 6 -->
-                      <div class="arch-card" data-index="06">
-                        <div class="arch-card-top">
-                          <h4 class="arch-card-title">OWN IT</h4>
-                          <span class="arch-card-num">06</span>
-                        </div>
-                        <p class="arch-card-desc">I’m comfortable jumping between problems, learning fast, and taking an idea from ambiguity to execution.</p>
-                        <div class="arch-card-pills">
-                          <span class="pill-tag">Ownership</span>
-                          <span class="pill-tag">Curiosity</span>
-                          <span class="pill-tag">Adaptability</span>
-                          <span class="pill-tag">Fast Learner</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              <!-- Card 6 -->
+              <div class="arch-card" data-index="06">
+                <div class="arch-card-top">
+                  <h4 class="arch-card-title">OWN IT</h4>
+                  <span class="arch-card-num">06</span>
+                </div>
+                <p class="arch-card-desc">I’m comfortable jumping between problems, learning fast, and taking an idea from ambiguity to execution.</p>
+                <div class="arch-card-pills">
+                  <span class="pill-tag">Ownership</span>
+                  <span class="pill-tag">Curiosity</span>
+                  <span class="pill-tag">Adaptability</span>
+                  <span class="pill-tag">Fast Learner</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
 
     <!-- Interactive Chapter II Projects Section with "My Project" Scroll Reveal -->
     <section id="projects-section" class="projects-section" aria-label="Projects Showcase">

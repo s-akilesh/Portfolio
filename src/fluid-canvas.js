@@ -192,112 +192,24 @@ export function initFluidCanvas() {
   let domeHoverFactor = 0.0;
   let currentDomeCoords = { x: 0, y: 0 };
 
-  let savedPageScrollY = 0;
-
-  window.openAboutDetail = function(x, y) {
-    if (isDetailOverlayOpen) return;
-    const overlay = document.getElementById('about-detail-overlay');
-    if (!overlay) return;
-
-    // Save previous page scroll position and reset to 0 so hero section is fully pinned in viewport
-    savedPageScrollY = window.scrollY || window.pageYOffset || 0;
-    window.scrollTo(0, 0);
-
-    const targetX = (x !== undefined && x > 0) ? x : (currentDomeCoords.x || window.innerWidth * 0.5);
-    const targetY = (y !== undefined && y > 0) ? y : (currentDomeCoords.y || window.innerHeight * 0.5);
-    overlay.style.setProperty('--dome-x', `${targetX}px`);
-    overlay.style.setProperty('--dome-y', `${targetY}px`);
-    overlay.classList.add('active');
-    overlay.setAttribute('aria-hidden', 'false');
-    isDetailOverlayOpen = true;
-
-    document.body.classList.add('about-overlay-open');
-    document.body.style.overflow = 'hidden';
-
-    if (siteHeader) {
-      siteHeader.classList.add('hide-for-overlay');
-    }
-
-    // Start video playback
-    const vid = document.getElementById('about-character-video');
-    if (vid) {
-      vid.currentTime = 0;
-      vid.play().catch(() => {});
-    }
-    // Reset overlay to default WORK STYLE tab panel
-    const subnavItems = overlay.querySelectorAll('.subnav-item');
-    const tabPanels = overlay.querySelectorAll('.about-tab-panel');
-    subnavItems.forEach((b) => b.classList.remove('active'));
-    tabPanels.forEach((p) => p.classList.remove('active'));
-
-    const defaultBtn = overlay.querySelector('.subnav-item[data-target="#work-style-section"]');
-    const defaultPanel = overlay.querySelector('#work-style-section');
-    if (defaultBtn) defaultBtn.classList.add('active');
-    if (defaultPanel) defaultPanel.classList.add('active');
-
-    if (overlay) overlay.scrollTop = 0;
-
-    requestAnimationFrame(() => {
-      window.scrollTo(0, 0);
-      if (overlay) overlay.scrollTop = 0;
-      if (typeof window.updateWorkStyleScrollytelling === 'function') {
-        window.updateWorkStyleScrollytelling();
-      }
-    });
-
-    if (typeof window.startAboutTabsFloat === 'function') {
-      window.startAboutTabsFloat();
+  window.openAboutDetail = function() {
+    const target = document.getElementById('work-style-section') || document.getElementById('about-more-sections');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   window.closeAboutDetail = function() {
-    const overlay = document.getElementById('about-detail-overlay');
-    if (!overlay) return;
-    overlay.classList.remove('active');
-    overlay.classList.remove('light-theme-tools');
-    overlay.setAttribute('aria-hidden', 'true');
-    isDetailOverlayOpen = false;
-
-    document.body.classList.remove('about-overlay-open');
-
-    if (typeof window.stopAboutTabsFloat === 'function') {
-      window.stopAboutTabsFloat();
-    }
-
-    document.body.style.overflow = '';
-
-    // Restore saved page scroll position
-    if (typeof savedPageScrollY === 'number') {
-      window.scrollTo(0, savedPageScrollY);
-    }
-
-    if (siteHeader) {
-      siteHeader.classList.remove('hide-for-overlay');
-    }
-
-    if (domeHoverTimer) {
-      clearTimeout(domeHoverTimer);
-      domeHoverTimer = null;
+    const scrollWrapper = document.getElementById('hero-scroll-wrapper');
+    if (scrollWrapper) {
+      const maxScroll = Math.max(scrollWrapper.offsetHeight - window.innerHeight, 1);
+      window.scrollTo({ top: maxScroll, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
-  const backBtn = document.getElementById('about-detail-back-btn');
-  if (backBtn) {
-    const handleClose = (e) => {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      window.closeAboutDetail();
-    };
-    backBtn.addEventListener('click', handleClose);
-    backBtn.addEventListener('pointerdown', handleClose);
-    backBtn.addEventListener('touchend', handleClose);
-  }
-
   const handleShowcaseClick = (e) => {
-    if (isDetailOverlayOpen) return;
-
     const rect = canvas ? canvas.getBoundingClientRect() : { left: 0, top: 0 };
     let clickX = width * 0.5;
     let clickY = height * 0.5;
@@ -317,7 +229,7 @@ export function initFluidCanvas() {
       if (e && e.cancelable) {
         e.preventDefault();
       }
-      window.openAboutDetail(clickX, clickY);
+      window.openAboutDetail();
     }
   };
 
@@ -330,7 +242,7 @@ export function initFluidCanvas() {
       if (touch) {
         const tx = touch.clientX - rect.left;
         const ty = touch.clientY - rect.top;
-        if ((isOverDomeGlobal || (typeof checkBtnHit === 'function' && checkBtnHit(tx, ty))) && !isDetailOverlayOpen) {
+        if (isOverDomeGlobal || (typeof checkBtnHit === 'function' && checkBtnHit(tx, ty))) {
           handleShowcaseClick(e);
         }
       }
