@@ -67,14 +67,13 @@ function initApp() {
   }
 
   function scrollToProjects() {
-    const scrollWrapper = document.getElementById('projects-scroll-wrapper');
-    if (scrollWrapper) {
-      const maxScroll = Math.max(scrollWrapper.offsetHeight - window.innerHeight, 1);
-      const targetY = scrollWrapper.offsetTop + maxScroll * 0.70;
-      lenis.scrollTo(targetY, { duration: 1.6 });
-    } else {
-      const projectsSec = document.getElementById('projects-section');
-      if (projectsSec) lenis.scrollTo(projectsSec, { duration: 1.6 });
+    const projectsSec = document.getElementById('projects-section') || document.getElementById('projects-scroll-wrapper');
+    if (projectsSec) {
+      if (lenis) {
+        lenis.scrollTo(projectsSec, { duration: 1.6, offset: 0 });
+      } else {
+        projectsSec.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }
 
