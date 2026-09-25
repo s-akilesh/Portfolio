@@ -499,7 +499,7 @@ body.dark-bg-active .nav-pill-inner button,
 .hero-scroll-wrapper {
   position: relative;
   width: 100%;
-  height: 280vh;
+  height: 220vh;
 }
 
 .hero-section.sticky-hero {
@@ -588,7 +588,7 @@ body.dark-bg-active .nav-pill-inner button,
 .projects-scroll-wrapper {
   position: relative;
   width: 100%;
-  height: 280vh;
+  height: 220vh;
 }
 
 .projects-sticky-stage {
@@ -2148,7 +2148,7 @@ span.title-line {
 .work-style-scroll-wrapper {
   position: relative;
   width: 100%;
-  height: 320vh;
+  height: 260vh;
 }
 
 .work-style-sticky-stage {
@@ -2336,7 +2336,7 @@ span.title-line {
 .tools-scroll-wrapper {
   position: relative;
   width: 100%;
-  height: 400vh;
+  height: 320vh;
 }
 
 .tools-sticky-stage {

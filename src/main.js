@@ -29,8 +29,8 @@ function initApp() {
 
   // Initialize Lenis Ultra-Smooth Oceanic Wave Scroll Engine
   const lenis = new Lenis({
-    lerp: 0.045, // Heavy, silky, continuous oceanic wave momentum
-    wheelMultiplier: 0.55, // Slows mouse wheel speed down by ~45% for a calm, deliberate scroll pace
+    lerp: 0.075, // Smooth responsive wave momentum
+    wheelMultiplier: 0.78, // Slightly increased scroll travel per wheel notch
     touchMultiplier: 1.0,
     smoothWheel: true,
     orientation: 'vertical',
