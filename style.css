@@ -2296,40 +2296,74 @@ span.title-line {
   transform: scale(1.15);
 }
 
-/* Part 3: What I Build Section (What I Bring to the Table - Fade-Over Scroll Reveal Above Previous Section) */
-.about-capabilities-section {
+/* Part 2 & 3: Tools & Ecosystem -> What I Bring to the Table (Seamless Unified Sticky Stage) */
+.about-tools-section {
   position: relative;
   width: 100%;
-  z-index: 25;
   background-color: #FFFFFF;
   color: #0F172A;
+  box-shadow: none;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   perspective: 1400px;
 }
 
-.capabilities-scroll-wrapper {
+.tools-scroll-wrapper {
   position: relative;
   width: 100%;
-  height: 220vh;
+  height: 250vh;
 }
 
-.capabilities-sticky-stage {
+.tools-sticky-stage {
   position: sticky;
   top: 0;
   width: 100%;
   height: 100vh;
   height: 100dvh;
-  padding: clamp(2rem, 4vh, 3.5rem) clamp(1.5rem, 4vw, 4.5rem);
+  padding: 0;
   background-color: #FFFFFF;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   overflow: hidden;
+}
+
+/* Layer 1: Tools & Ecosystem Container */
+.tools-layer-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: clamp(2rem, 4vh, 3.5rem) clamp(1rem, 3.5vw, 4rem);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  will-change: opacity, transform;
+}
+
+/* Layer 2: What I Bring to the Table (Fades Directly Over Layer 1 in the Same Sticky Stage) */
+.capabilities-layer-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: clamp(2rem, 4vh, 3.5rem) clamp(1.5rem, 4vw, 4.5rem);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
   opacity: 0;
+  pointer-events: none;
+  background-color: #FFFFFF;
+  overflow: hidden;
   will-change: opacity;
 }
 
@@ -2393,7 +2427,7 @@ span.title-line {
   transform-style: preserve-3d;
 }
 
-.about-capabilities-section .about-section-title {
+.capabilities-layer-wrap .about-section-title {
   color: #0F172A !important;
   font-family: 'Luckiest Guy', cursive, sans-serif !important;
   font-size: clamp(2.2rem, 3.8vw, 3.4rem);
@@ -2403,7 +2437,7 @@ span.title-line {
 }
 
 /* Cards Built Flush Inside Grid Modules */
-.about-capabilities-section .arch-card {
+.arch-card {
   position: relative;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
@@ -2424,7 +2458,7 @@ span.title-line {
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.about-capabilities-section .arch-card:hover {
+.arch-card:hover {
   transform: translateY(-4px) !important;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1) !important;
 }
@@ -2450,7 +2484,7 @@ span.title-line {
   border-radius: 4px;
 }
 
-.about-capabilities-section .arch-card-title {
+.arch-card-title {
   font-family: 'Mohave', sans-serif;
   font-size: 1.35rem;
   font-weight: 700;
@@ -2460,7 +2494,7 @@ span.title-line {
   margin: 0;
 }
 
-.about-capabilities-section .arch-card-desc {
+.arch-card-desc {
   font-family: 'Poppins', sans-serif;
   font-size: 0.88rem;
   color: #334155;
@@ -2469,7 +2503,7 @@ span.title-line {
   flex-grow: 1;
 }
 
-.about-capabilities-section .arch-card-pills {
+.arch-card-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -2477,7 +2511,7 @@ span.title-line {
   padding-top: 10px;
 }
 
-.about-capabilities-section .pill-tag {
+.pill-tag {
   font-family: 'Space Mono', monospace;
   font-size: 0.66rem;
   font-weight: 600;
@@ -2500,10 +2534,9 @@ span.title-line {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
-  .about-capabilities-section {
-    padding: clamp(2rem, 4vh, 3rem) clamp(1rem, 3vw, 1.5rem);
-    min-height: 100vh;
-    min-height: 100dvh;
+  .capabilities-layer-wrap,
+  .tools-layer-wrap {
+    padding: clamp(1.5rem, 3vh, 2.5rem) clamp(1rem, 3vw, 1.5rem);
   }
 }
 
@@ -2512,41 +2545,6 @@ span.title-line {
     grid-template-columns: 1fr;
     gap: 8px;
   }
-}
-
-/* Part 2: Tools Section Category Layout & Interactive Badge/Card (Full-Width Stretched with Scroll-Driven Reveal) */
-.about-tools-section {
-  position: relative;
-  width: 100%;
-  background-color: #FFFFFF;
-  color: #0F172A;
-  box-shadow: none;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  perspective: 1400px;
-}
-
-.tools-scroll-wrapper {
-  position: relative;
-  width: 100%;
-  height: 260vh;
-}
-
-.tools-sticky-stage {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  padding: clamp(2rem, 4vh, 3.5rem) clamp(1rem, 3.5vw, 4rem);
-  background-color: #FFFFFF;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
 }
 
 .tools-container {

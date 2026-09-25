@@ -305,14 +305,19 @@ function initApp() {
   updateWorkStyleScroll();
 
   // --------------------------------------------------------------------------
-  // TOOLS & ECOSYSTEM: Step-by-Step Scroll Reveal Engine
+  // TOOLS & ECOSYSTEM -> CAPABILITIES: Unified Step-by-Step & Fade-Over Scroll Reveal Engine
   // --------------------------------------------------------------------------
   const toolsScrollWrapper = document.getElementById('tools-scroll-wrapper');
+  const toolsLayerWrap = document.getElementById('tools-layer-wrap');
   const toolsHeader = document.getElementById('tools-header');
   const toolCat1 = document.getElementById('tool-cat-1');
   const toolCat2 = document.getElementById('tool-cat-2');
   const toolCat3 = document.getElementById('tool-cat-3');
   const toolCat4 = document.getElementById('tool-cat-4');
+
+  const capabilitiesLayerWrap = document.getElementById('what-i-build-section');
+  const capabilitiesHeader = document.getElementById('capabilities-header');
+  const capabilityCards = document.querySelectorAll('#what-i-build-section .arch-card');
 
   let toolsScrollTicking = false;
 
@@ -326,14 +331,15 @@ function initApp() {
     const scrolled = -rect.top;
     const progress = Math.min(Math.max(scrolled / maxScroll, 0), 1);
 
+    // ---------------- PHASE 1: TOOLS & ECOSYSTEM REVEAL (0.00 -> 0.46) ----------------
     // 1. Header: visible from the start
     if (toolsHeader) {
       const headerFade = Math.min(Math.max((progress + 0.1) / 0.22, 0), 1);
       toolsHeader.style.opacity = Math.max(0.6, headerFade).toFixed(3);
     }
 
-    // 2. Category 1 (DESIGN): reveals at 0.03 -> 0.26
-    const p1 = Math.min(Math.max((progress - 0.03) / 0.23, 0), 1);
+    // 2. Category 1 (DESIGN): reveals at 0.02 -> 0.12
+    const p1 = Math.min(Math.max((progress - 0.02) / 0.10, 0), 1);
     const ease1 = p1 * p1 * (3 - 2 * p1);
     if (toolCat1) {
       toolCat1.style.opacity = ease1.toFixed(3);
@@ -345,8 +351,8 @@ function initApp() {
       }
     }
 
-    // 3. Category 2 (MOTION): reveals at 0.26 -> 0.49
-    const p2 = Math.min(Math.max((progress - 0.26) / 0.23, 0), 1);
+    // 3. Category 2 (MOTION): reveals at 0.13 -> 0.23
+    const p2 = Math.min(Math.max((progress - 0.13) / 0.10, 0), 1);
     const ease2 = p2 * p2 * (3 - 2 * p2);
     if (toolCat2) {
       toolCat2.style.opacity = ease2.toFixed(3);
@@ -358,8 +364,8 @@ function initApp() {
       }
     }
 
-    // 4. Category 3 (CODE): reveals at 0.49 -> 0.72
-    const p3 = Math.min(Math.max((progress - 0.49) / 0.23, 0), 1);
+    // 4. Category 3 (CODE): reveals at 0.24 -> 0.34
+    const p3 = Math.min(Math.max((progress - 0.24) / 0.10, 0), 1);
     const ease3 = p3 * p3 * (3 - 2 * p3);
     if (toolCat3) {
       toolCat3.style.opacity = ease3.toFixed(3);
@@ -371,8 +377,8 @@ function initApp() {
       }
     }
 
-    // 5. Category 4 (AI & ANALYTICS): reveals at 0.72 -> 0.95
-    const p4 = Math.min(Math.max((progress - 0.72) / 0.23, 0), 1);
+    // 5. Category 4 (AI & ANALYTICS): reveals at 0.35 -> 0.45
+    const p4 = Math.min(Math.max((progress - 0.35) / 0.10, 0), 1);
     const ease4 = p4 * p4 * (3 - 2 * p4);
     if (toolCat4) {
       toolCat4.style.opacity = ease4.toFixed(3);
@@ -383,6 +389,40 @@ function initApp() {
         toolCat4.classList.remove('active-glow');
       }
     }
+
+    // ---------------- PHASE 2: CROSSFADE DIRECTLY INTO WHAT I BRING TO THE TABLE (0.46 -> 0.70) ----------------
+    // Layer 1 (Tools) fades out smoothly
+    const toolsOutProg = Math.min(Math.max((progress - 0.46) / 0.14, 0), 1);
+    const easeToolsOut = toolsOutProg * toolsOutProg * (3 - 2 * toolsOutProg);
+    if (toolsLayerWrap) {
+      toolsLayerWrap.style.opacity = (1 - easeToolsOut).toFixed(3);
+      toolsLayerWrap.style.transform = `translateY(-${(easeToolsOut * 25).toFixed(1)}px) scale(${(1 - easeToolsOut * 0.03).toFixed(3)})`;
+      toolsLayerWrap.style.pointerEvents = easeToolsOut >= 0.7 ? 'none' : 'auto';
+    }
+
+    // Layer 2 (Capabilities / What I Bring to the Table) fades directly in on top
+    const capInProg = Math.min(Math.max((progress - 0.47) / 0.15, 0), 1);
+    const easeCapIn = capInProg * capInProg * (3 - 2 * capInProg);
+    if (capabilitiesLayerWrap) {
+      capabilitiesLayerWrap.style.opacity = easeCapIn.toFixed(3);
+      capabilitiesLayerWrap.style.pointerEvents = easeCapIn >= 0.6 ? 'auto' : 'none';
+    }
+
+    // Capabilities Header and 6 cards stagger-fade in
+    if (capabilitiesHeader) {
+      const hProg = Math.min(Math.max((progress - 0.50) / 0.14, 0), 1);
+      const easeH = hProg * hProg * (3 - 2 * hProg);
+      capabilitiesHeader.style.opacity = easeH.toFixed(3);
+      capabilitiesHeader.style.transform = `translateY(${((1 - easeH) * 20).toFixed(1)}px)`;
+    }
+
+    capabilityCards.forEach((card, idx) => {
+      const staggerDelay = (idx % 3) * 0.02 + Math.floor(idx / 3) * 0.04;
+      const cp = Math.min(Math.max((progress - 0.52 - staggerDelay) / 0.16, 0), 1);
+      const easeCard = cp * cp * (3 - 2 * cp);
+      card.style.opacity = easeCard.toFixed(3);
+      card.style.transform = `translateY(${((1 - easeCard) * 30).toFixed(1)}px) scale(${(0.96 + easeCard * 0.04).toFixed(3)})`;
+    });
   }
 
   function requestToolsScrollUpdate() {
@@ -398,61 +438,6 @@ function initApp() {
   window.addEventListener('scroll', requestToolsScrollUpdate, { passive: true });
   window.addEventListener('resize', requestToolsScrollUpdate, { passive: true });
   updateToolsScroll();
-
-  // --------------------------------------------------------------------------
-  // WHAT I BRING TO THE TABLE: Fade-Over Scroll Reveal Engine
-  // --------------------------------------------------------------------------
-  const capabilitiesScrollWrapper = document.getElementById('capabilities-scroll-wrapper');
-  const capabilitiesStickyStage = document.querySelector('.capabilities-sticky-stage');
-  const capabilitiesHeader = document.getElementById('capabilities-header');
-  const capabilityCards = document.querySelectorAll('.about-capabilities-section .arch-card');
-
-  let capabilitiesScrollTicking = false;
-
-  function updateCapabilitiesScroll() {
-    if (!capabilitiesScrollWrapper || !capabilitiesStickyStage) return;
-
-    const rect = capabilitiesScrollWrapper.getBoundingClientRect();
-    const maxScroll = capabilitiesScrollWrapper.offsetHeight - window.innerHeight;
-    if (maxScroll <= 0) return;
-
-    const scrolled = -rect.top;
-    const progress = Math.min(Math.max(scrolled / maxScroll, 0), 1);
-
-    // 1. Fade stage in directly over the previous section as scroll begins (0.00 -> 0.28)
-    const stageFade = Math.min(Math.max(progress / 0.28, 0), 1);
-    const easeStage = stageFade * stageFade * (3 - 2 * stageFade);
-    capabilitiesStickyStage.style.opacity = easeStage.toFixed(3);
-    capabilitiesStickyStage.style.pointerEvents = easeStage >= 0.7 ? 'auto' : 'none';
-
-    // 2. Header and cards fade & lift into place (0.04 -> 0.45)
-    if (capabilitiesHeader) {
-      capabilitiesHeader.style.opacity = easeStage.toFixed(3);
-      capabilitiesHeader.style.transform = `translateY(${((1 - easeStage) * 20).toFixed(1)}px)`;
-    }
-
-    capabilityCards.forEach((card, idx) => {
-      const staggerDelay = (idx % 3) * 0.05 + Math.floor(idx / 3) * 0.08;
-      const cp = Math.min(Math.max((progress - 0.04 - staggerDelay) / 0.32, 0), 1);
-      const easeCard = cp * cp * (3 - 2 * cp);
-      card.style.opacity = easeCard.toFixed(3);
-      card.style.transform = `translateY(${((1 - easeCard) * 30).toFixed(1)}px) scale(${(0.96 + easeCard * 0.04).toFixed(3)})`;
-    });
-  }
-
-  function requestCapabilitiesScrollUpdate() {
-    if (!capabilitiesScrollTicking) {
-      capabilitiesScrollTicking = true;
-      requestAnimationFrame(() => {
-        updateCapabilitiesScroll();
-        capabilitiesScrollTicking = false;
-      });
-    }
-  }
-
-  window.addEventListener('scroll', requestCapabilitiesScrollUpdate, { passive: true });
-  window.addEventListener('resize', requestCapabilitiesScrollUpdate, { passive: true });
-  updateCapabilitiesScroll();
 
   // --------------------------------------------------------------------------
   // CHAPTER II PROJECTS: "My Project" Scroll Reveal & Interactive Preview
