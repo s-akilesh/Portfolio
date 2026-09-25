@@ -29,13 +29,12 @@ function initApp() {
 
   // Initialize Lenis Ultra-Smooth Oceanic Wave Scroll Engine
   const lenis = new Lenis({
-    duration: 1.6, // Silky oceanic wave momentum glide
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Smooth exponential wave curve
+    lerp: 0.045, // Heavy, silky, continuous oceanic wave momentum
+    wheelMultiplier: 0.55, // Slows mouse wheel speed down by ~45% for a calm, deliberate scroll pace
+    touchMultiplier: 1.0,
+    smoothWheel: true,
     orientation: 'vertical',
     gestureOrientation: 'vertical',
-    smoothWheel: true,
-    wheelMultiplier: 1.0,
-    touchMultiplier: 1.2,
     infinite: false,
   });
 

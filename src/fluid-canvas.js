@@ -700,7 +700,7 @@ export function initFluidCanvas() {
     if (Math.abs(scrollDiff) < 0.0001) {
       smoothScrollProgress = rawScrollProgress;
     } else {
-      smoothScrollProgress += scrollDiff * 0.92;
+      smoothScrollProgress += scrollDiff * 0.06;
     }
 
     if (heroContent) {
