@@ -2447,7 +2447,7 @@ span.title-line {
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.5rem;
-  margin-bottom: clamp(1rem, 2vh, 2rem);
+  margin-bottom: 48px;
   transform-style: preserve-3d;
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
@@ -2614,13 +2614,21 @@ span.title-line {
 }
 
 /* Center align Heading and Subheading in Tools & What I Build Sections */
-.about-tools-section .about-section-header,
-.capabilities-header {
+.about-tools-section .about-section-header {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: clamp(1rem, 2vh, 1.8rem);
+  transition: opacity 0.25s ease;
+}
+
+.capabilities-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 48px;
   transition: opacity 0.25s ease;
 }
 
