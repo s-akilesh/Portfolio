@@ -613,9 +613,11 @@ function initApp() {
   }
 
   // --------------------------------------------------------------------------
-  // Interactive Smooth Mouse Floating Parallax Engine for About Sections
+  // Interactive Smooth Mouse Floating Parallax Engine for About Sections (Desktop Only)
   // --------------------------------------------------------------------------
   function initAboutTabsMouseFloat() {
+    const isMobileViewport = () => window.innerWidth <= 850 || 'ontouchstart' in window;
+
     const aboutContainer = document.getElementById('about-more-sections');
     if (!aboutContainer) return;
 
@@ -623,7 +625,7 @@ function initApp() {
     const buildWrap = buildSection ? buildSection.querySelector('.capabilities-floating-wrap') : null;
     const buildGridBg = buildSection ? buildSection.querySelector('.capabilities-grid-bg') : null;
 
-    const toolsSection = document.getElementById('tools-section');
+    const toolsSection = document.getElementById('tools-layer-wrap') || document.getElementById('tools-section');
     const toolsWrap = toolsSection ? toolsSection.querySelector('.tools-floating-wrap') : null;
 
     let targetX = 0, targetY = 0;
@@ -631,6 +633,7 @@ function initApp() {
     let floatTime = 0;
 
     function onMouseMove(e) {
+      if (isMobileViewport()) return;
       const rect = aboutContainer.getBoundingClientRect();
       if (rect.top > window.innerHeight || rect.bottom < 0) return;
 
@@ -647,6 +650,14 @@ function initApp() {
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     function renderFloat() {
+      if (isMobileViewport()) {
+        if (buildWrap && buildWrap.style.transform) buildWrap.style.transform = '';
+        if (buildGridBg && buildGridBg.style.transform) buildGridBg.style.transform = '';
+        if (toolsWrap && toolsWrap.style.transform) toolsWrap.style.transform = '';
+        requestAnimationFrame(renderFloat);
+        return;
+      }
+
       const rect = aboutContainer.getBoundingClientRect();
       if (rect.top <= window.innerHeight && rect.bottom >= 0) {
         floatTime += 0.02;

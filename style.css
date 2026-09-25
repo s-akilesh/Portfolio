@@ -3448,7 +3448,7 @@ span.title-line {
 }
 
 /* --------------------------------------------------------------------------
-   Mobile Responsive Scroll Runway Heights (Slightly Faster & Snappier Mobile Flow)
+   Mobile Responsive Scroll Runway Heights & Floating Effect Removal
    -------------------------------------------------------------------------- */
 @media (max-width: 850px) {
   .hero-scroll-wrapper {
@@ -3462,6 +3462,31 @@ span.title-line {
   }
   .tools-scroll-wrapper {
     height: 260vh !important;
+  }
+
+  /* Remove floating, perspective, and 3D tilts on mobile for How I Work, Tools & Ecosystem, and What I Bring to the Table */
+  .capabilities-floating-wrap,
+  .tools-floating-wrap,
+  .capabilities-container,
+  .tools-container,
+  .work-style-container,
+  .cards-deck,
+  .about-process-grid,
+  .capabilities-grid-bg,
+  .about-tools-section,
+  .about-process-section {
+    transform: none !important;
+    transform-style: flat !important;
+    perspective: none !important;
+    will-change: auto !important;
+    transition: none !important;
+  }
+
+  .process-card:hover,
+  .tool-category-row:hover,
+  .tool-pill-badge:hover,
+  .arch-card:hover {
+    transform: none !important;
   }
 }
 
