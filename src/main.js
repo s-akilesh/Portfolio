@@ -29,8 +29,8 @@ function initApp() {
 
   // Initialize Lenis Ultra-Smooth Oceanic Wave Scroll Engine
   const lenis = new Lenis({
-    lerp: 0.075, // Smooth responsive wave momentum
-    wheelMultiplier: 0.78, // Slightly increased scroll travel per wheel notch
+    lerp: 0.045, // Heavy, silky, continuous oceanic wave momentum
+    wheelMultiplier: 0.55, // Slows mouse wheel speed down by ~45% for a calm, deliberate scroll pace
     touchMultiplier: 1.0,
     smoothWheel: true,
     orientation: 'vertical',
@@ -101,6 +101,19 @@ function initApp() {
       lenis.scrollTo(0, { duration: 1.6 });
     });
   }
+
+  function updateHeaderLogoVisibility() {
+    if (headerLogo) {
+      if (window.scrollY > 40) {
+        headerLogo.classList.add('hidden-on-scroll');
+      } else {
+        headerLogo.classList.remove('hidden-on-scroll');
+      }
+    }
+  }
+
+  window.addEventListener('scroll', updateHeaderLogoVisibility, { passive: true });
+  updateHeaderLogoVisibility();
 
   // Mobile Drawer Navigation Handlers
   const mobileNavOverlay = document.getElementById('mobile-nav-overlay');

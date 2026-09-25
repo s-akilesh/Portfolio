@@ -700,14 +700,23 @@ export function initFluidCanvas() {
     if (Math.abs(scrollDiff) < 0.0001) {
       smoothScrollProgress = rawScrollProgress;
     } else {
-      smoothScrollProgress += scrollDiff * 0.12;
+      smoothScrollProgress += scrollDiff * 0.06;
     }
 
+    const headerLogo = document.querySelector('.header-logo');
     if (heroContent) {
       if (smoothScrollProgress > 0.04) {
         heroContent.classList.add('fade-out-text');
       } else {
         heroContent.classList.remove('fade-out-text');
+      }
+    }
+
+    if (headerLogo) {
+      if (smoothScrollProgress > 0.04 || window.scrollY > 40) {
+        headerLogo.classList.add('hidden-on-scroll');
+      } else {
+        headerLogo.classList.remove('hidden-on-scroll');
       }
     }
 
