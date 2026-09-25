@@ -464,7 +464,7 @@ export function initFluidCanvas() {
     if (alpha <= 0.01) return;
     context.save();
     context.globalAlpha *= alpha;
-    context.font = '700 11px Poppins, sans-serif';
+    context.font = '700 12px Poppins, sans-serif';
     context.fillStyle = '#000000';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
