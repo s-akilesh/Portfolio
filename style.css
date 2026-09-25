@@ -1995,9 +1995,15 @@ span.title-line {
 
   .nav-pill-menu-btn {
     margin-left: 0 !important;
-    padding: 7px 16px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
     cursor: pointer !important;
     pointer-events: auto !important;
+    font-size: 16px !important;
+  }
+
+  .menu-label {
+    font-size: 16px !important;
   }
 
   .hero-tagline {
