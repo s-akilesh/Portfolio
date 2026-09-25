@@ -2991,45 +2991,77 @@ span.title-line {
 }
 
 @media (max-width: 768px) {
-  /* Work Style Section Mobile Typography & Viewport Fitting */
+  /* Work Style (How I Work) Section Mobile Stacked Layout */
   .about-process-section {
-    padding: clamp(2rem, 4vh, 3rem) clamp(1rem, 3vw, 1.5rem);
+    padding: clamp(1.5rem, 3vh, 2.5rem) clamp(1rem, 3vw, 1.5rem);
     min-height: 100vh;
     min-height: 100dvh;
   }
+  .work-style-sticky-stage {
+    padding: clamp(1.5rem, 3vh, 2.5rem) clamp(1rem, 4vw, 1.5rem);
+  }
+  .work-style-container {
+    max-width: 460px;
+    margin: auto 0;
+  }
+  .about-process-section .about-section-header {
+    margin-bottom: 1rem !important;
+  }
   .about-process-section .about-section-title {
-    font-size: clamp(1.65rem, 5vw, 2.2rem) !important;
+    font-size: clamp(1.75rem, 6vw, 2.3rem) !important;
+    margin: 0.2rem 0 0.4rem 0 !important;
   }
   .about-process-section .about-section-subtitle {
-    font-size: 0.84rem !important;
-    margin-bottom: 1.2rem !important;
+    font-size: 0.82rem !important;
+    margin: 0 auto 1rem auto !important;
+    max-width: 92% !important;
+    line-height: 1.45 !important;
   }
   .about-process-grid {
+    display: flex !important;
+    flex-direction: column !important;
     gap: 10px !important;
+    width: 100% !important;
+    max-width: 460px !important;
+    margin: 0 auto !important;
   }
   .process-card {
-    gap: 8px !important;
-    padding: 10px 8px !important;
+    gap: 5px !important;
+    padding: 12px 16px !important;
+    border-radius: 14px !important;
+    text-align: left !important;
   }
   .process-card-title {
-    font-size: 1.1rem !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
   }
   .process-card-desc {
     font-size: 0.78rem !important;
     line-height: 1.4 !important;
+    color: #cbd5e1 !important;
   }
   .process-card-flow {
-    font-size: 0.68rem !important;
-    padding-top: 8px !important;
+    font-size: 0.70rem !important;
+    padding-top: 6px !important;
+    margin-top: 2px !important;
   }
   .process-axis-wrapper {
-    margin-top: 1.5rem;
-    height: 18px;
+    margin-top: 1.2rem !important;
+    width: 100% !important;
+    max-width: 460px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    height: 20px !important;
+  }
+  .axis-node {
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 11px !important;
   }
 
-  /* Tools Section Mobile Typography & Viewport Fitting */
+  /* Tools & Ecosystem Section Mobile View */
   .about-tools-section {
-    padding: clamp(2rem, 4vh, 3rem) 1rem;
+    padding: clamp(1.5rem, 3vh, 2.5rem) 1rem;
     min-height: 100vh;
     min-height: 100dvh;
   }
@@ -3037,8 +3069,8 @@ span.title-line {
     font-size: clamp(1.65rem, 5.5vw, 2.2rem);
   }
   .about-tools-section .about-section-subtitle {
-    font-size: 0.84rem !important;
-    margin-bottom: 1.2rem !important;
+    font-size: 0.82rem !important;
+    margin-bottom: 1rem !important;
   }
   .category-row-title {
     font-size: 1.15rem !important;
@@ -3085,6 +3117,39 @@ span.title-line {
   .tool-item-wrapper:focus-within .tool-usage-card,
   .tool-item-wrapper.active .tool-usage-card {
     transform: translateY(0);
+  }
+
+  /* What I Bring to the Table Mobile Viewport Fitting */
+  .capabilities-header {
+    margin-bottom: clamp(12px, 2.5vh, 20px) !important;
+  }
+  .capabilities-layer-wrap .about-section-title {
+    font-size: clamp(1.65rem, 5.5vw, 2.2rem) !important;
+  }
+  .cards-deck {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+  }
+  .arch-card {
+    padding: 10px 12px !important;
+    min-height: 110px !important;
+    border-radius: 12px !important;
+  }
+  .arch-card-title {
+    font-size: 0.92rem !important;
+  }
+  .arch-card-num {
+    font-size: 0.70rem !important;
+  }
+  .arch-card-desc {
+    font-size: 0.72rem !important;
+    line-height: 1.35 !important;
+    margin: 4px 0 !important;
+  }
+  .arch-card-pills {
+    display: none !important;
   }
 }
 
